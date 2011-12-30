@@ -57,6 +57,7 @@ public class Config {
 	protected int jagdMax = 0;
 	protected int jagdMin = 0;
 	protected boolean prevention = false;
+	protected boolean debug = false;
 
 	protected static Config instance = null;
 
@@ -198,6 +199,8 @@ public class Config {
 				setUserAgent(jsonConfig.getString(key));
 			} else if (key.equalsIgnoreCase("Verschleiern")) {
 				setPrevention(jsonConfig.getBoolean(key));
+			} else if (key.equalsIgnoreCase("Debug")) {
+				setDebug(jsonConfig.getBoolean(key));
 			}
 		}
 	}
@@ -513,5 +516,13 @@ public class Config {
 
 	public static void setPrevention(boolean prevention) {
 		getInstance().prevention = prevention;
+	}
+
+	public static void setDebug(boolean debug) {
+		getInstance().debug = debug;
+	}
+
+	public static boolean getDebug() {
+		return getInstance().debug;
 	}
 }

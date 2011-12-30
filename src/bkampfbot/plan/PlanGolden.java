@@ -24,6 +24,7 @@ import bkampfbot.Utils;
 import bkampfbot.exception.FatalError;
 import bkampfbot.output.InfoFile;
 import bkampfbot.output.Output;
+import bkampfbot.state.Config;
 import bkampfbot.state.User;
 
 import json.JSONException;
@@ -127,7 +128,7 @@ public final class PlanGolden extends PlanObject {
 		} catch (JSONException e) {
 			Output.printTabLn("Kein Kampf möglich", 1);
 
-			if (Control.debug)
+			if (Config.getDebug())
 				e.printStackTrace();
 		}
 	}

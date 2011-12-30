@@ -346,7 +346,7 @@ public class Utils {
 			throws LocationChangedException {
 
 		try {
-			if (Control.debug)
+			if (Config.getDebug())
 				Output.println("getString: " + url, 2);
 
 			HttpGet httpget = new HttpGet(Config.getHost() + url);
@@ -454,7 +454,7 @@ public class Utils {
 	 * @param url
 	 */
 	public static final void visit(String url) {
-		if (Control.debug)
+		if (Config.getDebug())
 			Output.printTabLn("besuche: " + url, 2);
 
 		getString(url);
@@ -472,7 +472,7 @@ public class Utils {
 	public static final boolean serviceAvalible() throws RestartLater,
 			FatalError {
 
-		if (Control.debug) {
+		if (Config.getDebug()) {
 			Output.println("Teste Außendienst möglich", 2);
 		}
 

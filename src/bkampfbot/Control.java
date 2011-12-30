@@ -27,7 +27,6 @@ import bkampfbot.state.Prevention;
 
 public class Control {
 	public final static String version = "1.3.0";
-	public final static boolean debug = false;
 
 	public static Instance current = null;
 
@@ -52,7 +51,7 @@ public class Control {
 											+ "Der Bot wird sich in 3 min neu starten.",
 									0);
 
-					if (Control.debug) {
+					if (Config.getDebug()) {
 						e.printStackTrace();
 					}
 
@@ -120,7 +119,7 @@ public class Control {
 			return;
 		}
 
-		if (Control.debug) {
+		if (Config.getDebug()) {
 			int min = Math.round(milliSeconds / 60000);
 			int sec = Math.round((milliSeconds / 1000) % 60);
 			Output.println("Sleep for " + min + ":" + sec + " (" + milliSeconds

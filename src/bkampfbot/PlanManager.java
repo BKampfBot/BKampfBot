@@ -142,7 +142,7 @@ public class PlanManager {
 			return false;
 		}
 		
-		if (Control.debug) {
+		if (Config.getDebug()) {
 			Output.println("LookAhead test: " + plans[toRun].getName(), 2);
 		}
 

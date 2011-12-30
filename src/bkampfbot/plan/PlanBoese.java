@@ -27,7 +27,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import json.JSONArray;
 import json.JSONException;
 import json.JSONObject;
-import bkampfbot.Control;
 import bkampfbot.Utils;
 import bkampfbot.exception.BadOpponent;
 import bkampfbot.exception.FatalError;
@@ -105,7 +104,7 @@ public abstract class PlanBoese extends PlanObject {
 			fromList = false;
 			try {
 				Output.println(" (nochmal)", Output.INFO);
-				
+
 				int money = Utils.fight(toFight.attack, toFight.name, "Böse",
 						medicine, this, buyCrystal);
 				toFight.fights++;
@@ -121,8 +120,8 @@ public abstract class PlanBoese extends PlanObject {
 				Output.printClock("-> " + getJsonObjectName(), Output.INFO);
 			}
 
-		} 
-		
+		}
+
 		if (fromList) {
 			Output.println("", Output.INFO);
 
@@ -179,7 +178,7 @@ public abstract class PlanBoese extends PlanObject {
 				// delete all others
 				getOpponentList().deleteUnselected();
 
-				if (Control.debug) {
+				if (Config.getDebug()) {
 					Output.println("-- Current enemy list --", 2);
 					for (int key : getOpponentList().keySet()) {
 						Output.print(getOpponentList().get(key).name + ": "

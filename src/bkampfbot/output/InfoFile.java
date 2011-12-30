@@ -30,7 +30,6 @@ import json.JSONArray;
 import json.JSONException;
 import json.JSONObject;
 import json.JSONTokener;
-import bkampfbot.Control;
 import bkampfbot.state.Config;
 
 public class InfoFile {
@@ -39,7 +38,8 @@ public class InfoFile {
 
 	final public static void initiate() {
 		if (!new File(Config.getInfoPath()).isDirectory()) {
-			Output.println("Directory doesn't exist: " + Config.getInfoPath(), Output.ERROR);
+			Output.println("Directory doesn't exist: " + Config.getInfoPath(),
+					Output.ERROR);
 			Config.setInfoPath(null);
 		}
 
@@ -141,7 +141,7 @@ public class InfoFile {
 			return;
 		}
 
-		if (Control.debug) {
+		if (Config.getDebug()) {
 			Output.println("Write debug output: " + Config.getInfoPath() + "/"
 					+ filename, 2);
 		}
