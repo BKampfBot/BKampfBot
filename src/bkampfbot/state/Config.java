@@ -56,7 +56,7 @@ public class Config {
 	protected String proxyPassword = null;
 	protected int jagdMax = 0;
 	protected int jagdMin = 0;
-	protected boolean prevention = false;
+	protected boolean prevention = true;
 	protected boolean debug = false;
 
 	protected static Config instance = null;
