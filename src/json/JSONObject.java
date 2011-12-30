@@ -211,7 +211,13 @@ public final class JSONObject {
             } else if (c != ':') {
                 throw x.syntaxError("Expected a ':' after a key");
             }
-            putOnce(key, x.nextValue());
+            
+            // key with @ at position 0 is a comment
+            if (key.indexOf('@') != 0) {
+            	putOnce(key, x.nextValue());
+            } else {
+            	x.nextValue();
+            }
 
             /*
              * Pairs are separated by ','. We will also tolerate ';'.
