@@ -22,6 +22,15 @@ public class User {
 	protected String race = "";
 	protected String raceSecondary = "xxx";
 	protected Status status = Status.nothing;
+	protected boolean guildMember = false;
+
+	public static boolean isGuildMember() {
+		return getInstance().guildMember;
+	}
+
+	public static void setGuildMember(boolean guildMember) {
+		getInstance().guildMember = guildMember;
+	}
 
 	// User instance
 	protected static User instance = null;

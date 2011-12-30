@@ -42,7 +42,7 @@ public class Prevention {
 	private static Prevention instance = null;
 
 	public Prevention() {
-		urls = new Url[10];
+		urls = new Url[32];
 		urls[0] = new Url("characters/index");
 		urls[1] = new Url("placeOfHonour/index", 3, new Url("placeOfHonour/me"));
 		urls[2] = new Url("placeOfHonour/index", 3, new Url("placeOfHonour/me",
@@ -60,6 +60,30 @@ public class Prevention {
 						"challenge/achievements", 1, new Url(
 								"challenge/getAchievements/0")))));
 		urls[9] = new Url("city/index");
+		urls[10] = new Url("pns");
+		urls[11] = new Url("tournament/index/me/");
+		urls[12] = new Url("placeOfHonour/index");
+		urls[13] = new Url("verein/ehrenliste");
+		urls[14] = new Url("challenge/");
+		urls[15] = new Url("challenge/achievements");
+		urls[16] = new Url("city/index", 3, new Url("items/index"));
+		urls[17] = new Url("city/index", 4, new Url("arbeitsamt/index"));
+		urls[18] = new Url("city/index", 3, new Url("arbeitsamt/index"));
+		urls[19] = new Url("city/index", 4, new Url("training"));
+		urls[20] = new Url("city/index", 3, new Url("kiosk"));
+		urls[21] = new Url("bundesklatsche/index");
+		urls[22] = new Url("bundesklatsche/index" , 4, new Url("bundesklatsche/bundeshelden"));
+		urls[23] = new Url("bundesklatsche/index" , 4, new Url("bundesklatsche/klatschenfreunde"));
+		urls[24] = new Url("bundesklatsche/index" , 4, new Url("bundesklatsche/klatschenmeister"));
+		
+		// Nur für Vereinsmitglieder
+		urls[25] = (new Url("verein", 2, new Url("verein/shoutbox"))).setOnlyGuild();
+		urls[26] = (new Url("verein", 2, new Url("verein/mitglieder"))).setOnlyGuild();
+		urls[27] = (new Url("verein", 2, new Url("verein/gildenkasse"))).setOnlyGuild();
+		urls[28] = (new Url("verein", 2, new Url("verein/gildensaal"))).setOnlyGuild();
+		urls[29] = (new Url("verein", 2, new Url("verein/feindschaften"))).setOnlyGuild();
+		urls[30] = (new Url("verein", 2, new Url("verein/buendnisse"))).setOnlyGuild();
+		urls[31] = (new Url("verein", 2, new Url("guild_challenge/index"))).setOnlyGuild();
 	}
 
 	/**
@@ -94,7 +118,12 @@ public class Prevention {
 	 * @return {@link Url}
 	 */
 	private Url getRandom() {
-		int index = (new Random()).nextInt(urls.length);
+		int index;
+		do {
+			index = (new Random()).nextInt(urls.length);
+		
+		} while (!User.isGuildMember() && urls[index].isOnlyGuild());
+		
 		return urls[index];
 	}
 

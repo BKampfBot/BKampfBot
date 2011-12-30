@@ -28,6 +28,7 @@ public class Url {
 	private final String url;
 	private final Url next;
 	private final int seconds;
+	private boolean guild;
 
 	/**
 	 * Konstruktor für eine URL
@@ -38,6 +39,7 @@ public class Url {
 		this.url = url;
 		this.next = null;
 		this.seconds = -1;
+		this.guild = false;
 	}
 
 	/**
@@ -51,6 +53,7 @@ public class Url {
 		this.url = url;
 		this.seconds = seconds;
 		this.next = next;
+		this.guild = false;
 	}
 
 	/**
@@ -87,5 +90,19 @@ public class Url {
 	 */
 	public final int getSeconds() {
 		return this.seconds;
+	}
+	
+	/**
+	 * Setzt URL auf Verein
+	 * 
+	 * @return this
+	 */
+	public Url setOnlyGuild() {
+		this.guild = true;
+		return this;
+	}
+
+	public boolean isOnlyGuild() {
+		return guild;
 	}
 }

@@ -59,6 +59,7 @@ import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
 import bkampfbot.exception.FatalError;
+import bkampfbot.exception.LocationChangedException;
 import bkampfbot.exception.RestartLater;
 import bkampfbot.modes.Gluecksrad;
 import bkampfbot.modes.Jagd;
@@ -344,6 +345,16 @@ public final class Instance {
 			}
 
 			this.getCharacter(true);
+			
+			// Ist User im Verein?
+			try {
+				Utils.getString("verein/buendnisse", "verein/index");
+				User.setGuildMember(true);
+			} catch (LocationChangedException e) {
+				User.setGuildMember(false);
+			}
+			
+			
 		} catch (IOException e) {
 			Output.println(e.getMessage(), 0);
 			throw new FatalError(e.getMessage());
