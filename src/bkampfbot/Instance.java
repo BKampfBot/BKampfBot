@@ -139,30 +139,30 @@ public final class Instance {
 
 			// Read File Line By Line
 			while ((strLine = br.readLine()) != null) {
+
+				// Kommentare werden ausgelassen
 				if (strLine.length() > 0 && strLine.substring(0, 1).equals("#")) {
 					continue;
 				}
-				configString += strLine;
+				configString += strLine + "\n";
 			}
 
 			// Close the input stream
 			in.close();
-
-			// make to JSONObject
-			configString = "{" + configString + "}";
 
 			try {
 				JSONObject config = new JSONObject(
 						new JSONTokener(configString));
 				Config.parseJsonConfig(config);
 			} catch (JSONException e) {
-				throw new FatalError(
-						"Innerhalb der Konfigurationsdatei trat ein Fehler auf. "
-								+ "Die Struktur stimmt nicht.\n"
-								+ "Vermutlich stehen die Steuerzeichen nicht in der richtigen Reihenfolge."
-								+ "\nAls Hinweis hier noch die Fehlerausgabe:\n"
-								+ e.getMessage() + "\nEingabe war:\n"
-								+ e.getInputString());
+				throw new FatalError("Die Struktur der Konfigurationsdatei "
+						+ "stimmt nicht. Versuche den Inhalt der "
+						+ "Datei mit einem externen Werkzeug zu "
+						+ "reparieren. Dafür gibt es Webseiten, "
+						+ "die JSON-Objekte validieren können."
+						+ "\n\nAls Hinweis hier noch die Fehlerausgabe:\n"
+						+ e.getMessage() + "\n\nEingabe war:\n"
+						+ e.getInputString());
 			}
 		} catch (FileNotFoundException e) {
 			throw new FatalError(
@@ -299,7 +299,7 @@ public final class Instance {
 			Output.error(e);
 			throw new FatalError("Es gab einen Verbindungsfehler.");
 		}
-		
+
 		return s;
 	}
 
@@ -512,7 +512,7 @@ public final class Instance {
 
 				continue;
 			}
-			
+
 			if (arg.equals("testproxy") && this.modus.equals(Modus.normal)) {
 				this.modus = Modus.testproxy;
 
@@ -546,7 +546,7 @@ public final class Instance {
 		HttpProtocolParams.setUseExpectContinue(params, false);
 
 		HttpProtocolParams.setUserAgent(params, Config.getUserAgent());
-		
+
 		this.httpclient.setParams(params);
 
 		if (Config.getProxyHost() != null && Config.getProxyPort() != 0) {
@@ -571,24 +571,23 @@ public final class Instance {
 		this.httpclient.getParams().setParameter(ClientPNames.COOKIE_POLICY,
 				CookiePolicy.BROWSER_COMPATIBILITY);
 
-
 		switch (this.modus) {
-			// default: do nothing
-			default:
-				break;
+		// default: do nothing
+		default:
+			break;
 
-			// call help
-			case help:
-				Output.help();
-				System.exit(0);
-				break;
-			
-			// call proxy test
-			case testproxy:
-				new TestProxy();
-				System.exit(0);
-				break;
-		
+		// call help
+		case help:
+			Output.help();
+			System.exit(0);
+			break;
+
+		// call proxy test
+		case testproxy:
+			new TestProxy();
+			System.exit(0);
+			break;
+
 		}
 		// login
 		this.login();
@@ -605,7 +604,6 @@ public final class Instance {
 			new MessagesControl();
 			Control.safeExit();
 			break;
-			
 
 		case daily:
 

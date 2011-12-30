@@ -26,7 +26,7 @@ import bkampfbot.state.Config;
 import bkampfbot.state.Prevention;
 
 public class Control {
-	public final static String version = "1.2.9";
+	public final static String version = "1.3.0";
 	public final static boolean debug = false;
 
 	public static Instance current = null;
