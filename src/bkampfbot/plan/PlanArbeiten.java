@@ -84,9 +84,10 @@ public final class PlanArbeiten extends PlanObject {
 		Utils.visit("arbeitsamt/index/gold");
 
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
-		nvps.add(new BasicNameValuePair("data[Service][duration]", String
-				.valueOf(this.hours)));
 		nvps.add(new BasicNameValuePair("[Service][txt]", "Hier steht was"));
+		nvps.add(new BasicNameValuePair("confirm", "1"));
+		nvps.add(new BasicNameValuePair("x", "118"));
+		nvps.add(new BasicNameValuePair("y", "26"));
 
 		Utils.getString("services/index/gold/45", nvps);
 
@@ -100,17 +101,21 @@ public final class PlanArbeiten extends PlanObject {
 			Control.safeExit();
 		}
 
-		// cut it into parts to safe session
 		int count = 60 * this.hours + 1;
-		while (count > 10) {
-			// sleep for 10 min
-			Control.sleep(6000, 2);
-			count -= 10;
-			Control.current.getCharacter();
+		
+		if (!Config.getPrevention()) {
+			// cut it into parts to safe session
+			while (count > 10) {
+				// sleep for 10 min
+				Control.sleep(6000, 2);
+				count -= 10;
+				Control.current.getCharacter();
+			}
 		}
+			
 		Control.sleep(600 * count, 2);
 
-		Utils.visit("arbeitsamt/finish");
+		Utils.visit("arbeitsamt/cancel");
 
 	}
 
