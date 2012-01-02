@@ -8,7 +8,6 @@ import json.JSONException;
 import json.JSONObject;
 import bkampfbot.PlanManager;
 import bkampfbot.exception.FatalError;
-import bkampfbot.output.InfoFile;
 import bkampfbot.output.Output;
 import bkampfbot.plan.PlanObject;
 
@@ -43,7 +42,7 @@ public class Config {
 	protected PlanManager plan0 = null;
 	protected PlanManager plan1 = null;
 	protected int fightAgain = 30;
-	protected String infoPath = null;
+	protected String htmlPath = "./information/";
 	protected double sleepFactorMin = 1;
 	protected double sleepFactorMax = 1;
 	protected String userAgent = null;
@@ -145,9 +144,9 @@ public class Config {
 				setPlan1(plan);
 
 				// Info Pfad
-			} else if (key.equalsIgnoreCase("info pfad")) {
+			} else if (key.equalsIgnoreCase("htmlPath")) {
 
-				setInfoPath(jsonConfig.getString(key));
+				setHtmlPath(jsonConfig.getString(key));
 
 				// Mehr Aussendienste
 			} else if (key.equalsIgnoreCase("mehr aussendienste")) {
@@ -361,20 +360,18 @@ public class Config {
 	}
 
 	/**
-	 * @return the infoPath
+	 * @return the htmlPath
 	 */
-	public static String getInfoPath() {
-		return getInstance().infoPath;
+	public static String getHtmlPath() {
+		return getInstance().htmlPath;
 	}
 
 	/**
 	 * @param infoPath
 	 *            the infoPath to set
 	 */
-	public static void setInfoPath(String infoPath) {
-		getInstance().infoPath = infoPath;
-
-		InfoFile.initiate();
+	public static void setHtmlPath(String htmlPath) {
+		getInstance().htmlPath = htmlPath;
 	}
 
 	/**
