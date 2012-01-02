@@ -2,4 +2,4 @@ bin
 config.json
 config?.json
 log
-*.html
+information
