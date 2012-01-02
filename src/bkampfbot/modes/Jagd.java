@@ -35,8 +35,8 @@ import org.apache.http.message.BasicNameValuePair;
 
 import bkampfbot.Control;
 import bkampfbot.Utils;
-import bkampfbot.output.InfoFile;
 import bkampfbot.output.Output;
+import bkampfbot.output.SimpleFile;
 import bkampfbot.state.Config;
 
 public final class Jagd {
@@ -51,13 +51,13 @@ public final class Jagd {
 		int score;
 		try {
 			do {
-				JSONObject result = Utils
-						.getJSON("games/getWheelData");
+				JSONObject result = Utils.getJSON("games/getWheelData");
 				JSONArray data = result.getJSONArray("data");
 
 				availablePoints = result.getJSONArray("credit")
 						.getJSONObject(0).getInt("highscore");
-				score = result.getJSONArray("credit").getJSONObject(0).getInt("sloganhighscore");
+				score = result.getJSONArray("credit").getJSONObject(0).getInt(
+						"sloganhighscore");
 
 				Output.printTabLn("Aktuelle Punktzahl: " + availablePoints, 2);
 
@@ -80,37 +80,39 @@ public final class Jagd {
 					}
 
 					Output.println(" zu lösen", Output.DEBUG);
-					ArrayList<Character> alpha= new ArrayList<Character>();
-					for (int j = 65; j < 65+26; j++) {
-						alpha.add((char)j);
+					ArrayList<Character> alpha = new ArrayList<Character>();
+					for (int j = 65; j < 65 + 26; j++) {
+						alpha.add((char) j);
 					}
 
 					// check for letters
-					for (int z =0; z < Config.getJagdMax(); z++) {
+					for (int z = 0; z < Config.getJagdMax(); z++) {
 						if (availablePoints < current.getInt("costletter")) {
 							return;
 						}
-						
+
 						if (z >= Config.getJagdMin() && Math.random() > 0.4) {
 							continue;
 						}
-						int currentAlpha = (new Random()).nextInt(alpha.size()-1);
+						int currentAlpha = (new Random())
+								.nextInt(alpha.size() - 1);
 						char currentLetter = alpha.get(currentAlpha);
 						alpha.remove(currentAlpha);
-						
-						
-						Output.printTabLn("Kaufe ein "+currentLetter, Output.INFO);
-						
+
+						Output.printTabLn("Kaufe ein " + currentLetter,
+								Output.INFO);
+
 						List<NameValuePair> nvps = new ArrayList<NameValuePair>();
-						nvps.add(new BasicNameValuePair("buyletter", currentLetter + ""));
+						nvps.add(new BasicNameValuePair("buyletter",
+								currentLetter + ""));
 						nvps.add(new BasicNameValuePair("type", "letter"));
 						Utils.getString("games/buyWheel", nvps);
-						
+
 						availablePoints -= current.getInt("costletter");
-						
+
 						Control.sleep(45);
 					}
-					
+
 					String md5;
 					try {
 
@@ -118,7 +120,8 @@ public final class Jagd {
 
 						Output.printTab(dec + ": ", Output.INFO);
 
-						InfoFile.debug("Jagd." + names[i] + ".txt", dec+"\n", true);
+						SimpleFile.append("Jagd." + names[i] + ".txt", dec
+								+ "\n");
 
 						MessageDigest m = MessageDigest.getInstance("MD5");
 						byte[] data1 = ("OsShlljuozll11T670OO00OO" + dec
@@ -139,8 +142,7 @@ public final class Jagd {
 
 					Control.sleep(new Random().nextInt(100) + 100);
 
-					String res = Utils.getString(
-							"games/buyWheel", nvpn);
+					String res = Utils.getString("games/buyWheel", nvpn);
 
 					if (res.equals("errorStatus=ok&right=right")) {
 						Output.println("richtig", Output.INFO);
@@ -154,7 +156,7 @@ public final class Jagd {
 
 				}
 			} while (availablePoints > 20 && score < 100);
-			
+
 		} catch (JSONException e) {
 			Output.error(e);
 			return;

@@ -19,12 +19,12 @@ package bkampfbot.plan;
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import bkampfbot.Utils;
-import bkampfbot.exception.FatalError;
-import bkampfbot.output.InfoFile;
-import bkampfbot.output.Output;
 import json.JSONException;
 import json.JSONObject;
+import bkampfbot.Utils;
+import bkampfbot.exception.FatalError;
+import bkampfbot.output.LogFile;
+import bkampfbot.output.Output;
 
 /**
  * PlanBooster benötigt folgende Konfiguration: {"Booster":3}
@@ -68,8 +68,7 @@ public final class PlanBooster extends PlanObject {
 		try {
 			Output.printClockLn("-> Booster " + this.booster, 1);
 
-			String s = Utils
-					.getString("guild_challenge/index");
+			String s = Utils.getString("guild_challenge/index");
 			int i = s.indexOf("var flashvars = {");
 			i = s.indexOf("var flashvars = {", i + 1);
 			i = s.indexOf("var flashvars = {", i + 1);
@@ -78,14 +77,12 @@ public final class PlanBooster extends PlanObject {
 			final String guild_id = s.replaceAll("[^0-9]", "");
 
 			// visit guild_challenge/index
-			JSONObject result = Utils
-					.getJSON("guild_challenge/getData/"
-							+ guild_id);
+			JSONObject result = Utils.getJSON("guild_challenge/getData/"
+					+ guild_id);
 
 			if (result.getInt("booster") == 1) {
-				JSONObject win = Utils
-						.getJSON("guild_challenge/booster/"
-								+ this.booster);
+				JSONObject win = Utils.getJSON("guild_challenge/booster/"
+						+ this.booster);
 
 				if (win.getInt("win") == 1) {
 					Output.printTabLn("Booster: WIN", 1);
@@ -93,11 +90,12 @@ public final class PlanBooster extends PlanObject {
 					Output.printTabLn("Booster: LOST", 1);
 				}
 
-				InfoFile.writeLog("booster:" + this.booster + "\n" + "win:"
-						+ win.getInt("win") + "\n" + "boostertimes:"
-						+ result.getInt("boostertimes") + "\n" + "nextbooster:"
-						+ result.getInt("nextbooster"), null);
-
+				if (Output.isHtmlOutput()) {
+					JSONObject log = LogFile.getLog("Booster", "x"
+							+ this.booster);
+					log.put("good", true);
+					Output.addLog(log);
+				}
 			} else {
 				Output.printTabLn("Booster is done.", 1);
 			}
@@ -105,7 +103,7 @@ public final class PlanBooster extends PlanObject {
 			Output.error(e);
 		}
 	}
-	
+
 	@Override
 	public boolean isPreRunningable() {
 		return true;

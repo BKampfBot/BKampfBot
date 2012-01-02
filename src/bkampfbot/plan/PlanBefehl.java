@@ -19,13 +19,12 @@ package bkampfbot.plan;
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import bkampfbot.exception.FatalError;
-import bkampfbot.exception.RestartLater;
-import bkampfbot.output.InfoFile;
-import bkampfbot.output.Output;
-
 import json.JSONException;
 import json.JSONObject;
+import bkampfbot.exception.FatalError;
+import bkampfbot.exception.RestartLater;
+import bkampfbot.output.BefehlFile;
+import bkampfbot.output.Output;
 
 /**
  * PlanBefehl benötigt folgende Konfiguration: {"Befehl":true} o
@@ -49,13 +48,15 @@ public final class PlanBefehl extends PlanObject {
 	public final void run() throws FatalError, RestartLater, JSONException {
 		Output.printClock("-> Befehl", 1);
 
-		JSONObject now = InfoFile.getBefehl();
+		BefehlFile file = new BefehlFile();
+
+		JSONObject now = file.getBefehl();
 		while (now != null) {
 			Output.println(" (get one)", 1);
 			PlanObject doit = new PlanObject();
 			doit = PlanObject.get(now);
 			doit.run();
-			now = InfoFile.getBefehl();
+			now = file.getBefehl();
 			Output.printClock("-> Befehl", 1);
 		}
 		Output.println(" (nothing)", 1);

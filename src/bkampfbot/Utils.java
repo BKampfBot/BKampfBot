@@ -53,7 +53,6 @@ import bkampfbot.exception.BadOpponent;
 import bkampfbot.exception.FatalError;
 import bkampfbot.exception.LocationChangedException;
 import bkampfbot.exception.RestartLater;
-import bkampfbot.output.FightResult;
 import bkampfbot.output.Output;
 import bkampfbot.plan.PlanObject;
 import bkampfbot.state.Config;
@@ -110,7 +109,7 @@ public class Utils {
 		Utils.visit("fights/fight");
 		Utils.visit(attack.substring(1));
 
-		Output.printTab("Kampf mit " + name + " - ", 1);
+		Output.printTab("Kampf mit " + name + " - ", Output.INFO);
 
 		Control.sleep(5);
 
@@ -120,7 +119,7 @@ public class Utils {
 			JSONObject fight = Utils.getJSON(fightData.getString("url")
 					.replace("/results/", "/getResults/").substring(1));
 
-			new FightResult(fight, fightData, method);
+			Output.addKampf(fight, fightData, method);
 
 			JSONObject res = fight.getJSONObject("results");
 			JSONObject p1 = res.getJSONObject("p1");

@@ -19,16 +19,14 @@ package bkampfbot.plan;
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import json.JSONException;
+import json.JSONObject;
 import bkampfbot.Control;
 import bkampfbot.Utils;
 import bkampfbot.exception.FatalError;
-import bkampfbot.output.InfoFile;
 import bkampfbot.output.Output;
 import bkampfbot.state.Config;
 import bkampfbot.state.User;
-
-import json.JSONException;
-import json.JSONObject;
 
 /**
  * PlanGolden benötigt folgende Konfiguration: {"Golden":true}
@@ -46,16 +44,15 @@ public final class PlanGolden extends PlanObject {
 		try {
 			object.getBoolean("Golden");
 		} catch (JSONException e) {
-			
+
 			try {
 				JSONObject help = object.getJSONObject("Golden");
-				
-				
+
 				try {
-					this.medicine   = help.getInt("Medizin");
+					this.medicine = help.getInt("Medizin");
 				} catch (JSONException r) {
 				}
-				
+
 			} catch (JSONException t) {
 				throw new FatalError("Config error: Golden");
 			}
@@ -74,16 +71,14 @@ public final class PlanGolden extends PlanObject {
 		Utils.visit("sieben/index/");
 
 		try {
-			JSONObject ob = Utils
-					.getJSON("sieben/siebenData/");
+			JSONObject ob = Utils.getJSON("sieben/siebenData/");
 
 			Control.sleep(5);
 
 			Output.printTab("Kampf mit " + ob.getString("lastName") + " ("
 					+ ob.getString("lastId") + ")", 1);
 
-			Utils.visit("sieben/fight/"
-					+ ob.getString("lastId"));
+			Utils.visit("sieben/fight/" + ob.getString("lastId"));
 
 			ob = Utils.getJSON("sieben/fightData/");
 
@@ -95,7 +90,7 @@ public final class PlanGolden extends PlanObject {
 				Output.println(" - lost", 1);
 			}
 
-			InfoFile.writeGolden(ob);
+			Output.addGolden(ob);
 
 			Control.sleep(5);
 
@@ -104,12 +99,12 @@ public final class PlanGolden extends PlanObject {
 			ob = Utils.getJSON("sieben/siebenData/");
 
 			if (medicine != -1) {
-				
+
 				// Aktualisieren
 				Control.current.getCharacter();
 
-				int procent = Math.round((User.getCurrentLivePoints()
-						/ User.getMaxLivePoints()) * 100);
+				int procent = Math.round((User.getCurrentLivePoints() / User
+						.getMaxLivePoints()) * 100);
 
 				// Wenn weniger Prozent Leben als angegen, dann Medizin kaufen.
 				if (procent < medicine) {
