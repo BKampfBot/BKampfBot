@@ -3,9 +3,10 @@ package bkampfbot.bundesklatsche.field;
 import json.JSONObject;
 import bkampfbot.output.Output;
 
-public class ZumKnastField extends Field {
+public class NordBahnhofField extends Field {
 
-	public ZumKnastField(JSONObject result) {
+
+	public NordBahnhofField(JSONObject result) {
 		super(result);
 	}
 

@@ -89,6 +89,11 @@ public final class PlanAngriff extends PlanObject {
 	 * Welches Bundesland?
 	 */
 	private String raceToFight = null;
+	
+	/**
+	 * Für späteren Zugriff auf Ergebnis
+	 */
+	private boolean won = false;
 
 	private static Opponent[] lowMoney;
 	private static int lowMoneyPointer;
@@ -99,7 +104,12 @@ public final class PlanAngriff extends PlanObject {
 	private static ArrayList<Opponent> highMoney;
 
 	private static Calendar countDate;
-
+	
+	/**
+	 * 
+	 * @param object
+	 * @throws FatalError
+	 */
 	public PlanAngriff(JSONObject object) throws FatalError {
 		this.setName("Angriff");
 
@@ -237,9 +247,12 @@ public final class PlanAngriff extends PlanObject {
 
 				// Fight was won, we safe the opponent
 				if (money > Config.getFightAgain()) {
-
+					this.won = true;
+					
 					// Fight was lost
 				} else if (money == -1) {
+					this.won = false;
+	
 					// remove from list
 					PlanAngriff.highMoney.remove(opp);
 
@@ -248,6 +261,8 @@ public final class PlanAngriff extends PlanObject {
 
 					// Fight was won, but with low money
 				} else {
+					this.won = true;
+					
 					PlanAngriff.highMoney.remove(opp);
 					this.addLowMoney(opp.attack, opp.name);
 				}
@@ -697,6 +712,10 @@ public final class PlanAngriff extends PlanObject {
 		}
 
 		return 0;
+	}
+	
+	public boolean won() {
+		return this.won;
 	}
 
 }

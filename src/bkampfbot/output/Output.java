@@ -78,7 +78,7 @@ public class Output {
 	public static void addKampf(JSONObject fight, JSONObject data, String method) {
 		if (isHtmlOutput()) {
 			try {
-				
+
 				// Dateinamen generieren
 				String filename = String.valueOf(new Date().getTime())
 						+ fight.getJSONObject("opponent").getString("name")
@@ -91,23 +91,24 @@ public class Output {
 						+ Output.DIR_HTML + filename));
 
 				// Log generieren
-				JSONObject log = LogFile.getLog(method, fight.getJSONObject("opponent")
-						.getString("name"));
-				
+				JSONObject log = LogFile.getLog(method, fight.getJSONObject(
+						"opponent").getString("name"));
+
 				log.put("file", "." + DIR_HTML + filename);
 				log.put("good", fight.getJSONObject("results").getBoolean(
 						"fightWasWon"));
-				
+
 				// Log schreiben
 				Output.addLog(log);
 			} catch (JSONException e) {
 			}
 		}
 	}
+
 	public static void addGolden(JSONObject fight) {
 		if (isHtmlOutput()) {
 			try {
-				
+
 				// Dateinamen generieren
 				String filename = String.valueOf(new Date().getTime())
 						+ fight.getJSONObject("opponent").getString("name")
@@ -118,13 +119,13 @@ public class Output {
 						+ Output.DIR_HTML + filename));
 
 				// Log generieren
-				JSONObject log = LogFile.getLog("Golden", fight.getJSONObject("opponent")
-						.getString("name"));
-				
+				JSONObject log = LogFile.getLog("Golden", fight.getJSONObject(
+						"opponent").getString("name"));
+
 				log.put("file", "." + DIR_HTML + filename);
 				log.put("good", fight.getJSONObject("results").getBoolean(
 						"fightWasWon"));
-				
+
 				// Log schreiben
 				Output.addLog(log);
 			} catch (JSONException e) {
@@ -174,6 +175,12 @@ public class Output {
 		return instance;
 	}
 
+	/**
+	 * Gibt eine Fehlermeldung und einen Stacktrace aus.
+	 * 
+	 * @param e
+	 *            Exception zum Anzeigen
+	 */
 	public static void error(Exception e) {
 		String message = "Es trat in unbehandelbarer Fehler auf:\n"
 				+ e.getMessage() + "\n";

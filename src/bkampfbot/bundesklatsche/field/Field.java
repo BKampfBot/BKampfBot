@@ -1,106 +1,115 @@
 package bkampfbot.bundesklatsche.field;
 
-public class Field {
-	public static Field getField(int position) {
+import json.JSONObject;
+
+public abstract class Field {
+	protected JSONObject result;
+	
+	public Field (JSONObject result) {
+		this.result = result;
+	}
+	
+	public static Field getField(int position, JSONObject result) {
 		switch (position) {
 		
 		case 0:
-			return new StartField();
+			return new StartField(result);
 		
 		case 1:
 		case 16:
 		case 23:
 		case 31:
-			return new SchatzField();
+			return new SchatzField(result);
 			
 		case 2:
-			return new KampfField("Bayern");
+			return new KampfField("Bayern", result);
 			
 		case 3:
 		case 11:
 		case 26:
 		case 37:
-			return new EreignisField();
+			return new EreignisField(result);
 			
 		case 4:
-			return new NordBahnhof();
+			return new NordBahnhofField(result);
 			
 		case 5:
-			return new KampfField("Baden-Württemberg");
+			return new KampfField("Baden-Württemberg", result);
 			
 		case 6:
 		case 18:
 		case 24:
 		case 34:
-			return new AktionField();
+			return new AktionField(result);
 			
 		case 7:
-			return new KampfField("Hamburg");
+			return new KampfField("Hamburg", result);
 			
 		case 8:
 		case 12:
 		case 21:
 		case 36:
-			return new VierGewinntField();
+			return new VierGewinntField(result);
 			
 		case 9:
-			return new KampfField("Saarland");
+			return new KampfField("Saarland", result);
 			
 		case 10:
-			return new ZumKnastField();
+			return new ZumKnastField(result);
 			
 		case 13:
-			return new KampfField("Brandenburg");
+			return new KampfField("Brandenburg", result);
 			
 		case 14:
-			return new KampfField("Thüringen");
+			return new KampfField("Thüringen", result);
 			
 		case 15:
-			return new OstBahnhof();
+			return new OstBahnhofField(result);
 			
 		case 17:
-			return new KampfField("Bremen");
+			return new KampfField("Bremen", result);
 			
 		case 19:
-			return new KampfField("Schleswig-Holstein");
+			return new KampfField("Schleswig-Holstein", result);
 			
 		case 20:
-			return new Knast();
+			return new KnastField(result);
 			
 		case 22:
-			return new KampfField("Hessen");
+			return new KampfField("Hessen", result);
 			
 		case 25:
-			return new KampfField("Rheinland-Pfalz");
+			return new KampfField("Rheinland-Pfalz", result);
 			
 		case 27:
-			return new KampfField("Sachsen");
+			return new KampfField("Sachsen", result);
 			
 		case 28:
-			return new KampfField("Nordrhein-Westfalen");
+			return new KampfField("Nordrhein-Westfalen", result);
 			
 		case 29:
-			return new EWerkField();
+			return new EWerkField(result);
 			
 		case 30:
-			return new HopTopField();
+			return new HopTopField(result);
 			
 		case 32:
-			return new KampfField("Sachsen-Anhalt");
+			return new KampfField("Sachsen-Anhalt", result);
 			
 		case 33:
-			return new KampfField("Niedersachsen");
+			return new KampfField("Niedersachsen", result);
 			
 		case 35:
-			return new KampfField("Mecklenburg-Vorpommern");
+			return new KampfField("Mecklenburg-Vorpommern", result);
 			
 		case 38:
-			return new KampfField("Berlin");
+			return new KampfField("Berlin", result);
 		
 		case 39:
 		default:
-			return new KampfField();
+			return new KampfField(result);
 		}
-
 	}
+	
+	public abstract boolean action();
 }
