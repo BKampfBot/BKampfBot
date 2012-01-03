@@ -1,6 +1,9 @@
 package bkampfbot.bundesklatsche.field;
 
+import json.JSONException;
 import json.JSONObject;
+import bkampfbot.exception.FatalError;
+import bkampfbot.exception.RestartLater;
 import bkampfbot.output.Output;
 import bkampfbot.plan.PlanAngriff;
 import bkampfbot.state.Config;
@@ -27,8 +30,8 @@ public class KampfField extends Field {
 	}
 
 	@Override
-	public boolean action() {
-		try {
+	public boolean action() throws JSONException, FatalError, RestartLater {
+		
 			JSONObject config = new JSONObject();
 			JSONObject angriff = new JSONObject();
 
@@ -45,7 +48,7 @@ public class KampfField extends Field {
 
 			for (int i = start; i < fightsToDo; i++) {
 				if (Config.getDebug()) {
-					Output.printTabLn("Angriff " + i + " von " + fightsToDo,
+					Output.printTabLn("Angriff " + (i+1) + " von " + fightsToDo,
 							Output.DEBUG);
 				}
 
@@ -56,11 +59,6 @@ public class KampfField extends Field {
 				}
 			}
 			return true;
-		} catch (Exception e) {
-			// TODO
-			e.printStackTrace();
-			return false;
-		}
 	}
 
 }

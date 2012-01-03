@@ -22,8 +22,9 @@ package bkampfbot.modes;
 import json.JSONException;
 import json.JSONObject;
 import bkampfbot.Utils;
-import bkampfbot.bundesklatsche.field.*;
-import bkampfbot.Control;
+import bkampfbot.bundesklatsche.field.Field;
+import bkampfbot.exception.FatalError;
+import bkampfbot.exception.RestartLater;
 import bkampfbot.output.Output;
 
 public final class Bundesklatsche {
@@ -31,7 +32,7 @@ public final class Bundesklatsche {
 	private JSONObject lastResult = null;
 	private JSONObject lastChar = null;
 
-	public Bundesklatsche() {
+	public Bundesklatsche() throws FatalError, RestartLater{
 		try {
 
 			// first get info
