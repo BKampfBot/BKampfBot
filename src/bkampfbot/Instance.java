@@ -61,6 +61,7 @@ import org.apache.http.util.EntityUtils;
 import bkampfbot.exception.FatalError;
 import bkampfbot.exception.LocationChangedException;
 import bkampfbot.exception.RestartLater;
+import bkampfbot.modes.Bundesklatsche;
 import bkampfbot.modes.Gluecksrad;
 import bkampfbot.modes.Jagd;
 import bkampfbot.modes.Lottery;
@@ -88,7 +89,7 @@ public final class Instance {
 	}
 
 	public enum Modus {
-		normal, daily, help, lottery, pins, messages, testproxy
+		normal, daily, help, lottery, pins, messages, testproxy, bundesklatsche
 	}
 
 	// Configuration from file
@@ -345,7 +346,7 @@ public final class Instance {
 			}
 
 			this.getCharacter(true);
-			
+
 			// Ist User im Verein?
 			try {
 				Utils.getString("verein/buendnisse", "verein/index");
@@ -353,8 +354,7 @@ public final class Instance {
 			} catch (LocationChangedException e) {
 				User.setGuildMember(false);
 			}
-			
-			
+
 		} catch (IOException e) {
 			Output.println(e.getMessage(), 0);
 			throw new FatalError(e.getMessage());
@@ -403,6 +403,11 @@ public final class Instance {
 				this.daily[dailyCount] = Daily.scratchTicket;
 				dailyCount++;
 
+				continue;
+			}
+
+			if (arg.equals("bundesklatsche") && this.modus.equals(Modus.normal)) {
+				this.modus = Modus.bundesklatsche;
 				continue;
 			}
 
@@ -668,6 +673,12 @@ public final class Instance {
 		// call "Pins"
 		case pins:
 			new Pins();
+			Control.safeExit();
+			break;
+
+		// call "Bundesklatsche"
+		case bundesklatsche:
+			new Bundesklatsche();
 			Control.safeExit();
 			break;
 
