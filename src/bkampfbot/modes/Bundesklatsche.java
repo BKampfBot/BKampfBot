@@ -86,9 +86,17 @@ public final class Bundesklatsche {
 		}
 		return false;
 	}
+	
+	public static JSONObject rollTheDice() throws JSONException {
+		return getData(1);
+	}
 
+	private static JSONObject getData(int type) throws JSONException {
+		return Utils.getJSON("bundesklatsche/get_data/" + type);
+	}
+	
 	private void info(int type) throws JSONException {
-		lastResult = Utils.getJSON("bundesklatsche/get_data/" + type);
+		lastResult = getData(type);
 		lastChar = lastResult.getJSONObject("char");
 	}
 	
