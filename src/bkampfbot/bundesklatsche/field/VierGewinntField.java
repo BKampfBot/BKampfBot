@@ -1,5 +1,6 @@
 package bkampfbot.bundesklatsche.field;
 
+import json.JSONException;
 import json.JSONObject;
 import bkampfbot.output.Output;
 
@@ -10,13 +11,16 @@ public class VierGewinntField extends Field {
 	}
 
 	@Override
-	public boolean action() {
+	public boolean action() throws JSONException {
 
-		// TODO Nicht implementiert
+		if (result.getJSONObject("char").getString("viergewinnt").equals("4")) {
 
-		Output.printTabLn("Nicht implementiert: "
-				+ this.getClass().getSimpleName(), Output.ERROR);
-		return false;
+			Output.printTabLn("Nicht implementiert: "
+					+ this.getClass().getSimpleName(), Output.ERROR);
+			Output.printTabLn("Vier gewinnt steht auf 4", Output.INFO);
+			return false;
+		}
+		return true;
 	}
 
 }
