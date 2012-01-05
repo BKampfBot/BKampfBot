@@ -40,7 +40,7 @@ public class KampfField extends Field {
 		}
 		angriff.put("Stufe", -4);
 		angriff.put("Zwerg", true);
-		angriff.put("Respekt", new JSONObject("{\"min\":-1,\"max\":19000}"));
+		angriff.put("Respekt", new JSONObject("{\"min\":-1,\"max\":70000}"));
 
 		config.put("Angriff", angriff);
 
