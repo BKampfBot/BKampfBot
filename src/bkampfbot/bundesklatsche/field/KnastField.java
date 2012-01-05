@@ -38,7 +38,7 @@ public class KnastField extends Field {
 				return true;
 			}
 			
-			Bundesklatsche.rollTheDice();
+			result = Bundesklatsche.rollTheDice();
 			
 		}
 		
