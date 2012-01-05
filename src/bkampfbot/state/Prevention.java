@@ -154,7 +154,7 @@ public class Prevention {
 		// reset pointer
 		last = null;
 
-		while (deciSeconds > MIN_SECONDS) {
+		while (deciSeconds > MIN_SECONDS * 10) {
 
 			int sleepDeciSeconds = getDeciSeconds();
 			deciSeconds -= sleepDeciSeconds;

@@ -749,9 +749,6 @@ public final class Instance {
 		if (Config.getPlan1() != null) {
 			Config.getPlan1().run();
 		}
-
-		// Nach beiden Schleifen, die Listen ausgeben
-		PlanAngriff.showLists();
 	}
 
 	/**

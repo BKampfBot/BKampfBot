@@ -31,34 +31,38 @@ public class KampfField extends Field {
 
 	@Override
 	public boolean action() throws JSONException, FatalError, RestartLater {
-		
-			JSONObject config = new JSONObject();
-			JSONObject angriff = new JSONObject();
 
-			if (this.race != null) {
-				angriff.put("Land", race);
+		JSONObject config = new JSONObject();
+		JSONObject angriff = new JSONObject();
+
+		if (this.race != null) {
+			angriff.put("Land", race);
+		}
+		angriff.put("Stufe", -4);
+		angriff.put("Zwerg", true);
+		angriff.put("Respekt", new JSONObject("{\"min\":-1,\"max\":19000}"));
+
+		config.put("Angriff", angriff);
+
+		int start = Integer.valueOf(result.getJSONObject("char").getString(
+				"num2"));
+
+		for (int i = start; i < fightsToDo; i++) {
+			if (Config.getDebug()) {
+				Output.printTabLn("Angriff " + (i + 1) + " von " + fightsToDo,
+						Output.DEBUG);
 			}
-			angriff.put("Stufe", -3);
-			angriff.put("Zwerg", true);
 
-			config.put("Angriff", angriff);
+			PlanAngriff elem = new PlanAngriff(config);
+			elem.setUseCache(false);
+			elem.run();
 
-			int start = Integer.valueOf(result.getJSONObject("char").getString(
-					"num2"));
-
-			for (int i = start; i < fightsToDo; i++) {
-				if (Config.getDebug()) {
-					Output.printTabLn("Angriff " + (i+1) + " von " + fightsToDo,
-							Output.DEBUG);
-				}
-
-				PlanAngriff elem = new PlanAngriff(config);
-				elem.run();
-				if (!elem.won()) {
-					i--;
-				}
+			if (!elem.won()) {
+				Output.println("Setze eins zurück: " + i, Output.DEBUG);
+				i--;
 			}
-			return true;
+		}
+		return true;
 	}
 
 }

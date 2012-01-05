@@ -43,8 +43,27 @@ public final class Jagd {
 
 	private final String[] names = { "Film", "Sprichwort", "Musik", "Games",
 			"Sport" };
+	
+	private int wordsToRun = -1;
+	
+	private int wordsSolved = 0;
 
+	/**
+	 * Führt die Wörterjagd nicht direkt aus. Man muss die run() manuell aufrufen.
+	 * @param wordsToRun
+	 */
+	public Jagd(int wordsToRun) {
+		this.wordsToRun = wordsToRun;
+	}
+	
+	/**
+	 * Führt die Wörterjagd aus
+	 */
 	public Jagd() {
+		this.run();
+	}
+	
+	public void run() {
 		Output.printClockLn("Wörterjagd", 1);
 
 		int availablePoints;
@@ -67,7 +86,7 @@ public final class Jagd {
 									Output.ERROR);
 				}
 
-				for (int i = 0; i < 5 && availablePoints > 20 && score < 100; i++) {
+				for (int i = 0; i < 5 && availablePoints > 20 && score < 100 && doMore(); i++) {
 					JSONObject current = data.getJSONObject(i);
 
 					Output.printTab(names[i] + ": ", Output.DEBUG);
@@ -147,6 +166,7 @@ public final class Jagd {
 					if (res.equals("errorStatus=ok&right=right")) {
 						Output.println("richtig", Output.INFO);
 						score++;
+						wordsSolved++;
 					} else {
 						Output.println("falsch", Output.INFO);
 						break;
@@ -155,14 +175,22 @@ public final class Jagd {
 					availablePoints -= 20;
 
 				}
-			} while (availablePoints > 20 && score < 100);
+			} while (availablePoints > 20 && score < 100 && doMore());
 
 		} catch (JSONException e) {
 			Output.error(e);
 			return;
 		}
 	}
-
+	
+	private boolean doMore() {
+		return (wordsToRun == -1) || (wordsSolved < wordsToRun);
+	}
+	
+	public int getWordsSolved() {
+		return wordsSolved;
+	}
+	
 	private final String decrypt(final JSONArray slogan) throws JSONException {
 		final char[] letters = new char[36];
 

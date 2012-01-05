@@ -42,6 +42,11 @@ import bkampfbot.state.User;
 public final class PlanSkill extends PlanObject {
 	private String category = "";
 	private int count = -1;
+	
+	/**
+	 * Informationen, wie viele Skills gekauft wurden
+	 */
+	private int bought = 0;
 
 	public PlanSkill(JSONObject object) throws FatalError {
 		this.setName("Skill");
@@ -154,11 +159,23 @@ public final class PlanSkill extends PlanObject {
 					+ Integer.valueOf(increaseCost) + " D-Mark", Output.INFO);
 
 			User.setGold(User.getGold() - Integer.valueOf(increaseCost));
+			
+			bought++;
 
 			thisCount++;
 		} while (count < 0 || thisCount < count);
 	}
 
+	/**
+	 * Wie viele Skills wurden gekauft?
+	 * 
+	 * @return Anzahl der Skills
+	 */
+	public int getBought() {
+		return this.bought;
+	}
+	
+	
 	@Override
 	public boolean isPreRunningable() {
 		return true;

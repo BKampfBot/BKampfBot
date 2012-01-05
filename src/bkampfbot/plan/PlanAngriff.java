@@ -95,6 +95,8 @@ public final class PlanAngriff extends PlanObject {
 	 */
 	private boolean won = false;
 
+	private boolean useCache = true;
+
 	private static Opponent[] lowMoney;
 	private static int lowMoneyPointer;
 
@@ -253,9 +255,11 @@ public final class PlanAngriff extends PlanObject {
 				} else if (money == -1) {
 					this.won = false;
 	
-					// remove from list
-					PlanAngriff.highMoney.remove(opp);
-
+					if (useCache) {
+						// remove from list
+						PlanAngriff.highMoney.remove(opp);
+					}
+					
 					// add to bad list
 					this.addBad(opp.name);
 
@@ -263,8 +267,10 @@ public final class PlanAngriff extends PlanObject {
 				} else {
 					this.won = true;
 					
-					PlanAngriff.highMoney.remove(opp);
-					this.addLowMoney(opp.attack, opp.name);
+					if (useCache ) {
+						PlanAngriff.highMoney.remove(opp);
+						this.addLowMoney(opp.attack, opp.name);
+					}
 				}
 				return true;
 			} catch (BadOpponent e) {
@@ -282,6 +288,8 @@ public final class PlanAngriff extends PlanObject {
 
 		try {
 			int level = this.level + User.getLevel();
+			
+			if (level < 1) level = 1;
 
 			JSONArray arr;
 			if (raceToFight != null) {
@@ -327,19 +335,27 @@ public final class PlanAngriff extends PlanObject {
 										medicine, this, buyCrystal);
 								// Fight was won, we safe the opponent
 								if (result > Config.getFightAgain()) {
-									// save
-									this.addHighMoney(now.getString("attack"),
-											now.getString("name"));
+									if (useCache) {
+										// save
+										this.addHighMoney(now.getString("attack"),
+												now.getString("name"));
+									}
+									
+									this.won = true;
 
 									// Fight was lost
 								} else if (result == -1) {
 									// save, here we don't need the name
 									this.addLowMoney(now.getString("attack"),
 											now.getString("name"));
+									
+									this.won = false;
 								} else {
 									// save, here we don't need the name
 									this.addLowMoney(now.getString("attack"),
 											now.getString("name"));
+									
+									this.won = true;
 								}
 							} catch (BadOpponent e) {
 								Output.printTabLn("Add "
@@ -388,59 +404,16 @@ public final class PlanAngriff extends PlanObject {
 		return false;
 	}
 
-	public final static void showLists() {
-		if (Output.check(2)) {
-			if (PlanAngriff.badPointer > 0) {
-				Output.println("----- bad list -----", 2);
-				Output.printTab("", 2);
-
-				int i;
-				for (i = 0; i < PlanAngriff.bad.length; i++) {
-					if (PlanAngriff.badPointer == i
-							&& PlanAngriff.bad[i] == null) {
-
-						break;
-					}
-					if (PlanAngriff.badPointer == i)
-						Output.print(" -> ", 2);
-					Output.print(PlanAngriff.bad[i].name + " ", 2);
-				}
-				Output.println("", 2);
-				Output.printTabLn("total: " + i, 2);
-			}
-			if (PlanAngriff.highMoney.size() > 0) {
-				Output.println("----- high money -----", 2);
-				for (Opponent o : PlanAngriff.highMoney) {
-					Output.printTabLn(o.name, 2);
-				}
-			}
-			if (PlanAngriff.lowMoneyPointer > 0) {
-				Output.println("----- low money -----", 2);
-				Output.printTab("", 2);
-
-				int i;
-				for (i = 0; i < PlanAngriff.lowMoney.length; i++) {
-					if (PlanAngriff.lowMoneyPointer == i
-							&& PlanAngriff.lowMoney[i] == null) {
-
-						break;
-					}
-					if (PlanAngriff.lowMoneyPointer == i)
-						Output.print(" -> ", 2);
-					Output.println(PlanAngriff.lowMoney[i].name + " ", 2);
-				}
-				Output.println("", 2);
-				Output.printTabLn("total: " + i, 2);
-			}
-		}
-	}
-
 	/**
 	 * find a opponent from the "high money" list, which can fight
 	 * 
 	 * @return null if nobody found or the opponent
 	 */
 	private final Opponent findHighMoney() {
+		if (!useCache) {
+			return null;
+		}
+		
 		this.checkDateCounter();
 
 		for (Opponent opp : PlanAngriff.highMoney) {
@@ -479,6 +452,10 @@ public final class PlanAngriff extends PlanObject {
 	 * @return true if on the list
 	 */
 	private final boolean badOpponent(String attack) {
+		if (!useCache) {
+			return false;
+		}
+
 		for (int i = 0; i < PlanAngriff.lowMoney.length; i++) {
 			if (PlanAngriff.lowMoneyPointer == i
 					&& PlanAngriff.lowMoney[i] == null) {
@@ -613,6 +590,10 @@ public final class PlanAngriff extends PlanObject {
 	 * @param attack
 	 */
 	private final void addLowMoney(String attack, String name) {
+		if (!useCache) {
+			return;
+		}
+
 		Output.printTabLn("Add to \"low money\" list", 2);
 
 		PlanAngriff.lowMoney[PlanAngriff.lowMoneyPointer] = new Opponent(
@@ -630,6 +611,10 @@ public final class PlanAngriff extends PlanObject {
 	 * @param attack
 	 */
 	private final void addBad(String name) {
+		if (!useCache) {
+			return;
+		}
+
 		Output.printTabLn("Add to \"bad opponent\" list", 2);
 
 		PlanAngriff.bad[PlanAngriff.badPointer] = new Opponent(null, name);
@@ -647,6 +632,10 @@ public final class PlanAngriff extends PlanObject {
 	 * @param name
 	 */
 	private final void addHighMoney(String attack, String name) {
+		if (!useCache) {
+			return;
+		}
+		
 		Output.printTabLn("Add " + name + " to \"high money\" list", 2);
 
 		// is inside?
@@ -716,6 +705,10 @@ public final class PlanAngriff extends PlanObject {
 	
 	public boolean won() {
 		return this.won;
+	}
+
+	public void setUseCache(boolean b) {
+		this.useCache = b;
 	}
 
 }
