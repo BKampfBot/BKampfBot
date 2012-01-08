@@ -5,6 +5,7 @@ import json.JSONObject;
 import bkampfbot.exception.FatalError;
 import bkampfbot.modes.Jagd;
 import bkampfbot.output.Output;
+import bkampfbot.plan.PlanAussendienst;
 import bkampfbot.plan.PlanSkill;
 
 public class AktionField extends Field {
@@ -38,7 +39,13 @@ public class AktionField extends Field {
 			jagd.run();
 			return (jagd.getWordsSolved() > 0);
 		}
-
+		if (action.getString("text").equalsIgnoreCase("Du bist heute gut drauf in deiner Außendiensttätigkeit, absolviere einen leichten AD und kassiere einen Sonderbonus!")) {
+			JSONObject config = new JSONObject("{\"Aussendienst\":0}");
+			PlanAussendienst aussen = new PlanAussendienst(config);
+			aussen.run();
+			return true;
+		}
+		
 		// TODO Nicht implementiert
 
 		Output.printTabLn("Nicht implementiert: "
