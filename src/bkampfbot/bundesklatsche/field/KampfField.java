@@ -13,10 +13,12 @@ public class KampfField extends Field {
 
 	private int fightsToDo = 3;
 	private String race = null;
-	
-	public KampfField(JSONObject result, int fights) {
+	private String fieldName = null;
+
+	public KampfField(JSONObject result, int fights, String fieldName) {
 		super(result);
-		fightsToDo = 3;
+		fightsToDo = fights;
+		this.fieldName = fieldName;
 	}
 
 	public KampfField(String race, JSONObject result) {
@@ -26,10 +28,14 @@ public class KampfField extends Field {
 		if (User.getRace().equals(race) || User.getRaceSecondary().equals(race)) {
 			this.race = null;
 		}
+
+		this.fieldName = "Bundeslandfeld: " + race;
 	}
 
 	@Override
 	public boolean action() throws JSONException, FatalError, RestartLater {
+
+		Output.printClockLn(fieldName, Output.INFO);
 
 		JSONObject config = new JSONObject();
 		JSONObject angriff = new JSONObject();

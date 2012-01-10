@@ -14,22 +14,15 @@ public class HopTopField extends Field {
 
 	@Override
 	public boolean action() throws JSONException {
-
-		// wieviel einsatz ist möglich? maximal bestimmt die bisherige beute?
-
-		// einsatz eingeben
-		// bundesklatsche/set_hoptop/40
+		Output.printClockLn("HopTop-Feld", Output.INFO);
 
 		JSONObject set = Utils.getJSON("bundesklatsche/set_hoptop/"
 				+ result.getJSONObject("char").getInt("beute"));
 
-		// rückgabe enthält srn
-		// {"status":"ok","srn":7590}
-
 		int code = Math.round(((set.getInt("srn") * 5 + 234) * 2 - 1104) / 5F);
-		// POST /bundesklatsche/fin_hoptop/1/15053 HTTP/1.1
-		// RundenVon(((SicherheitsCode * 5 + 234) * 2 - 1104) / 5)
-Control.sleep(150, Output.INFO);
+
+		Control.sleep(150, Output.DEBUG);
+
 		try {
 			Utils.getJSON("bundesklatsche/fin_hoptop/1/" + code);
 			return true;
@@ -37,7 +30,5 @@ Control.sleep(150, Output.INFO);
 			Output.printTabLn("Es gab einen Fehler bei HopTop", Output.ERROR);
 			return false;
 		}
-
 	}
-
 }

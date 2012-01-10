@@ -13,15 +13,8 @@ public class KnastField extends Field {
 
 	@Override
 	public boolean action() throws JSONException {
-
-		/*
-		 * "action": { "cont": "knast", "moveon": "0", "raus": 0 },
-		 * 
-		 * 
-		 * "action": { "cont": "knast", "blackdice": 6, "beute": null, "raus":
-		 * 1, "moveon": "1" },
-		 */
 		if (result.getJSONObject("action").getString("cont").equals("knast")) {
+			Output.printClockLn("In den Knast", Output.INFO);
 			for (int i = 0; i < 10; i++) {
 
 				JSONObject action = result.getJSONObject("action");
@@ -36,8 +29,10 @@ public class KnastField extends Field {
 			Output.printTabLn("Beim Würfeln funktioniert etwas nicht. "
 					+ this.getClass().getSimpleName(), Output.ERROR);
 			return false;
+		} else {
+			Output.printClockLn("Knast: Freiwurf", Output.INFO);
+			return true;
 		}
-		return true;
 	}
 
 }

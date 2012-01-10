@@ -34,7 +34,8 @@ public abstract class Field {
 			return new EreignisField(result);
 
 		case 4:
-			return new NordBahnhofField(result);
+		case 15:
+			return new BahnhofField(result);
 
 		case 5:
 			return new KampfField("Baden-Württemberg", result);
@@ -58,7 +59,8 @@ public abstract class Field {
 			return new KampfField("Saarland", result);
 
 		case 10:
-			return new ZumKnastField(result);
+		case 20:
+			return new KnastField(result);
 
 		case 13:
 			return new KampfField("Brandenburg", result);
@@ -66,17 +68,11 @@ public abstract class Field {
 		case 14:
 			return new KampfField("Thüringen", result);
 
-		case 15:
-			return new OstBahnhofField(result);
-
 		case 17:
 			return new KampfField("Bremen", result);
 
 		case 19:
 			return new KampfField("Schleswig-Holstein", result);
-
-		case 20:
-			return new KnastField(result);
 
 		case 22:
 			return new KampfField("Hessen", result);
@@ -91,7 +87,7 @@ public abstract class Field {
 			return new KampfField("Nordrhein-Westfalen", result);
 
 		case 29:
-			return new KampfField(result, 3);
+			return new KampfField(result, 3, "E-Werk");
 
 		case 30:
 			return new HopTopField(result);
@@ -110,7 +106,7 @@ public abstract class Field {
 
 		case 39:
 		default:
-			return new KampfField(result, 10);
+			return new KampfField(result, 10, "Kampfrausch");
 		}
 	}
 
