@@ -91,7 +91,7 @@ public abstract class Field {
 			return new KampfField("Nordrhein-Westfalen", result);
 
 		case 29:
-			return new EWerkField(result);
+			return new KampfField(result, 3);
 
 		case 30:
 			return new HopTopField(result);
@@ -110,7 +110,7 @@ public abstract class Field {
 
 		case 39:
 		default:
-			return new KampfField(result);
+			return new KampfField(result, 10);
 		}
 	}
 

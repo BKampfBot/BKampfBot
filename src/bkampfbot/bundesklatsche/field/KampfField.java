@@ -13,11 +13,10 @@ public class KampfField extends Field {
 
 	private int fightsToDo = 3;
 	private String race = null;
-
-	public KampfField(JSONObject result) {
+	
+	public KampfField(JSONObject result, int fights) {
 		super(result);
-		// TODO Eventuell nicht immer 10?
-		fightsToDo = 10;
+		fightsToDo = 3;
 	}
 
 	public KampfField(String race, JSONObject result) {
