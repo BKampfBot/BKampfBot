@@ -3,6 +3,7 @@ package bkampfbot.bundesklatsche.field;
 import json.JSONException;
 import json.JSONObject;
 import bkampfbot.Utils;
+import bkampfbot.output.Output;
 
 public class StartField extends Field {
 
@@ -12,19 +13,12 @@ public class StartField extends Field {
 
 	@Override
 	public boolean action() throws JSONException {
-/*
- * 
-        "payout_arr": {
-            "gold": 7384,
-            "bonus": 0,
-            "atts": 0
-        },
- */
+		Output.printClockLn("Startfeld", Output.INFO);
+		
 		if (result.getInt("payout") == 1) {
 			Utils.getString("bundesklatsche/get_data/2");
-			return true;
 		}
-		return false;
+		return true;
 	}
 
 }
