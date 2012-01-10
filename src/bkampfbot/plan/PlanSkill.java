@@ -62,7 +62,11 @@ public final class PlanSkill extends PlanObject {
 		} catch (JSONException e) {
 			throw new FatalError("Config error: Skill config is bad");
 		}
-
+	}
+	
+	public PlanSkill(String category, int count) {
+		this.category = category;
+		this.count = count;
 	}
 
 	public final void run() throws FatalError {
