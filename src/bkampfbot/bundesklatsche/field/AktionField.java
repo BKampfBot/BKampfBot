@@ -6,6 +6,7 @@ import bkampfbot.exception.FatalError;
 import bkampfbot.modes.Jagd;
 import bkampfbot.output.Output;
 import bkampfbot.plan.PlanAussendienst;
+import bkampfbot.plan.PlanBank;
 import bkampfbot.plan.PlanSkill;
 
 public class AktionField extends Field {
@@ -44,6 +45,11 @@ public class AktionField extends Field {
 			PlanAussendienst aussen = new PlanAussendienst(config);
 			aussen.run();
 			return true;
+		}
+		if (action.getString("text").equalsIgnoreCase("Die nächste Rate für deinen neuerworbenen Fernseher ist fällig, zahle 300 D-Mark auf dein Sparkassenkonto  ein um diese begleichen zu können!")) {
+			PlanBank bank = new PlanBank(300);
+			bank.run();
+			return bank.inserted();
 		}
 		
 		// TODO Nicht implementiert

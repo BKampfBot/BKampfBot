@@ -43,6 +43,8 @@ import json.JSONObject;
  */
 public final class PlanBank extends PlanObject {
 	private int money;
+	
+	private boolean inserted = false;
 
 	public PlanBank(JSONObject object) throws FatalError {
 		this.setName("Bank");
@@ -57,6 +59,11 @@ public final class PlanBank extends PlanObject {
 			Output.println("Config: Bank is set to 0.", 0);
 			this.money = 0;
 		}
+	}
+	
+	public PlanBank(int money) {
+		this.setName("Bank");
+		this.money = money;
 	}
 
 	public final void run() {
@@ -130,6 +137,7 @@ public final class PlanBank extends PlanObject {
 			Output
 					.printTabLn("Bringe " + moneyMax + " D-Mark auf die Bank.",
 							2);
+			inserted = true;
 
 		}
 	}
@@ -137,5 +145,9 @@ public final class PlanBank extends PlanObject {
 	@Override
 	public boolean isPreRunningable() {
 		return true;
+	}
+	
+	public boolean inserted() {
+		return inserted;
 	}
 }
