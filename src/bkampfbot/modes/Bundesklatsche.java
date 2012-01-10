@@ -98,6 +98,10 @@ public final class Bundesklatsche {
 	private void info(int type) throws JSONException {
 		lastResult = getData(type);
 		lastChar = lastResult.getJSONObject("char");
+
+		if (lastResult.getInt("payout") == 1) {
+			info(2);
+		}
 	}
 	
 	private void next() throws JSONException {
