@@ -1,4 +1,4 @@
-package bkampfbot.bundesklatsche.field;
+package bkampfbot.bundesklatsche;
 
 import bkampfbot.exception.FatalError;
 import bkampfbot.exception.RestartLater;

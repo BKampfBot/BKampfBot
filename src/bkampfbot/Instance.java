@@ -61,7 +61,6 @@ import org.apache.http.util.EntityUtils;
 import bkampfbot.exception.FatalError;
 import bkampfbot.exception.LocationChangedException;
 import bkampfbot.exception.RestartLater;
-import bkampfbot.modes.Bundesklatsche;
 import bkampfbot.modes.Gluecksrad;
 import bkampfbot.modes.Jagd;
 import bkampfbot.modes.Lottery;
@@ -89,7 +88,7 @@ public final class Instance {
 	}
 
 	public enum Modus {
-		normal, daily, help, lottery, pins, messages, testproxy, bundesklatsche
+		normal, daily, help, lottery, pins, messages, testproxy
 	}
 
 	// Configuration from file
@@ -406,11 +405,6 @@ public final class Instance {
 				continue;
 			}
 
-			if (arg.equals("bundesklatsche") && this.modus.equals(Modus.normal)) {
-				this.modus = Modus.bundesklatsche;
-				continue;
-			}
-
 			if (arg.startsWith("lotto") && this.modus.equals(Modus.normal)) {
 
 				if (arg.equals("lotto")) {
@@ -673,12 +667,6 @@ public final class Instance {
 		// call "Pins"
 		case pins:
 			new Pins();
-			Control.safeExit();
-			break;
-
-		// call "Bundesklatsche"
-		case bundesklatsche:
-			new Bundesklatsche();
 			Control.safeExit();
 			break;
 

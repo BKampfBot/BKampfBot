@@ -1,9 +1,9 @@
-package bkampfbot.bundesklatsche.field;
+package bkampfbot.bundesklatsche;
 
 import json.JSONException;
 import json.JSONObject;
-import bkampfbot.modes.Bundesklatsche;
 import bkampfbot.output.Output;
+import bkampfbot.plan.PlanBundesklatsche;
 
 public class KnastField extends Field {
 
@@ -22,7 +22,7 @@ public class KnastField extends Field {
 					return true;
 				}
 
-				result = Bundesklatsche.rollTheDice();
+				result = PlanBundesklatsche.rollTheDice();
 
 			}
 

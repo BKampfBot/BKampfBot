@@ -1,4 +1,4 @@
-package bkampfbot.bundesklatsche.field;
+package bkampfbot.bundesklatsche;
 
 import json.JSONException;
 import json.JSONObject;

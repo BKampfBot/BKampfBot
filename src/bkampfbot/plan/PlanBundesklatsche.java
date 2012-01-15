@@ -1,4 +1,4 @@
-package bkampfbot.modes;
+package bkampfbot.plan;
 
 /*
  Copyright (C) 2011  georf@georf.de
@@ -22,41 +22,41 @@ package bkampfbot.modes;
 import json.JSONException;
 import json.JSONObject;
 import bkampfbot.Utils;
-import bkampfbot.bundesklatsche.field.Field;
+import bkampfbot.bundesklatsche.Field;
 import bkampfbot.exception.FatalError;
 import bkampfbot.exception.RestartLater;
 import bkampfbot.output.Output;
 
-public final class Bundesklatsche {
+public final class PlanBundesklatsche {
 
 	private JSONObject lastResult = null;
 	private JSONObject lastChar = null;
 
-	public Bundesklatsche() throws FatalError, RestartLater{
+	public PlanBundesklatsche() throws FatalError, RestartLater {
 		try {
 
 			// first get info
 			info(0);
-			
-			
+
 			// is time for dice?
 			dice();
-			
+
 			do {
 				info(0);
 
-				int pos = Integer.valueOf(lastChar
-						.getString("figur_pos"));
+				int pos = Integer.valueOf(lastChar.getString("figur_pos"));
 
 				// Erzeuge Spielfeld
 				Field current = Field.getField(pos, lastResult);
-				
+
 				// Führe Spielfeld aus
 				if (!current.action()) {
-					Output.printTabLn("Konnte Spielfeld nicht vollständig abarbeiten.", Output.INFO);
+					Output.printTabLn(
+							"Konnte Spielfeld nicht vollständig abarbeiten.",
+							Output.INFO);
 					return;
 				}
-				
+
 				// Bestätige Gewinn oder Verlust
 				next();
 
@@ -72,7 +72,7 @@ public final class Bundesklatsche {
 		if (!lastChar.getString("cont").equals("rollthedice")) {
 			return false;
 		}
-		
+
 		int rolls = Integer.valueOf(lastChar.getString("rolls"));
 		int maxRolls = lastChar.getInt("max_rolls");
 
@@ -86,7 +86,7 @@ public final class Bundesklatsche {
 		}
 		return false;
 	}
-	
+
 	public static JSONObject rollTheDice() throws JSONException {
 		return getData(1);
 	}
@@ -94,7 +94,7 @@ public final class Bundesklatsche {
 	private static JSONObject getData(int type) throws JSONException {
 		return Utils.getJSON("bundesklatsche/get_data/" + type);
 	}
-	
+
 	private void info(int type) throws JSONException {
 		lastResult = getData(type);
 		lastChar = lastResult.getJSONObject("char");
@@ -103,16 +103,16 @@ public final class Bundesklatsche {
 			info(2);
 		}
 	}
-	
+
 	private void next() throws JSONException {
 		// aktualisieren
 		info(0);
-		
+
 		// könnte man würfeln?
 		if (lastChar.getString("cont").equals("rollthedice")) {
 			return;
 		}
-		
+
 		// weiter
 		info(1);
 	}
