@@ -28,7 +28,7 @@ public class EreignisField extends Field {
 			Output.print("verloren", Output.INFO);
 		}
 
-		Output.println(" " + action.getInt("gold") + " DM, "
+		Output.println(" (" + action.getInt("gold") + " DM, "
 				+ action.getInt("klatschen") + " Klatschen)", Output.INFO);
 		return true;
 	}

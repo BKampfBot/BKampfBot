@@ -27,11 +27,25 @@ public class AktionField extends Field {
 		 */
 		String text = getResult().getJSONObject("action").getString("text");
 
+		Output.printClockLn("Aktionsfeld", Output.INFO);
+		Output.printTabLn(text, Output.DEBUG);
+
 		if (text
 				.equalsIgnoreCase("Der Schwimmkurs im hiesigen Hallenbad fordert deine ganze Kraft, steigere deinen Fitnesswert um  1 Punkt!")) {
-			PlanSkill skill = new PlanSkill("Fitness", 1);
-			skill.run();
-			return cancelButton(skill.getBought() <= 0);
+
+			boolean toSkill = true;
+			try {
+				toSkill = getConfig().getBoolean("Fitness");
+			} catch (JSONException e) {
+			}
+
+			if (toSkill) {
+				PlanSkill skill = new PlanSkill("Fitness", 1);
+				skill.run();
+				return cancelButton(skill.getBought() <= 0);
+			} else {
+				return cancelButton();
+			}
 		}
 
 		if (text
@@ -58,9 +72,20 @@ public class AktionField extends Field {
 
 		if (text
 				.equalsIgnoreCase("Du warst im Fitnesscenter und hast stundenlang deine Armmuskulatur trainiert, steigere deinen Skill Mukkies um 1 Punkt!")) {
-			PlanSkill skill = new PlanSkill("Mukkies", 1);
-			skill.run();
-			return cancelButton(skill.getBought() <= 0);
+
+			boolean toSkill = true;
+			try {
+				toSkill = getConfig().getBoolean("Mukkies");
+			} catch (JSONException e) {
+			}
+
+			if (toSkill) {
+				PlanSkill skill = new PlanSkill("Mukkies", 1);
+				skill.run();
+				return cancelButton(skill.getBought() <= 0);
+			} else {
+				return cancelButton();
+			}
 		}
 
 		if (text
@@ -71,11 +96,11 @@ public class AktionField extends Field {
 
 		if (text
 				.equalsIgnoreCase("Du warst heute den ganzen Tag auf den Beinen und hast irrsinnigen Hunger, besuche Bogdan und kauf dir eins seiner Gourmet-Essen!")) {
-			
+
 			boolean essen = true;
 			try {
-			 essen = getConfig().getBoolean("Essen");
-			}catch (JSONException e) {
+				essen = getConfig().getBoolean("Essen");
+			} catch (JSONException e) {
 			}
 			if (essen) {
 				return cancelButton(!Essen.get().buy());
@@ -98,15 +123,16 @@ public class AktionField extends Field {
 		return false;
 	}
 
-	private boolean cancelButton(boolean press) {
+	private boolean cancelButton(boolean press) throws JSONException {
 		if (press) {
-			// TODO
+			Output.printTabLn("Abbrechen", Output.DEBUG);
+			getKlatsche().rollTheDice();
 			return false;
 		}
 		return true;
 	}
 
-	private boolean cancelButton() {
+	private boolean cancelButton() throws JSONException {
 		return cancelButton(true);
 	}
 
