@@ -37,17 +37,22 @@ public class KampfField extends Field {
 	public boolean action() throws JSONException, FatalError, RestartLater {
 
 		Output.printClockLn(fieldName, Output.INFO);
-
-		JSONObject config = new JSONObject();
+		
 		JSONObject angriff = new JSONObject();
+		try {
+			angriff = getConfig().getJSONObject("Angriff");
+		} catch (JSONException e) {
+			
+		}
 
 		if (this.race != null) {
+			if (angriff.has("Land")) {
+				angriff.remove("Land");
+			}
 			angriff.put("Land", race);
 		}
-		angriff.put("Stufe", -4);
-		angriff.put("Zwerg", true);
-		angriff.put("Respekt", new JSONObject("{\"min\":-1,\"max\":70000}"));
-
+		
+		JSONObject config = new JSONObject();
 		config.put("Angriff", angriff);
 
 		int start = Integer.valueOf(getResult().getJSONObject("char")
