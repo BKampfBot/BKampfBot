@@ -1,13 +1,13 @@
 package bkampfbot.bundesklatsche;
 
 import json.JSONException;
-import json.JSONObject;
 import bkampfbot.output.Output;
+import bkampfbot.plan.PlanBundesklatsche;
 
 public class StartField extends Field {
 
-	public StartField(JSONObject result) {
-		super(result);
+	public StartField(PlanBundesklatsche klatsche) {
+		super(klatsche);
 	}
 
 	@Override

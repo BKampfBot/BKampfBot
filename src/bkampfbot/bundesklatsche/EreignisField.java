@@ -3,11 +3,12 @@ package bkampfbot.bundesklatsche;
 import json.JSONException;
 import json.JSONObject;
 import bkampfbot.output.Output;
+import bkampfbot.plan.PlanBundesklatsche;
 
 public class EreignisField extends Field {
 
-	public EreignisField(JSONObject result) {
-		super(result);
+	public EreignisField(PlanBundesklatsche klatsche) {
+		super(klatsche);
 	}
 
 	@Override
@@ -17,7 +18,7 @@ public class EreignisField extends Field {
 		 * "Auch wenn es Bogdan nicht gerne sieht: Du verkaufst Rubbellose zu Gunsten der Aktion Morgenwind. Deine Einnahmen erreichen bereits am ersten Tag:"
 		 * , "bonus": "1", "gold": 1702, "klatschen": 5 },
 		 */
-		JSONObject action = result.getJSONObject("action");
+		JSONObject action = getResult().getJSONObject("action");
 
 		Output.printClock("Ereignis - ", Output.INFO);
 

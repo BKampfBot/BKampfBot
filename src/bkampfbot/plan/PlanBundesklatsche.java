@@ -44,6 +44,8 @@ public final class PlanBundesklatsche extends PlanObject {
 	}
 
 	public void run() throws FatalError, RestartLater {
+		Output.printClockLn("-> Bundesklatsche", Output.INFO);
+
 		try {
 
 			// first get info
@@ -58,7 +60,7 @@ public final class PlanBundesklatsche extends PlanObject {
 				int pos = Integer.valueOf(lastChar.getString("figur_pos"));
 
 				// Erzeuge Spielfeld
-				Field current = Field.getField(pos, lastResult);
+				Field current = Field.getField(pos, this);
 
 				// Führe Spielfeld aus
 				if (!current.action()) {
@@ -75,19 +77,38 @@ public final class PlanBundesklatsche extends PlanObject {
 		} catch (JSONException e) {
 			Output.error(e);
 			return;
+		} catch (DiceException e){
+			return;
 		}
 	}
 
-	private boolean dice() throws JSONException {
+	private boolean dice() throws JSONException, DiceException {
 
 		if (!lastChar.getString("cont").equals("rollthedice")) {
 			return false;
 		}
 
+		int maxRollsConfig = Integer.MAX_VALUE;
+		try {
+			maxRollsConfig = config.getInt("Wuerfe");
+		} catch (JSONException e) {
+		}
+
 		int rolls = Integer.valueOf(lastChar.getString("rolls"));
+
+		if (rolls >= maxRollsConfig) {
+			Output.printTabLn("Maximale Würfe erreicht", Output.INFO);
+			throw new DiceException();
+		}
+
 		int maxRolls = lastChar.getInt("max_rolls");
 
-		if (rolls < maxRolls && lastChar.getInt("rolls_ok") != 0) {
+		if (rolls >= maxRolls) {
+			Output.printTabLn("Maximale Würfe des Tages erreicht", Output.INFO);
+			throw new DiceException();
+		}
+
+		if (lastChar.getInt("rolls_ok") != 0) {
 			info(1);
 
 			Output.printClockLn("Würfel: "
@@ -95,10 +116,11 @@ public final class PlanBundesklatsche extends PlanObject {
 					Output.DEBUG);
 			return true;
 		}
-		return false;
+		Output.printTabLn("Nicht genügend Punkte zum Würfeln", Output.INFO);
+		throw new DiceException();
 	}
 
-	public static JSONObject rollTheDice() throws JSONException {
+	public JSONObject rollTheDice() throws JSONException {
 		return getData(1);
 	}
 
@@ -126,5 +148,22 @@ public final class PlanBundesklatsche extends PlanObject {
 
 		// weiter
 		info(1);
+	}
+
+	private final class DiceException extends Exception {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -2049167987518967561L;
+
+	}
+	
+	public JSONObject getLastResult() {
+		return lastResult;
+	}
+	
+	public JSONObject getConfig() {
+		return config;
 	}
 }

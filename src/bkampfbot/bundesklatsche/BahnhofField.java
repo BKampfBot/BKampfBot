@@ -1,12 +1,12 @@
 package bkampfbot.bundesklatsche;
 
 import bkampfbot.output.Output;
-import json.JSONObject;
+import bkampfbot.plan.PlanBundesklatsche;
 
 public class BahnhofField extends Field {
 
-	public BahnhofField(JSONObject result) {
-		super(result);
+	public BahnhofField(PlanBundesklatsche klatsche) {
+		super(klatsche);
 	}
 
 	@Override

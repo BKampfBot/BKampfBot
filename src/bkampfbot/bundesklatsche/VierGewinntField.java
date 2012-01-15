@@ -1,19 +1,20 @@
 package bkampfbot.bundesklatsche;
 
 import json.JSONException;
-import json.JSONObject;
 import bkampfbot.output.Output;
+import bkampfbot.plan.PlanBundesklatsche;
 
 public class VierGewinntField extends Field {
 
-	public VierGewinntField(JSONObject result) {
-		super(result);
+	public VierGewinntField(PlanBundesklatsche klatsche) {
+		super(klatsche);
 	}
 
 	@Override
 	public boolean action() throws JSONException {
 
-		if (result.getJSONObject("char").getString("viergewinnt").equals("4")) {
+		if (getResult().getJSONObject("char").getString("viergewinnt").equals(
+				"4")) {
 
 			Output.printTabLn("Nicht implementiert: "
 					+ this.getClass().getSimpleName(), Output.ERROR);

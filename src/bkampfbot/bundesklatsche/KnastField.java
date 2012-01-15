@@ -7,12 +7,13 @@ import bkampfbot.plan.PlanBundesklatsche;
 
 public class KnastField extends Field {
 
-	public KnastField(JSONObject result) {
-		super(result);
+	public KnastField(PlanBundesklatsche klatsche) {
+		super(klatsche);
 	}
 
 	@Override
 	public boolean action() throws JSONException {
+		JSONObject result = getResult();
 		if (result.getJSONObject("action").getString("cont").equals("knast")) {
 			Output.printClockLn("In den Knast", Output.INFO);
 			for (int i = 0; i < 10; i++) {
@@ -22,7 +23,7 @@ public class KnastField extends Field {
 					return true;
 				}
 
-				result = PlanBundesklatsche.rollTheDice();
+				result = getKlatsche().rollTheDice();
 
 			}
 

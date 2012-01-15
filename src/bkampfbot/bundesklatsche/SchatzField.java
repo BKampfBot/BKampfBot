@@ -1,8 +1,8 @@
 package bkampfbot.bundesklatsche;
 
 import json.JSONException;
-import json.JSONObject;
 import bkampfbot.output.Output;
+import bkampfbot.plan.PlanBundesklatsche;
 
 /**
  * Geschenke satt. Auf dem Schatzfeld gibt es DM und Klatschen für lau. Ihr müßt
@@ -13,18 +13,18 @@ import bkampfbot.output.Output;
  */
 public class SchatzField extends Field {
 
-	public SchatzField(JSONObject result) {
-		super(result);
+	public SchatzField(PlanBundesklatsche klatsche) {
+		super(klatsche);
 	}
 
 	@Override
 	public boolean action() throws JSONException {
 
-		Output.printClockLn(
-				"Schatz: " + result.getJSONObject("char").getString("num1")
-						+ " Mark, "
-						+ result.getJSONObject("char").getString("num2")
-						+ " Klatschen", Output.INFO);
+		Output.printClockLn("Schatz: "
+				+ getResult().getJSONObject("char").getString("num1")
+				+ " Mark, "
+				+ getResult().getJSONObject("char").getString("num2")
+				+ " Klatschen", Output.INFO);
 		return true;
 	}
 

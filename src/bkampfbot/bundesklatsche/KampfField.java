@@ -6,6 +6,7 @@ import bkampfbot.exception.FatalError;
 import bkampfbot.exception.RestartLater;
 import bkampfbot.output.Output;
 import bkampfbot.plan.PlanAngriff;
+import bkampfbot.plan.PlanBundesklatsche;
 import bkampfbot.state.Config;
 import bkampfbot.state.User;
 
@@ -15,14 +16,14 @@ public class KampfField extends Field {
 	private String race = null;
 	private String fieldName = null;
 
-	public KampfField(JSONObject result, int fights, String fieldName) {
-		super(result);
+	public KampfField(PlanBundesklatsche klatsche, int fights, String fieldName) {
+		super(klatsche);
 		fightsToDo = fights;
 		this.fieldName = fieldName;
 	}
 
-	public KampfField(String race, JSONObject result) {
-		super(result);
+	public KampfField(String race, PlanBundesklatsche klatsche) {
+		super(klatsche);
 		this.race = race;
 
 		if (User.getRace().equals(race) || User.getRaceSecondary().equals(race)) {
@@ -49,8 +50,8 @@ public class KampfField extends Field {
 
 		config.put("Angriff", angriff);
 
-		int start = Integer.valueOf(result.getJSONObject("char").getString(
-				"num2"));
+		int start = Integer.valueOf(getResult().getJSONObject("char")
+				.getString("num2"));
 
 		for (int i = start; i < fightsToDo; i++) {
 			if (Config.getDebug()) {
