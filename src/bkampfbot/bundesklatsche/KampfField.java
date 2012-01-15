@@ -69,7 +69,6 @@ public class KampfField extends Field {
 			elem.run();
 
 			if (!elem.won()) {
-				Output.println("Setze eins zurück: " + i, Output.DEBUG);
 				i--;
 			}
 		}
