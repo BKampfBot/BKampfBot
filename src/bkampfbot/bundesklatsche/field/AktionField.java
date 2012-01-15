@@ -8,6 +8,8 @@ import bkampfbot.output.Output;
 import bkampfbot.plan.PlanAussendienst;
 import bkampfbot.plan.PlanBank;
 import bkampfbot.plan.PlanSkill;
+import bkampfbot.utils.Essen;
+import bkampfbot.utils.Strategie;
 
 public class AktionField extends Field {
 
@@ -61,6 +63,23 @@ public class AktionField extends Field {
 			return (skill.getBought() > 0);
 		}
 		
+		if (action.getString("text").equalsIgnoreCase("Man wirft dir vor berechenbar zu sein, speichere eine neue Kampfstrategie ab!")) {
+			Strategie.getRandom().save();
+			return true;
+		}
+
+		
+		if (action.getString("text").equalsIgnoreCase("Du warst heute den ganzen Tag auf den Beinen und hast irrsinnigen Hunger, besuche Bogdan und kauf dir eins seiner Gourmet-Essen!")) {
+			Essen.get().buy();
+			return true;
+		}
+		
+		/**
+		 * Noch zu implementieren:
+		 * 
+		 * 
+		 */
+		 
 		
 		
 		// TODO Nicht implementiert
