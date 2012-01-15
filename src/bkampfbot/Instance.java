@@ -108,6 +108,7 @@ public final class Instance {
 	 * @param args
 	 * @throws FatalError
 	 * @throws IOException
+	 * @throws RestartLater
 	 */
 	public Instance(String[] args) throws FatalError, IOException {
 

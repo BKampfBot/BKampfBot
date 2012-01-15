@@ -22,6 +22,11 @@ package bkampfbot.plan;
 import java.util.ArrayList;
 import java.util.List;
 
+import json.JSONArray;
+import json.JSONException;
+import json.JSONObject;
+import json.JSONTokener;
+
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.http.NameValuePair;
 import org.apache.http.ParseException;
@@ -30,11 +35,6 @@ import org.apache.http.message.BasicNameValuePair;
 import bkampfbot.Utils;
 import bkampfbot.exception.FatalError;
 import bkampfbot.output.Output;
-
-import json.JSONArray;
-import json.JSONException;
-import json.JSONObject;
-import json.JSONTokener;
 
 /**
  * PlanBeschreibung benötigt folgende Konfiguration: {"Beschreibung":true} oder
@@ -68,8 +68,7 @@ public final class PlanBeschreibung extends PlanObject {
 
 		try {
 
-			String page = Utils
-					.getString("characters/index");
+			String page = Utils.getString("characters/index");
 
 			int pos = page.indexOf("id=\"char_description\"");
 
@@ -177,15 +176,12 @@ public final class PlanBeschreibung extends PlanObject {
 		// Post senden
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 		nvps.add(new BasicNameValuePair("submit", "einfügen"));
-		Utils.getString(
-				"characters/showEditDescription",
-				nvps);
+		Utils.getString("characters/showEditDescription", nvps);
 
 		nvps = new ArrayList<NameValuePair>();
 		nvps.add(new BasicNameValuePair("data[Character][description]", input));
 		nvps.add(new BasicNameValuePair("submit", ""));
-		Utils.getString(
-				"characters/editDescription", nvps);
+		Utils.getString("characters/editDescription", nvps);
 
 	}
 }

@@ -74,6 +74,8 @@ public class PlanObject {
 			return new PlanBooster(object);
 		} else if (keys[0].equalsIgnoreCase("Skill")) {
 			return new PlanSkill(object);
+		} else if (keys[0].equalsIgnoreCase("Bundesklatsche")) {
+			return new PlanBundesklatsche(object);
 		}
 
 		throw new FatalError("Die Konfiguration ist nicht korrekt. "

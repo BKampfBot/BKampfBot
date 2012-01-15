@@ -27,12 +27,23 @@ import bkampfbot.exception.FatalError;
 import bkampfbot.exception.RestartLater;
 import bkampfbot.output.Output;
 
-public final class PlanBundesklatsche {
+public final class PlanBundesklatsche extends PlanObject {
 
 	private JSONObject lastResult = null;
 	private JSONObject lastChar = null;
+	private final JSONObject config;
 
-	public PlanBundesklatsche() throws FatalError, RestartLater {
+	public PlanBundesklatsche(JSONObject config) throws FatalError {
+		this.setName("Bundesklatsche");
+
+		try {
+			this.config = config.getJSONObject(getName());
+		} catch (JSONException e) {
+			throw new FatalError("Bundesklatsche ist falsch konfiguriert.");
+		}
+	}
+
+	public void run() throws FatalError, RestartLater {
 		try {
 
 			// first get info
