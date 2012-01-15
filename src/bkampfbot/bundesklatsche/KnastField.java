@@ -2,6 +2,7 @@ package bkampfbot.bundesklatsche;
 
 import json.JSONException;
 import json.JSONObject;
+import bkampfbot.Control;
 import bkampfbot.output.Output;
 import bkampfbot.plan.PlanBundesklatsche;
 
@@ -32,6 +33,7 @@ public class KnastField extends Field {
 			return false;
 		} else {
 			Output.printClockLn("Knast: Freiwurf", Output.INFO);
+			Control.sleep(10);
 			return true;
 		}
 	}

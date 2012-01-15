@@ -2,6 +2,7 @@ package bkampfbot.bundesklatsche;
 
 import json.JSONException;
 import json.JSONObject;
+import bkampfbot.Control;
 import bkampfbot.output.Output;
 import bkampfbot.plan.PlanBundesklatsche;
 
@@ -30,6 +31,7 @@ public class EreignisField extends Field {
 
 		Output.println(" (" + action.getInt("gold") + " DM, "
 				+ action.getInt("klatschen") + " Klatschen)", Output.INFO);
+		Control.sleep(10);
 		return true;
 	}
 }

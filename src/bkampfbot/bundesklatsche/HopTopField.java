@@ -16,6 +16,7 @@ public class HopTopField extends Field {
 	@Override
 	public boolean action() throws JSONException {
 		Output.printClockLn("HopTop-Feld", Output.INFO);
+		Control.sleep(10);
 
 		JSONObject set = Utils.getJSON("bundesklatsche/set_hoptop/"
 				+ getResult().getJSONObject("char").getInt("beute"));
@@ -26,9 +27,11 @@ public class HopTopField extends Field {
 
 		try {
 			Utils.getJSON("bundesklatsche/fin_hoptop/1/" + code);
+			Control.sleep(10);
 			return true;
 		} catch (JSONException e) {
 			Output.printTabLn("Es gab einen Fehler bei HopTop", Output.ERROR);
+			Control.sleep(10);
 			return false;
 		}
 	}

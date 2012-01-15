@@ -21,6 +21,7 @@ package bkampfbot.plan;
 
 import json.JSONException;
 import json.JSONObject;
+import bkampfbot.Control;
 import bkampfbot.Utils;
 import bkampfbot.bundesklatsche.Field;
 import bkampfbot.exception.FatalError;
@@ -69,6 +70,8 @@ public final class PlanBundesklatsche extends PlanObject {
 							Output.INFO);
 					return;
 				}
+				
+				Control.sleep(10);
 
 				// Bestätige Gewinn oder Verlust
 				next();
@@ -125,6 +128,7 @@ public final class PlanBundesklatsche extends PlanObject {
 	}
 
 	private static JSONObject getData(int type) throws JSONException {
+		Control.sleep(5);
 		return Utils.getJSON("bundesklatsche/get_data/" + type);
 	}
 

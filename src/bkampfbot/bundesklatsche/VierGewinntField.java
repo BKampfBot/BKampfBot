@@ -1,6 +1,7 @@
 package bkampfbot.bundesklatsche;
 
 import json.JSONException;
+import bkampfbot.Control;
 import bkampfbot.output.Output;
 import bkampfbot.plan.PlanBundesklatsche;
 
@@ -21,6 +22,7 @@ public class VierGewinntField extends Field {
 			Output.printTabLn("Vier gewinnt steht auf 4", Output.INFO);
 			return false;
 		}
+		Control.sleep(10);
 		return true;
 	}
 

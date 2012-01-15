@@ -2,6 +2,7 @@ package bkampfbot.bundesklatsche;
 
 import json.JSONException;
 import json.JSONObject;
+import bkampfbot.Control;
 import bkampfbot.exception.FatalError;
 import bkampfbot.exception.RestartLater;
 import bkampfbot.output.Output;
@@ -37,6 +38,7 @@ public class KampfField extends Field {
 	public boolean action() throws JSONException, FatalError, RestartLater {
 
 		Output.printClockLn(fieldName, Output.INFO);
+		Control.sleep(10);
 		
 		JSONObject angriff = new JSONObject();
 		try {

@@ -1,6 +1,7 @@
 package bkampfbot.bundesklatsche;
 
 import json.JSONException;
+import bkampfbot.Control;
 import bkampfbot.output.Output;
 import bkampfbot.plan.PlanBundesklatsche;
 
@@ -25,6 +26,7 @@ public class SchatzField extends Field {
 				+ " Mark, "
 				+ getResult().getJSONObject("char").getString("num2")
 				+ " Klatschen", Output.INFO);
+		Control.sleep(10);
 		return true;
 	}
 

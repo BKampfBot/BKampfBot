@@ -2,6 +2,7 @@ package bkampfbot.bundesklatsche;
 
 import json.JSONException;
 import json.JSONObject;
+import bkampfbot.Control;
 import bkampfbot.exception.FatalError;
 import bkampfbot.modes.Jagd;
 import bkampfbot.output.Output;
@@ -20,6 +21,7 @@ public class AktionField extends Field {
 
 	@Override
 	public boolean action() throws JSONException, FatalError {
+		Control.sleep(10);
 
 		/**
 		 * "action": { "cont": "", "done": 0, "gold": 159, "text":"Der Schwimmkurs im hiesigen Hallenbad fordert deine ganze Kraft, steigere deinen Fitnesswert um  1 Punkt!"
@@ -125,9 +127,10 @@ public class AktionField extends Field {
 
 	private boolean cancelButton(boolean press) throws JSONException {
 		if (press) {
+			Control.sleep(10);
 			Output.printTabLn("Abbrechen", Output.DEBUG);
 			getKlatsche().rollTheDice();
-			return false;
+			Control.sleep(10);
 		}
 		return true;
 	}
