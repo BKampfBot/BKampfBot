@@ -110,6 +110,8 @@ public class User {
 			setRaceSecondary("Mecklenburg-Vorpommern");
 		} else if (race.compareToIgnoreCase("Bad.WÃ¼rtt.") == 0) {
 			setRaceSecondary("Baden-Württemberg");
+		} else if (race.compareToIgnoreCase("Rheinl-Pfalz") == 0) {
+			setRaceSecondary("Rheinland-Pfalz");
 		}
 		// "Nordrhein-Westfalen"
 		// "Hessen"
