@@ -19,19 +19,11 @@ package bkampfbot.plan;
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-
-import bkampfbot.Control;
-import bkampfbot.Utils;
-import bkampfbot.exception.FatalError;
-import bkampfbot.output.Output;
-
 import json.JSONException;
 import json.JSONObject;
+import bkampfbot.exception.FatalError;
+import bkampfbot.output.Output;
+import bkampfbot.utils.Bank;
 
 /**
  * PlanBank benötigt folgende Konfiguration: {"Bank":23} -> Es werden 23 Mark
@@ -43,8 +35,6 @@ import json.JSONObject;
  */
 public final class PlanBank extends PlanObject {
 	private int money;
-	
-	private boolean inserted = false;
 
 	public PlanBank(JSONObject object) throws FatalError {
 		this.setName("Bank");
@@ -60,94 +50,20 @@ public final class PlanBank extends PlanObject {
 			this.money = 0;
 		}
 	}
-	
+
 	public PlanBank(int money) {
 		this.setName("Bank");
 		this.money = money;
 	}
 
 	public final void run() {
-		Output.printClockLn("-> Bank", 1);
+		Output.printClockLn("-> Bank", Output.INFO);
 
-		Utils.getString("city/index");
-		Control.quietSleep(500);
-		Utils.getString("sparkasse/banker");
-		Control.quietSleep(500);
-		String einzahlen = Utils.getString("sparkasse/einzahlen");
-		Control.quietSleep(500);
-
-		if (this.money == 0) {
-			List<NameValuePair> nvps = new ArrayList<NameValuePair>();
-			nvps.add(new BasicNameValuePair("max", "1"));
-			nvps.add(new BasicNameValuePair("x", "44"));
-			nvps.add(new BasicNameValuePair("y", "24"));
-			Utils.getString("sparkasse/einzahlen", nvps);
-		} else {
-
-			if (einzahlen.indexOf(" D-Mark haben um etwas einzuzahlen.") != -1) {
-				Output.printTabLn("Nicht genug D-Mark verhanden.", 2);
-				return;
-			}
-
-			int index = einzahlen.indexOf("Du besitzt ");
-			if (index == -1) {
-				Output.println("Etwas ging schief.", Output.ERROR);
-				return;
-			}
-			einzahlen = einzahlen.substring(index);
-
-			index = einzahlen.indexOf(" D-Mark.");
-			if (index == -1) {
-				Output.println("Etwas ging schief.", Output.ERROR);
-				return;
-			}
-			int moneyNow = Integer.valueOf(einzahlen.substring(0, index)
-					.replaceAll("[^0-9]+", ""));
-
-			index = einzahlen.indexOf("Bis auf ein Haushaltsgeld von ");
-			if (index == -1) {
-				Output.println("Etwas ging schief.", Output.ERROR);
-				return;
-			}
-			einzahlen = einzahlen.substring(index);
-
-			index = einzahlen.indexOf(" D-Mark kannst du dein Geld");
-			if (index == -1) {
-				Output.println("Etwas ging schief.", Output.ERROR);
-				return;
-			}
-			int moneyMin = Integer.valueOf(einzahlen.substring(0, index)
-					.replaceAll("[^0-9]+", ""));
-
-			int moneyMax = moneyNow - moneyMin;
-
-			if (this.money < moneyMax) {
-				moneyMax = this.money;
-			}
-
-			// Post zusammenbauen
-			List<NameValuePair> nvps = new ArrayList<NameValuePair>();
-			nvps.add(new BasicNameValuePair("data[Bank][in]", String
-					.valueOf(moneyMax)));
-			nvps.add(new BasicNameValuePair("x", "110"));
-			nvps.add(new BasicNameValuePair("y", "16"));
-
-			Utils.getString("sparkasse/einzahlen", nvps);
-
-			Output
-					.printTabLn("Bringe " + moneyMax + " D-Mark auf die Bank.",
-							2);
-			inserted = true;
-
-		}
+		Bank.putMoney(money);
 	}
 
 	@Override
 	public boolean isPreRunningable() {
 		return true;
-	}
-	
-	public boolean inserted() {
-		return inserted;
 	}
 }

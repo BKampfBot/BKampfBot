@@ -7,9 +7,9 @@ import bkampfbot.exception.FatalError;
 import bkampfbot.modes.Jagd;
 import bkampfbot.output.Output;
 import bkampfbot.plan.PlanAussendienst;
-import bkampfbot.plan.PlanBank;
 import bkampfbot.plan.PlanBundesklatsche;
 import bkampfbot.plan.PlanSkill;
+import bkampfbot.utils.Bank;
 import bkampfbot.utils.Essen;
 import bkampfbot.utils.Strategie;
 
@@ -67,9 +67,8 @@ public class AktionField extends Field {
 
 		if (text
 				.equalsIgnoreCase("Die nächste Rate für deinen neuerworbenen Fernseher ist fällig, zahle 300 D-Mark auf dein Sparkassenkonto  ein um diese begleichen zu können!")) {
-			PlanBank bank = new PlanBank(300);
-			bank.run();
-			return cancelButton(!bank.inserted());
+
+			return cancelButton(!Bank.putMoney(300));
 		}
 
 		if (text
