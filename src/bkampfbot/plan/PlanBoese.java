@@ -33,6 +33,7 @@ import bkampfbot.exception.FatalError;
 import bkampfbot.exception.RestartLater;
 import bkampfbot.output.Output;
 import bkampfbot.state.Config;
+import bkampfbot.utils.Keilerei;
 
 /**
  * PlanBoese benötigt folgende Konfiguration: {"Boese":{}}
@@ -105,7 +106,7 @@ public abstract class PlanBoese extends PlanObject {
 			try {
 				Output.println(" (nochmal)", Output.INFO);
 
-				int money = Utils.fight(toFight.attack, toFight.name, "Böse",
+				int money = Keilerei.fight(toFight.attack, toFight.name, "Böse",
 						medicine, this, buyCrystal);
 				toFight.fights++;
 
@@ -215,7 +216,7 @@ public abstract class PlanBoese extends PlanObject {
 				}
 
 				try {
-					int money = Utils.fight(
+					int money = Keilerei.fight(
 							getOpponentList().get(nextKey).attack,
 							getOpponentList().get(nextKey).name, "Böse",
 							medicine, this, buyCrystal);

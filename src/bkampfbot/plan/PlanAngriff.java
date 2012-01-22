@@ -39,6 +39,7 @@ import bkampfbot.exception.RestartLater;
 import bkampfbot.output.Output;
 import bkampfbot.state.Config;
 import bkampfbot.state.User;
+import bkampfbot.utils.Keilerei;
 
 /**
  * PlanAngriff benötigt folgende Konfiguration:
@@ -244,7 +245,7 @@ public final class PlanAngriff extends PlanObject {
 		Opponent opp = this.findHighMoney();
 		if (opp != null) {
 			try {
-				int money = Utils.fight(opp.attack, opp.name, "Angriff High",
+				int money = Keilerei.fight(opp.attack, opp.name, "Angriff High",
 						medicine, this, buyCrystal);
 
 				// Fight was won, we safe the opponent
@@ -329,7 +330,7 @@ public final class PlanAngriff extends PlanObject {
 								&& !this.isFriend(friends, now
 										.getString("name"))) {
 							try {
-								int result = Utils.fight(now
+								int result = Keilerei.fight(now
 										.getString("attack"), now
 										.getString("name"), "Angriff",
 										medicine, this, buyCrystal);

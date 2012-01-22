@@ -24,6 +24,7 @@ import bkampfbot.exception.BadOpponent;
 import bkampfbot.exception.FatalError;
 import bkampfbot.exception.RestartLater;
 import bkampfbot.output.Output;
+import bkampfbot.utils.Keilerei;
 
 import json.JSONException;
 import json.JSONObject;
@@ -90,7 +91,7 @@ public final class PlanKampf extends PlanObject {
 		}
 
 		try {
-			Utils.fight(attack, this.idOrName, "Kampf", medicine, this, buyCrystal);
+			Keilerei.fight(attack, this.idOrName, "Kampf", medicine, this, buyCrystal);
 		} catch (BadOpponent o) {
 			Output.printTabLn("Angriff abgebrochen. "
 					+ "Vermutlich heute zu viele Kämpfe gegen diesen Gegner.",
