@@ -84,7 +84,7 @@ public final class PlanAngriff extends PlanObject {
 	/**
 	 * Zwerg kaufen?
 	 */
-	private boolean buyCrystal = false;
+	private int buyCrystal = -1;
 
 	/**
 	 * Welches Bundesland?
@@ -175,8 +175,11 @@ public final class PlanAngriff extends PlanObject {
 			}
 
 			try {
-				this.buyCrystal = angriff.getBoolean("Zwerg");
+				if (angriff.getBoolean("Zwerg")) {
+					this.buyCrystal = Integer.MAX_VALUE;
+				}
 			} catch (JSONException r) {
+				this.buyCrystal = angriff.getInt("Zwerg");
 			}
 
 			try {

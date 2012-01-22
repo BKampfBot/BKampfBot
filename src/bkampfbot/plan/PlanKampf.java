@@ -19,15 +19,14 @@ package bkampfbot.plan;
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import json.JSONException;
+import json.JSONObject;
 import bkampfbot.Utils;
 import bkampfbot.exception.BadOpponent;
 import bkampfbot.exception.FatalError;
 import bkampfbot.exception.RestartLater;
 import bkampfbot.output.Output;
 import bkampfbot.utils.Keilerei;
-
-import json.JSONException;
-import json.JSONObject;
 
 /**
  * PlanKampf benötigt folgende Konfiguration: {"Kampf":"ID des Gegners"} oder
@@ -39,7 +38,7 @@ import json.JSONObject;
 public final class PlanKampf extends PlanObject {
 	private String idOrName;
 	private int medicine = -1;
-	private boolean buyCrystal = false;
+	private int buyCrystal = -1;
 
 	public PlanKampf(JSONObject object) throws FatalError {
 		this.setName("Kampf");
@@ -62,8 +61,11 @@ public final class PlanKampf extends PlanObject {
 				}
 
 				try {
-					this.buyCrystal = help.getBoolean("Zwerg");
+					if (help.getBoolean("Zwerg")) {
+						this.buyCrystal = Integer.MAX_VALUE;
+					}
 				} catch (JSONException r) {
+					this.buyCrystal = help.getInt("Zwerg");
 				}
 
 			} catch (JSONException t) {
@@ -91,7 +93,8 @@ public final class PlanKampf extends PlanObject {
 		}
 
 		try {
-			Keilerei.fight(attack, this.idOrName, "Kampf", medicine, this, buyCrystal);
+			Keilerei.fight(attack, this.idOrName, "Kampf", medicine, this,
+					buyCrystal);
 		} catch (BadOpponent o) {
 			Output.printTabLn("Angriff abgebrochen. "
 					+ "Vermutlich heute zu viele Kämpfe gegen diesen Gegner.",

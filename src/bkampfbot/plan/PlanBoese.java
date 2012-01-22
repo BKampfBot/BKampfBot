@@ -45,7 +45,7 @@ import bkampfbot.utils.Keilerei;
 public abstract class PlanBoese extends PlanObject {
 	private int medicine = -1;
 	private int moneyAgain = -1;
-	protected boolean buyCrystal = false;
+	protected int buyCrystal = -1;
 
 	// private static ConcurrentHashMap<Integer, Opponent> list;
 
@@ -66,8 +66,11 @@ public abstract class PlanBoese extends PlanObject {
 			}
 
 			try {
-				this.buyCrystal = help.getBoolean("Zwerg");
+				if (help.getBoolean("Zwerg")) {
+					this.buyCrystal = Integer.MAX_VALUE;
+				}
 			} catch (JSONException r) {
+				this.buyCrystal = help.getInt("Zwerg");
 			}
 
 		} catch (JSONException t) {
@@ -106,8 +109,8 @@ public abstract class PlanBoese extends PlanObject {
 			try {
 				Output.println(" (nochmal)", Output.INFO);
 
-				int money = Keilerei.fight(toFight.attack, toFight.name, "Böse",
-						medicine, this, buyCrystal);
+				int money = Keilerei.fight(toFight.attack, toFight.name,
+						"Böse", medicine, this, buyCrystal);
 				toFight.fights++;
 
 				if (money < this.moneyAgain) {

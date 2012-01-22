@@ -23,7 +23,7 @@ public class Keilerei {
 
 	// after fight
 	private int medicine;
-	private final boolean buyCrystal;
+	private final int buyCrystal;
 
 	// for look ahead
 	private PlanObject current;
@@ -32,7 +32,7 @@ public class Keilerei {
 	private final String method;
 
 	public static int fight(String attack, String name, String method,
-			int medicine, PlanObject current, boolean buyCrystal)
+			int medicine, PlanObject current, int buyCrystal)
 			throws BadOpponent, FatalError, RestartLater {
 
 		Keilerei k = new Keilerei(attack, name, method, medicine, current,
@@ -43,7 +43,7 @@ public class Keilerei {
 	}
 
 	private Keilerei(String attack, String name, String method, int medicine,
-			PlanObject current, boolean buyCrystal) {
+			PlanObject current, int buyCrystal) {
 		
 		this.attack = attack;
 		this.name = name;
@@ -96,7 +96,7 @@ public class Keilerei {
 
 			int deci = -1;
 
-			if (buyCrystal) {
+			if (buyCrystal >= returnValue) {
 				Output.printTab("Gebe Zwerg: ", Output.INFO);
 				try {
 					Utils.getString("fights/waitFight/buy", "fights/start");
