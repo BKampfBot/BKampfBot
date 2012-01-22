@@ -65,7 +65,10 @@ public final class PlanKampf extends PlanObject {
 						this.buyCrystal = Integer.MAX_VALUE;
 					}
 				} catch (JSONException r) {
-					this.buyCrystal = help.getInt("Zwerg");
+					try {
+						this.buyCrystal = help.getInt("Zwerg");
+					} catch (JSONException p) {
+					}
 				}
 
 			} catch (JSONException t) {

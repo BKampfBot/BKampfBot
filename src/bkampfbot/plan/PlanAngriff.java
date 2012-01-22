@@ -80,7 +80,7 @@ public final class PlanAngriff extends PlanObject {
 	 * Apotheke besuchen?
 	 */
 	private int medicine = -1;
-	
+
 	/**
 	 * Zwerg kaufen?
 	 */
@@ -90,7 +90,7 @@ public final class PlanAngriff extends PlanObject {
 	 * Welches Bundesland?
 	 */
 	private String raceToFight = null;
-	
+
 	/**
 	 * Für späteren Zugriff auf Ergebnis
 	 */
@@ -107,7 +107,7 @@ public final class PlanAngriff extends PlanObject {
 	private static ArrayList<Opponent> highMoney;
 
 	private static Calendar countDate;
-	
+
 	/**
 	 * 
 	 * @param object
@@ -179,7 +179,10 @@ public final class PlanAngriff extends PlanObject {
 					this.buyCrystal = Integer.MAX_VALUE;
 				}
 			} catch (JSONException r) {
-				this.buyCrystal = angriff.getInt("Zwerg");
+				try {
+					this.buyCrystal = angriff.getInt("Zwerg");
+				} catch (JSONException p) {
+				}
 			}
 
 			try {
@@ -248,30 +251,30 @@ public final class PlanAngriff extends PlanObject {
 		Opponent opp = this.findHighMoney();
 		if (opp != null) {
 			try {
-				int money = Keilerei.fight(opp.attack, opp.name, "Angriff High",
-						medicine, this, buyCrystal);
+				int money = Keilerei.fight(opp.attack, opp.name,
+						"Angriff High", medicine, this, buyCrystal);
 
 				// Fight was won, we safe the opponent
 				if (money > Config.getFightAgain()) {
 					this.won = true;
-					
+
 					// Fight was lost
 				} else if (money == -1) {
 					this.won = false;
-	
+
 					if (useCache) {
 						// remove from list
 						PlanAngriff.highMoney.remove(opp);
 					}
-					
+
 					// add to bad list
 					this.addBad(opp.name);
 
 					// Fight was won, but with low money
 				} else {
 					this.won = true;
-					
-					if (useCache ) {
+
+					if (useCache) {
 						PlanAngriff.highMoney.remove(opp);
 						this.addLowMoney(opp.attack, opp.name);
 					}
@@ -292,8 +295,9 @@ public final class PlanAngriff extends PlanObject {
 
 		try {
 			int level = this.level + User.getLevel();
-			
-			if (level < 1) level = 1;
+
+			if (level < 1)
+				level = 1;
 
 			JSONArray arr;
 			if (raceToFight != null) {
@@ -341,10 +345,11 @@ public final class PlanAngriff extends PlanObject {
 								if (result > Config.getFightAgain()) {
 									if (useCache) {
 										// save
-										this.addHighMoney(now.getString("attack"),
-												now.getString("name"));
+										this.addHighMoney(now
+												.getString("attack"), now
+												.getString("name"));
 									}
-									
+
 									this.won = true;
 
 									// Fight was lost
@@ -352,13 +357,13 @@ public final class PlanAngriff extends PlanObject {
 									// save, here we don't need the name
 									this.addLowMoney(now.getString("attack"),
 											now.getString("name"));
-									
+
 									this.won = false;
 								} else {
 									// save, here we don't need the name
 									this.addLowMoney(now.getString("attack"),
 											now.getString("name"));
-									
+
 									this.won = true;
 								}
 							} catch (BadOpponent e) {
@@ -417,7 +422,7 @@ public final class PlanAngriff extends PlanObject {
 		if (!useCache) {
 			return null;
 		}
-		
+
 		this.checkDateCounter();
 
 		for (Opponent opp : PlanAngriff.highMoney) {
@@ -639,7 +644,7 @@ public final class PlanAngriff extends PlanObject {
 		if (!useCache) {
 			return;
 		}
-		
+
 		Output.printTabLn("Add " + name + " to \"high money\" list", 2);
 
 		// is inside?
@@ -706,7 +711,7 @@ public final class PlanAngriff extends PlanObject {
 
 		return 0;
 	}
-	
+
 	public boolean won() {
 		return this.won;
 	}
