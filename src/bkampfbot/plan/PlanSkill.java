@@ -35,6 +35,7 @@ import bkampfbot.utils.Skill;
 public final class PlanSkill extends PlanObject {
 	private String category = "";
 	private int count = -1;
+	private boolean bank = false;
 
 	public PlanSkill(JSONObject object) throws FatalError {
 		this.setName("Skill");
@@ -47,6 +48,13 @@ public final class PlanSkill extends PlanObject {
 				count = skill.getInt("Anzahl");
 			} catch (JSONException e) {
 			}
+
+			try {
+				bank = skill.getBoolean("Bank");
+			} catch (JSONException e) {
+
+			}
+
 		} catch (JSONException e) {
 			throw new FatalError("Config error: Skill config is bad");
 		}
@@ -55,8 +63,7 @@ public final class PlanSkill extends PlanObject {
 	public final void run() throws FatalError {
 		Output.printClockLn("-> Skill (" + category + ")", Output.INFO);
 
-		// TODO bank
-		Skill.get(category).buy(count, false);
+		Skill.get(category).buy(count, bank);
 	}
 
 	@Override

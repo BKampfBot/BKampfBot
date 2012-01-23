@@ -35,16 +35,15 @@ public class AktionField extends Field {
 		if (text
 				.equalsIgnoreCase("Der Schwimmkurs im hiesigen Hallenbad fordert deine ganze Kraft, steigere deinen Fitnesswert um  1 Punkt!")) {
 
-			boolean toSkill = true;
-			try {
-				toSkill = getConfig().getBoolean("Fitness");
-			} catch (JSONException e) {
-			}
+			if (!getConfig().isNull("Fitness")) {
 
-			if (toSkill) {
+				boolean bank = false;
+				try {
+					bank = getConfig().getBoolean("Fitness");
+				} catch (JSONException e) {
+				}
 
-				// TODO bank
-				int bought = Skill.get("Fitness").buy(1, false);
+				int bought = Skill.get("Fitness").buy(1, bank);
 				return cancelButton(bought <= 0);
 
 			} else {
@@ -76,16 +75,15 @@ public class AktionField extends Field {
 		if (text
 				.equalsIgnoreCase("Du warst im Fitnesscenter und hast stundenlang deine Armmuskulatur trainiert, steigere deinen Skill Mukkies um 1 Punkt!")) {
 
-			boolean toSkill = true;
-			try {
-				toSkill = getConfig().getBoolean("Mukkies");
-			} catch (JSONException e) {
-			}
+			if (!getConfig().isNull("Mukkies")) {
 
-			if (toSkill) {
+				boolean bank = false;
+				try {
+					bank = getConfig().getBoolean("Mukkies");
+				} catch (JSONException e) {
+				}
 
-				// TODO bank
-				int bought = Skill.get("Mukkies").buy(1, false);
+				int bought = Skill.get("Mukkies").buy(1, bank);
 				return cancelButton(bought <= 0);
 
 			} else {
