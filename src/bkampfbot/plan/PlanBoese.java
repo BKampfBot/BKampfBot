@@ -21,6 +21,7 @@ package bkampfbot.plan;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -46,6 +47,7 @@ public abstract class PlanBoese extends PlanObject {
 	private int medicine = -1;
 	private int moneyAgain = -1;
 	protected int buyCrystal = -1;
+	private boolean random = false;
 
 	// private static ConcurrentHashMap<Integer, Opponent> list;
 
@@ -62,6 +64,11 @@ public abstract class PlanBoese extends PlanObject {
 
 			try {
 				this.moneyAgain = help.getInt("nochmal");
+			} catch (JSONException r) {
+			}
+
+			try {
+				this.random = help.getBoolean("Zufall");
 			} catch (JSONException r) {
 			}
 
@@ -189,25 +196,33 @@ public abstract class PlanBoese extends PlanObject {
 
 				// From up to down?
 
-				int fights = -1;
+				if (!random) {
 
-				// go through the list
-				for (int key : getOpponentList().keySet()) {
-					if (fights == -1 && getOpponentList().get(key).canFight) {
-						nextKey = key;
-						fights = getOpponentList().get(key).fights;
+					int fights = -1;
+
+					// go through the list
+					for (int key : getOpponentList().keySet()) {
+						if (fights == -1 && getOpponentList().get(key).canFight) {
+							nextKey = key;
+							fights = getOpponentList().get(key).fights;
+						}
+						if (getOpponentList().get(key).canFight
+								&& getOpponentList().get(key).fights < fights) {
+							nextKey = key;
+							fights = getOpponentList().get(key).fights;
+						}
 					}
-					if (getOpponentList().get(key).canFight
-							&& getOpponentList().get(key).fights < fights) {
-						nextKey = key;
-						fights = getOpponentList().get(key).fights;
+
+					if (fights == -1) {
+						throw new BadOpponent("", "");
 					}
+				} else {
+					Integer[] keys = getOpponentList().keySet().toArray(
+							new Integer[0]);
+					Random generator = new Random();
+					nextKey = keys[generator.nextInt(keys.length)];
 				}
-
-				if (fights == -1) {
-					throw new BadOpponent("", "");
-				}
-
+				
 				try {
 					int money = Keilerei.fight(
 							getOpponentList().get(nextKey).attack,
