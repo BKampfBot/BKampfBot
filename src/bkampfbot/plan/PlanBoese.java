@@ -185,19 +185,6 @@ public abstract class PlanBoese extends PlanObject {
 				// delete all others
 				getOpponentList().deleteUnselected();
 
-				if (Config.getDebug()) {
-					Output.println("-- Current enemy list --", 2);
-					for (int key : getOpponentList().keySet()) {
-						Output.print(getOpponentList().get(key).name + ": "
-								+ getOpponentList().get(key).fights, 2);
-						if (!getOpponentList().get(key).canFight) {
-							Output.print(" - today lock", 2);
-						}
-						Output.println("", 2);
-					}
-					Output.println("", 2);
-				}
-
 				int nextKey = 0;
 
 				// From up to down?

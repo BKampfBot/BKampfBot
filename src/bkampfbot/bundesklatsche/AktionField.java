@@ -8,9 +8,9 @@ import bkampfbot.modes.Jagd;
 import bkampfbot.output.Output;
 import bkampfbot.plan.PlanAussendienst;
 import bkampfbot.plan.PlanBundesklatsche;
-import bkampfbot.plan.PlanSkill;
 import bkampfbot.utils.Bank;
 import bkampfbot.utils.Essen;
+import bkampfbot.utils.Skill;
 import bkampfbot.utils.Strategie;
 
 public class AktionField extends Field {
@@ -42,9 +42,11 @@ public class AktionField extends Field {
 			}
 
 			if (toSkill) {
-				PlanSkill skill = new PlanSkill("Fitness", 1);
-				skill.run();
-				return cancelButton(skill.getBought() <= 0);
+
+				// TODO bank
+				int bought = Skill.get("Fitness").buy(1, false);
+				return cancelButton(bought <= 0);
+
 			} else {
 				return cancelButton();
 			}
@@ -81,9 +83,11 @@ public class AktionField extends Field {
 			}
 
 			if (toSkill) {
-				PlanSkill skill = new PlanSkill("Mukkies", 1);
-				skill.run();
-				return cancelButton(skill.getBought() <= 0);
+
+				// TODO bank
+				int bought = Skill.get("Mukkies").buy(1, false);
+				return cancelButton(bought <= 0);
+
 			} else {
 				return cancelButton();
 			}

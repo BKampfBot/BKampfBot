@@ -19,18 +19,11 @@ package bkampfbot.plan;
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import java.util.ArrayList;
-
 import json.JSONException;
 import json.JSONObject;
-
-import org.apache.http.NameValuePair;
-
-import bkampfbot.Control;
-import bkampfbot.Utils;
 import bkampfbot.exception.FatalError;
 import bkampfbot.output.Output;
-import bkampfbot.state.User;
+import bkampfbot.utils.Skill;
 
 /**
  * PlanSkill benötigt folgende Konfiguration: {"Skill":{"Kategorie":"Mukkies",
@@ -42,11 +35,6 @@ import bkampfbot.state.User;
 public final class PlanSkill extends PlanObject {
 	private String category = "";
 	private int count = -1;
-	
-	/**
-	 * Informationen, wie viele Skills gekauft wurden
-	 */
-	private int bought = 0;
 
 	public PlanSkill(JSONObject object) throws FatalError {
 		this.setName("Skill");
@@ -63,123 +51,14 @@ public final class PlanSkill extends PlanObject {
 			throw new FatalError("Config error: Skill config is bad");
 		}
 	}
-	
-	public PlanSkill(String category, int count) {
-		this.category = category;
-		this.count = count;
-	}
 
 	public final void run() throws FatalError {
 		Output.printClockLn("-> Skill (" + category + ")", Output.INFO);
-		/*
-		 * <span style='color: #000000;font-size:11px;'>Kosten Steigerung:
-		 * <span>95 </span>
-		 * 
-		 * Mukkies id="statStr" /characters/charLeft/strength
-		 * 
-		 * Schleuderkraft id="statInt" /characters/charLeft/intelligence
-		 * 
-		 * Fitness id="statSta" /characters/charLeft/endurance
-		 * 
-		 * Wahrnehmung id="statSkill" /characters/charLeft/skill
-		 * 
-		 * Glück id="statCog" /characters/charLeft/cognition
-		 * 
-		 * 
-		 * </div> <script type="text/javascript"> var vereinbonus = 0; var
-		 * baseStr = 26; var baseInt = 28; var baseSkill = 133; var baseSta =
-		 * 247; var baseCog = 436; var baseArmor = 0; var charLevel = 50;
-		 * </script>
-		 */
 
-		int thisCount = 0;
-
-		do {
-			String character = Control.current.getCharacter();
-			character = character.substring(character
-					.indexOf("<div class=\"attibutes\">"));
-
-			String link = "";
-			String id = "";
-			if (category.equals("Mukkies")) {
-				link = "strength";
-				id = "statStr";
-			} else if (category.equals("Schleuderkraft")) {
-				link = "intelligence";
-				id = "statInt";
-			} else if (category.equals("Fitness")) {
-				link = "endurance";
-				id = "statSta";
-			} else if (category.equals("Wahrnehmung")) {
-				link = "skill";
-				id = "statSkill";
-			} else if (category.equals("Glueck")) {
-				link = "cognition";
-				id = "statCog";
-			}
-
-			if (link.equals("")) {
-				Output.printTabLn("Es ging was mit der Config schief.",
-						Output.INFO);
-				return;
-			}
-
-			link = "characters/charLeft/" + link;
-			id = " id=\"" + id + "\"";
-
-			int searchIndex = 0;
-
-			// search for id
-			searchIndex = character.indexOf(id);
-			if (searchIndex < 0)
-				return;
-			String thisSkill = character.substring(searchIndex);
-
-			searchIndex = thisSkill.indexOf("Kosten Steigerung: <span");
-			if (searchIndex < 0)
-				return;
-			String increaseCost = thisSkill.substring(searchIndex);
-
-			searchIndex = increaseCost.indexOf(">");
-			if (searchIndex < 0)
-				return;
-			increaseCost = increaseCost.substring(searchIndex);
-
-			searchIndex = increaseCost.indexOf("</span>");
-			if (searchIndex < 0)
-				return;
-			increaseCost = increaseCost.substring(0, searchIndex).replaceAll(
-					"[^0-9]", "");
-
-			Output.printTabLn("Du hast " + User.getGold() + " D-Mark und " + category+" kostet "
-					+ Integer.valueOf(increaseCost)+ " D-Mark", Output.DEBUG);
-
-			if (User.getGold() < Integer.valueOf(increaseCost)) {
-				return;
-			}
-
-			Utils.getString(link, new ArrayList<NameValuePair>());
-			Output.printTabLn("Kaufe " + category + " für "
-					+ Integer.valueOf(increaseCost) + " D-Mark", Output.INFO);
-
-			User.setGold(User.getGold() - Integer.valueOf(increaseCost));
-			
-			bought++;
-
-			thisCount++;
-		} while (count < 0 || thisCount < count);
+		// TODO bank
+		Skill.get(category).buy(count, false);
 	}
 
-	/**
-	 * Wie viele Skills wurden gekauft?
-	 * 
-	 * @return Anzahl der Skills
-	 */
-	public int getBought() {
-		return this.bought;
-	}
-	
-	
 	@Override
 	public boolean isPreRunningable() {
 		return true;
