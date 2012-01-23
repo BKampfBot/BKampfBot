@@ -16,11 +16,11 @@ public class Skill {
 	private Skill(String category) {
 		this.category = category;
 	}
-	
+
 	public static Skill get(String category) {
 		return new Skill(category);
 	}
-	
+
 	public int buy(int count, boolean bank) throws FatalError {
 		int bought = 0;
 
@@ -87,8 +87,18 @@ public class Skill {
 					+ category + " kostet " + Integer.valueOf(increaseCost)
 					+ " D-Mark", Output.DEBUG);
 
-			if (User.getGold() < Integer.valueOf(increaseCost)) {
-				return 0;
+			int needMoney = Integer.valueOf(increaseCost) - User.getGold();
+			if (needMoney > 0) {
+
+				if (bank) {
+
+					if (!Bank.getMoney(needMoney)) {
+						return 0;
+					}
+
+				} else {
+					return 0;
+				}
 			}
 
 			Utils.getString(link, new ArrayList<NameValuePair>());
@@ -101,7 +111,7 @@ public class Skill {
 
 			thisCount++;
 		} while (count < 0 || thisCount < count);
-		
+
 		return bought;
 	}
 }
