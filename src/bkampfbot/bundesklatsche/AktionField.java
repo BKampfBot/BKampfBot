@@ -154,7 +154,7 @@ public class AktionField extends Field {
 		if (text
 				.equalsIgnoreCase("Wer nicht wagt, der nicht gewinnt! Gehe ins Casino und drehe dreimal am einarmigen Banditen!")) {
 			if (User.getLevel() < 10) {
-				Output.printTabLn("Du darst noch nicht ins Casino.", Output.INFO);
+				Output.printTabLn("Du darfst noch nicht ins Casino.", Output.INFO);
 				return cancelButton();
 			}
 			
