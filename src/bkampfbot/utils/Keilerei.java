@@ -114,7 +114,7 @@ public class Keilerei {
 
 			int deci = -1;
 
-			if (buyCrystal >= returnValue) {
+			if (buyCrystal >= 0 && buyCrystal >= returnValue) {
 				Output.printTab("Gebe Zwerg: ", Output.INFO);
 				try {
 					Utils.getString("fights/waitFight/buy", "fights/start");
