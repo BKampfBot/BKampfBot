@@ -52,7 +52,7 @@ public abstract class HtmlFile extends AbstractFile {
 				+ "</script>"
 
 				+ "<style type=\"text/css\">"
-				+ "body{padding:50px}"
+				+ "body{padding:0 50px 50px 50px}"
 				+ "#example{clear:both;margin:auto 5px}"
 				+ "#example th{cursor:pointer}"
 				+ ".good{background-color:#90EE90}"

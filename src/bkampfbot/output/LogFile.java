@@ -20,7 +20,6 @@ package bkampfbot.output;
  */
 
 import java.io.FileNotFoundException;
-import java.text.DateFormat;
 import java.util.Date;
 
 import json.JSONException;
@@ -49,9 +48,8 @@ public class LogFile extends AbstractFile implements DoItLater {
 			StringBuffer output = new StringBuffer("<tr><td>");
 
 			// Datum
-			output.append(DateFormat.getDateTimeInstance(DateFormat.SHORT,
-					DateFormat.SHORT)
-					.format(new Date(file.getLong("datetime"))));
+			Date d = new Date(file.getLong("datetime"));
+			output.append(String.format("%tF %tR", d, d));
 
 			output.append("</td><td>");
 

@@ -93,6 +93,7 @@ public class KampfFile extends HtmlFile implements DoItLater {
 			}
 
 			write(getHeader(result.getJSONObject("opponent").getString("name"))
+					+ "<h1>Kampfergebnis</h1>"
 					+ "<table border=\"1\" style=\"width: 700px;\">"
 					+ "<tr><td style=\"background-color:"
 					+ ((result.getJSONObject("results").getBoolean(
