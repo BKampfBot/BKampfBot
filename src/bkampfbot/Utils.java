@@ -154,7 +154,7 @@ public class Utils {
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 		nvps.add(new BasicNameValuePair("playerName", name));
 		try {
-			JSONObject ob = Utils.getJSON("quests/start", nvps);
+			JSONObject ob = Utils.getJSON("fights/searchCharacterJson/1", nvps);
 
 			JSONArray arr = ob.getJSONArray("list");
 			for (int i = 0; i < arr.length(); i++) {
