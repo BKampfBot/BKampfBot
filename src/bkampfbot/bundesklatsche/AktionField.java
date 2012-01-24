@@ -27,6 +27,7 @@ import bkampfbot.modes.Jagd;
 import bkampfbot.output.Output;
 import bkampfbot.plan.PlanAussendienst;
 import bkampfbot.plan.PlanBundesklatsche;
+import bkampfbot.state.User;
 import bkampfbot.utils.Bank;
 import bkampfbot.utils.Essen;
 import bkampfbot.utils.Skill;
@@ -149,10 +150,20 @@ public class AktionField extends Field {
 				return cancelButton();
 			}
 		}
+		
+		if (text
+				.equalsIgnoreCase("Wer nicht wagt, der nicht gewinnt! Gehe ins Casino und drehe dreimal am einarmigen Banditen!")) {
+			if (User.getLevel() < 10) {
+				Output.printTabLn("Du darst noch nicht ins Casino.", Output.INFO);
+				return cancelButton();
+			}
+			
+			// TODO casino
+		}
 
 		/**
 		 * Noch zu implementieren:
-		 * 
+		 * Wer nicht wagt, der nicht gewinnt! Gehe ins Casino und drehe dreimal am einarmigen Banditen!
 		 * 
 		 */
 
