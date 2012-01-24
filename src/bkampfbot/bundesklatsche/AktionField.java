@@ -130,6 +130,25 @@ public class AktionField extends Field {
 				return cancelButton();
 			}
 		}
+		
+		if (text
+				.equalsIgnoreCase("Der alljährliche Schützenwettbewerb im Kastanienweitwurf steht an, steigere deinen Skill Schleuderkraft um 1 Punkt!")) {
+
+			if (!getConfig().isNull("Schleuderkraft")) {
+
+				boolean bank = false;
+				try {
+					bank = getConfig().getBoolean("Schleuderkraft");
+				} catch (JSONException e) {
+				}
+
+				int bought = Skill.get("Schleuderkraft").buy(1, bank);
+				return cancelButton(bought <= 0);
+
+			} else {
+				return cancelButton();
+			}
+		}
 
 		/**
 		 * Noch zu implementieren:
