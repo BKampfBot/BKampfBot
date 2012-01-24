@@ -94,6 +94,18 @@ public class Strategie {
 		return s;
 	}
 	
+	public void setDefens(String[] tactics) {
+		if (tactics.length > 0) {
+			defens[0] = tactics[0];
+		}
+		if (tactics.length > 1) {
+			defens[1] = tactics[1];
+		}
+		if (tactics.length > 2) {
+			defens[2] = tactics[2];
+		}
+	}
+	
 	public void setDefens(String first, String second, String third) {
 		defens[0] = first;
 		defens[1] = second;

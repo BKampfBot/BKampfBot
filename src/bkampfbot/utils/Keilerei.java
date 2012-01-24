@@ -30,6 +30,7 @@ import bkampfbot.exception.FatalError;
 import bkampfbot.exception.LocationChangedException;
 import bkampfbot.exception.RestartLater;
 import bkampfbot.output.Output;
+import bkampfbot.output.TacticsLogFile;
 import bkampfbot.plan.PlanObject;
 import bkampfbot.state.Config;
 import bkampfbot.state.User;
@@ -79,6 +80,14 @@ public class Keilerei {
 
 		Utils.visit("fights/fight");
 		Utils.visit(attack.substring(1));
+
+		// set tactics
+		String[] tactics = TacticsLogFile.getTactics(name);
+
+		if (tactics != null) {
+
+			Strategie.getRandom().setDefens(tactics);
+		}
 
 		Output.printTab("Kampf mit " + name + " - ", Output.INFO);
 

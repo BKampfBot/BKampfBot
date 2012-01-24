@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import bkampfbot.state.Config;
+import bkampfbot.state.Tuple;
 
 import json.JSONArray;
 import json.JSONException;
@@ -178,15 +179,5 @@ public class KampfFile extends HtmlFile implements DoItLater {
 			}
 		}
 
-	}
-
-	public class Tuple {
-		public String key;
-		public int count;
-
-		public Tuple(String k) {
-			key = k;
-			count = 1;
-		}
 	}
 }

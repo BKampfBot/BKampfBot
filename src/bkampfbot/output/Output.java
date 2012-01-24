@@ -79,6 +79,9 @@ public class Output {
 		if (isHtmlOutput()) {
 			try {
 
+				// Taktik speichern
+				add(new TacticsLogFile(getInstance().htmlPath, data));
+				
 				// Dateinamen generieren
 				String filename = String.valueOf(new Date().getTime())
 						+ fight.getJSONObject("opponent").getString("name")

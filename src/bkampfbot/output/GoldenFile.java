@@ -19,8 +19,8 @@ package bkampfbot.output;
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import bkampfbot.state.Config;
 import json.JSONObject;
+import bkampfbot.state.Config;
 
 public class GoldenFile extends HtmlFile implements DoItLater {
 
@@ -100,15 +100,5 @@ public class GoldenFile extends HtmlFile implements DoItLater {
 			}
 		}
 
-	}
-
-	public class Tuple {
-		public String key;
-		public int count;
-
-		public Tuple(String k) {
-			key = k;
-			count = 1;
-		}
 	}
 }

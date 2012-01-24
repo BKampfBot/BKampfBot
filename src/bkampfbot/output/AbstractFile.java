@@ -34,11 +34,19 @@ abstract public class AbstractFile {
 	}
 
 	protected String read() throws FileNotFoundException {
+		return read(null);
+	}
+
+	protected String read(String defaultString) throws FileNotFoundException {
 		try {
 			File file = new File(filename);
 
 			if (!file.isFile() || !file.exists()) {
-				throw new FileNotFoundException();
+				if (defaultString == null) {
+					throw new FileNotFoundException();
+				} else {
+					return defaultString;
+				}
 			}
 
 			StringBuilder contents = new StringBuilder();
