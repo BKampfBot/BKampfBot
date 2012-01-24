@@ -94,8 +94,9 @@ public final class PlanArbeiten extends PlanObject {
 		Control.sleep(5);
 
 		JSONObject result = Utils.getJSON("services/serviceData");
-		String workFee = result.getString("workFee");
-		Output.printTabLn("Arbeite für " + workFee + " D-Mark.", 2);
+		String workFee = result.getString("workFee").replaceAll("[^0-9]", "");
+		int fee = Integer.valueOf(workFee)/10*hours;
+		Output.printTabLn("Arbeite für " + fee + " D-Mark.", 2);
 
 		if (this.stop) {
 			Control.safeExit();
