@@ -1,6 +1,7 @@
 package bkampfbot.output;
 
 import java.io.FileNotFoundException;
+import java.util.Date;
 
 import json.JSONArray;
 import json.JSONException;
@@ -8,6 +9,8 @@ import json.JSONObject;
 
 public class TacticsLogFile extends AbstractFile implements DoItLater {
 	public final static String FILENAME = "tactics.bkampfbot";
+	public final static int minSaveTime = 3600 * 24 * 7;
+
 	public final JSONObject data;
 
 	public TacticsLogFile(String path, JSONObject data) {
@@ -59,14 +62,29 @@ public class TacticsLogFile extends AbstractFile implements DoItLater {
 
 			JSONObject newOpponent = new JSONObject();
 			newOpponent.put("tactics", tactics);
+			newOpponent.put("time", (int) ((new Date()).getTime()/1000));
 
 			JSONObject content = new JSONObject(read("{}"));
 			if (content.has(name)) {
-				content.remove(name);
+				
+				boolean remove = true;
+				
+				if (content.getJSONObject(name).has("time")) {
+					int timestamp = content.getJSONObject(name).getInt("time");
+					if ((int) ((new Date()).getTime()/1000) - minSaveTime < timestamp) {
+						remove = false;
+					}
+				}
+				
+				if (remove) {
+					content.remove(name);
+					content.put(name, newOpponent);
+				}
+			} else {
+				content.put(name, newOpponent);
 			}
-			content.put(name, newOpponent);
 
-			write(content.toString(2));
+			write(content.toString());
 
 		} catch (JSONException e) {
 		} catch (FileNotFoundException e) {
@@ -79,7 +97,7 @@ public class TacticsLogFile extends AbstractFile implements DoItLater {
 					Output.getInstance().htmlPath);
 			JSONObject content = new JSONObject(help.read("{}"));
 			if (content.has(name)) {
-				JSONArray t = content.getJSONArray("tactics");
+				JSONArray t = content.getJSONObject(name).getJSONArray("tactics");
 				String[] tactics = new String[t.length()];
 				for (int i = 0; i < t.length(); i++) {
 					tactics[i] = t.getString(i);

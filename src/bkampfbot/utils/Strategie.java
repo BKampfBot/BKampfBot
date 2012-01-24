@@ -91,34 +91,44 @@ public class Strategie {
 		
 		s.setAttack(a1, a2, a3);
 		s.setDefens(d1, d2, d3);
+		
 		return s;
 	}
 	
-	public void setDefens(String[] tactics) {
+	public Strategie setDefens(String[] tactics) {
+		
 		if (tactics.length > 0) {
 			defens[0] = tactics[0];
 		}
+		
 		if (tactics.length > 1) {
 			defens[1] = tactics[1];
 		}
+		
 		if (tactics.length > 2) {
 			defens[2] = tactics[2];
 		}
+		
+		return this;
 	}
 	
-	public void setDefens(String first, String second, String third) {
+	public Strategie setDefens(String first, String second, String third) {
 		defens[0] = first;
 		defens[1] = second;
 		defens[2] = third;
+		
+		return this;
 	}
 	
-	public void setAttack(String first, String second, String third) {
+	public Strategie setAttack(String first, String second, String third) {
 		attack[0] = first;
 		attack[1] = second;
 		attack[2] = third;
+		
+		return this;
 	}
 	
-	public void save() throws JSONException {
+	public Strategie save() throws JSONException {
 		JSONArray a = new JSONArray(attack);
 		JSONArray d = new JSONArray(defens);
 		JSONObject j = new JSONObject();
@@ -128,5 +138,7 @@ public class Strategie {
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 		nvps.add(new BasicNameValuePair("json", j.toString()));
 		Utils.getString("fights/tacticSave", nvps);
+		
+		return this;
 	}
 }

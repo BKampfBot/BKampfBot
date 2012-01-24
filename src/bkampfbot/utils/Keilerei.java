@@ -78,23 +78,28 @@ public class Keilerei {
 
 	private int runFight() throws BadOpponent, FatalError, RestartLater {
 
-		Utils.visit("fights/fight");
-		Utils.visit(attack.substring(1));
-
-		// set tactics
-		String[] tactics = TacticsLogFile.getTactics(name);
-
-		if (tactics != null) {
-
-			Strategie.getRandom().setDefens(tactics);
-		}
-
-		Output.printTab("Kampf mit " + name + " - ", Output.INFO);
-
-		Control.sleep(5);
-
 		int returnValue = -1;
 		try {
+			
+
+			// set tactics
+			String[] tactics = TacticsLogFile.getTactics(name);
+
+			if (tactics != null) {
+
+				Strategie.getRandom().setDefens(tactics).save();
+				
+				Control.sleep(15);
+			}
+			
+
+			Utils.visit("fights/fight");
+			Utils.visit(attack.substring(1));
+
+			Output.printTab("Kampf mit " + name + " - ", Output.INFO);
+			
+			Control.sleep(5);
+			
 			JSONObject fightData = Utils.getJSON("fights/fightData");
 			JSONObject fight = Utils.getJSON(fightData.getString("url")
 					.replace("/results/", "/getResults/").substring(1));
