@@ -30,24 +30,39 @@ public abstract class HtmlFile extends AbstractFile {
 	protected String getHeader(String title) {
 		return "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">"
 				+ "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">"
-				+ "<head>"
-				+ "<title>"
+				+ "<head>" + "<title>"
 				+ title
 				+ " - BKampfBot</title>"
 				+ "<meta http-equiv=\"content-type\" content=\"text/html;charset=utf-8\"/>"
 				+ "<meta name=\"generator\" content=\"BKampfBot "
 				+ Control.version
 				+ "\"/>"
+
+				+ "<script type=\"text/javascript\" src=\"https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js\"></script>"
+				+ "<script type=\"text/javascript\" src=\"http://datatables.net/download/build/jquery.dataTables.min.js\"></script>"
+				+ "<link rel=\"stylesheet\" type=\"text/css\" href=\"http://datatables.net/release-datatables/media/css/demo_page.css\"/>"
+				+ "<link rel=\"stylesheet\" type=\"text/css\" href=\"http://datatables.net/release-datatables/media/css/demo_table.css\"/>"
+				+ "<script type=\"text/javascript\">"
+				+ "$(document).ready(function(){"
+				+ "$('#example').dataTable({"
+				+ "'aaSorting':[[0,'desc']],"
+				+ "'iDisplayLength':25"
+				+ "});"
+				+ "});"
+				+ "</script>"
+
 				+ "<style type=\"text/css\">"
+				+ "body{padding:50px}"
+				+ "#example{clear:both;margin:auto 5px}"
+				+ "#example th{cursor:pointer}"
 				+ ".good{background-color:#90EE90}"
-				+ ".bad{background-color:#FF6B6B}"
-				+ "</style>"
-				+ "</head>"
-				+ "<body>";
+				+ ".bad{background-color:#FF6B6B}" + "</style>"
+
+				+ "</head>" + "<body>" + "<div id=\"dt_example\">";
 	}
 
 	protected String getFooter() {
-		return "</body></html>";
+		return "</div></body></html>";
 	}
 
 }

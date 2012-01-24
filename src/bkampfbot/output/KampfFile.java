@@ -73,6 +73,7 @@ public class KampfFile extends HtmlFile implements DoItLater {
 
 			String fightAttacks = "";
 			if (list.size() > 0) {
+				fightAttacks += "<h2>Taktik des Gegners</h2>";
 				fightAttacks += "<table border=\"1\" style=\"width: 400px;\">";
 				for (Tuple c : list) {
 					fightAttacks += "<tr><td>" + c.key + "</td><td>" + c.count
@@ -101,7 +102,9 @@ public class KampfFile extends HtmlFile implements DoItLater {
 							"fightWasWon") ? "Gewonnen" : "Verloren"))
 					+ "</td><th style=\"width: 40%;\">"
 					+ result.getJSONObject("opponent").getString("name")
-					+ "</th><th style=\"width: 40%;\">Ich</th></tr>"
+					+ "</th><th style=\"width: 40%;\">"
+					+ Config.getUserName()
+					+ "</th></tr>"
 					+ "<tr><th>Nahkampfschaden</th><td>"
 					+ result.getJSONObject("results").getJSONObject("p2")
 							.getJSONObject("fightDamage").getInt("from")

@@ -54,9 +54,11 @@ public class IndexFile extends HtmlFile implements DoItLater {
 		Arrays.sort(list);
 
 		StringBuffer content = new StringBuffer(getHeader("Überblick")
-				+ "<h1>Auswertung</h1>" + "<table>" + "<tr>"
-				+ "<th>Zeitpunkt</th>" + "<th>Informationen</th>"
-				+ "<th>Typ</th>" + "</tr>");
+				+ "<h1>Auswertung</h1>" + "<table id=\"example\">"
+				+ "<thead><tr>"
+				+ "<th style=\"min-width:150px\">Zeitpunkt</th>"
+				+ "<th style=\"min-width:250px\">Informationen</th>"
+				+ "<th style=\"min-width:100px\">Typ</th>" + "</tr></thead>");
 
 		for (File c : list) {
 			content.append((new LogFile(c.getAbsolutePath())).getHtmlTr());
