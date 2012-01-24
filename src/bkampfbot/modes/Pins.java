@@ -30,7 +30,6 @@ import bkampfbot.Control;
 import bkampfbot.Utils;
 import bkampfbot.output.Output;
 
-
 import json.JSONArray;
 import json.JSONException;
 import json.JSONObject;
@@ -82,8 +81,7 @@ public final class Pins {
 	}
 
 	private ArrayList<ArrayList<Integer>> getPins() throws JSONException {
-		JSONObject result = Utils
-				.getJSON("items/getPinData/");
+		JSONObject result = Utils.getJSON("items/getPinData/");
 		/*
 		 * {"items":[...], "pins":[
 		 * {"id":"11446","character_id":"163988","typ":"1"
@@ -119,8 +117,7 @@ public final class Pins {
 		case 21:
 		case 31:
 		case 41:
-			Utils.visit("items/kaufen/"
-					+ type + "/0");
+			Utils.visit("items/kaufen/" + type + "/0");
 			return true;
 
 		case 51:
@@ -227,7 +224,6 @@ public final class Pins {
 		nvps.add(new BasicNameValuePair("pin2", String.valueOf(p2)));
 		nvps.add(new BasicNameValuePair("pin1", String.valueOf(p1)));
 
-		Utils.getString(
-				"items/check/1/fortunes", nvps);
+		Utils.getString("items/check/1/fortunes", nvps);
 	}
 }

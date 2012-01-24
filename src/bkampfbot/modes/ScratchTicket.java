@@ -25,8 +25,6 @@ import bkampfbot.output.Output;
 import json.JSONException;
 import json.JSONObject;
 
-
-
 public final class ScratchTicket {
 
 	public ScratchTicket() {
@@ -35,12 +33,10 @@ public final class ScratchTicket {
 		try {
 			for (int i = 0; i < 3; i++) {
 				Utils.visit("kiosk/");
-				Utils
-						.visit("kiosk/losKaufen/");
+				Utils.visit("kiosk/losKaufen/");
 				Utils.visit("kiosk/lose/");
 
-				JSONObject result = Utils
-						.getJSON("kiosk/getLos");
+				JSONObject result = Utils.getJSON("kiosk/getLos");
 				String type = result.getString("type");
 				if (!type.equals("kein Gewinn")) {
 					Output.printTabLn("Gewinn: " + type + ": "
@@ -54,11 +50,13 @@ public final class ScratchTicket {
 
 				Control.sleep(15);
 
-				Utils
-						.visit("kiosk/getLosWin");
+				Utils.visit("kiosk/getLosWin");
 			}
 		} catch (JSONException e) {
-			Output.printTabLn("Schon alle Lose für heute gekauft oder nicht genügend Punkte.", 1);
+			Output
+					.printTabLn(
+							"Schon alle Lose für heute gekauft oder nicht genügend Punkte.",
+							1);
 		}
 	}
 }

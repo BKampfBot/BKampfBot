@@ -17,8 +17,7 @@ package bkampfbot.exception;
 
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
+ */
 
 /**
  * Gibt an, dass der übergebene Feind zur Zeit nicht angreifbar ist.
@@ -27,15 +26,16 @@ public final class BadOpponent extends Exception {
 	private static final long serialVersionUID = 201102030046L;
 	private final String attack;
 	private final String name;
-	
+
 	public BadOpponent(String attack, String name) {
 		this.attack = attack;
 		this.name = name;
 	}
-	
+
 	public final String getAttack() {
 		return this.attack;
 	}
+
 	public final String getName() {
 		return this.name;
 	}

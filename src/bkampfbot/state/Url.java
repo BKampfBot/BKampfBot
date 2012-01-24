@@ -46,8 +46,10 @@ public class Url {
 	 * Konstruktor für eine URL, mit Folge-URL
 	 * 
 	 * @param url
-	 * @param seconds Sekunden Abstand
-	 * @param next Pointer auf nächste URL
+	 * @param seconds
+	 *            Sekunden Abstand
+	 * @param next
+	 *            Pointer auf nächste URL
 	 */
 	public Url(String url, int seconds, Url next) {
 		this.url = url;
@@ -91,7 +93,7 @@ public class Url {
 	public final int getSeconds() {
 		return this.seconds;
 	}
-	
+
 	/**
 	 * Setzt URL auf Verein
 	 * 

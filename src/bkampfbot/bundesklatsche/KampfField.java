@@ -1,5 +1,24 @@
 package bkampfbot.bundesklatsche;
 
+/*
+ Copyright (C) 2011  georf@georf.de
+
+ This file is part of BKampfBot.
+
+ BKampfBot is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 2 of the License, or
+ any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 import json.JSONException;
 import json.JSONObject;
 import bkampfbot.Control;
@@ -39,12 +58,12 @@ public class KampfField extends Field {
 
 		Output.printClockLn(fieldName, Output.INFO);
 		Control.sleep(10);
-		
+
 		JSONObject angriff = new JSONObject();
 		try {
 			angriff = getConfig().getJSONObject("Angriff");
 		} catch (JSONException e) {
-			
+
 		}
 
 		if (this.race != null) {
@@ -53,7 +72,7 @@ public class KampfField extends Field {
 			}
 			angriff.put("Land", race);
 		}
-		
+
 		JSONObject config = new JSONObject();
 		config.put("Angriff", angriff);
 

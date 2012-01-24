@@ -1,5 +1,24 @@
 package bkampfbot.utils;
 
+/*
+ Copyright (C) 2012  georf@georf.de
+
+ This file is part of BKampfBot.
+
+ BKampfBot is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 2 of the License, or
+ any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 import java.util.GregorianCalendar;
 
 import json.JSONException;
@@ -37,14 +56,14 @@ public class Keilerei {
 
 		Keilerei k = new Keilerei(attack, name, method, medicine, current,
 				buyCrystal);
-		
+
 		return k.runFight();
 
 	}
 
 	private Keilerei(String attack, String name, String method, int medicine,
 			PlanObject current, int buyCrystal) {
-		
+
 		this.attack = attack;
 		this.name = name;
 
@@ -88,7 +107,6 @@ public class Keilerei {
 			Output.println(" (" + p1.getInt("gold") + ", hp:" + p1.getInt("hp")
 					+ ")", 1);
 
-			
 			// set new values to user model
 			User.setLevel(Integer.parseInt(fight.getString("mylevel")));
 			User.setCurrentLivePoints(Integer.parseInt(p1.getString("lp")));
@@ -159,8 +177,6 @@ public class Keilerei {
 			// Add 20 seconds
 			deci += 200;
 
-			
-			
 			GregorianCalendar beforeLookAhead = new GregorianCalendar();
 
 			if (current != null) {

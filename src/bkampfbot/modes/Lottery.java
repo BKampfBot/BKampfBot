@@ -33,8 +33,6 @@ import org.apache.http.message.BasicNameValuePair;
 import bkampfbot.Utils;
 import bkampfbot.output.Output;
 
-
-
 public final class Lottery {
 	public static int[] numbers = new int[5];
 	public static boolean random = true;
@@ -62,8 +60,8 @@ public final class Lottery {
 			for (int n : numbers) {
 				out += n + " ";
 			}
-			
-			Output.printTabLn("Benutze: "+out, Output.INFO);
+
+			Output.printTabLn("Benutze: " + out, Output.INFO);
 		}
 
 		Arrays.sort(Lottery.numbers);
@@ -71,8 +69,7 @@ public final class Lottery {
 		Utils.visit("lotto/history");
 
 		try {
-			String s = Utils
-					.getString("lotto/schein");
+			String s = Utils.getString("lotto/schein");
 
 			int start = s.indexOf("/img/flash/ankreuzen.swf");
 			if (start == -1)
@@ -117,8 +114,7 @@ public final class Lottery {
 			nvps.add(new BasicNameValuePair("numbers", numbers));
 
 			// send post
-			Utils.getString(
-					"lotto/schein", nvps);
+			Utils.getString("lotto/schein", nvps);
 
 			Output.printTabLn("Nummern angekreuzt: " + numbers, 1);
 

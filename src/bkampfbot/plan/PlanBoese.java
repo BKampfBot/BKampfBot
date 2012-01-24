@@ -222,7 +222,7 @@ public abstract class PlanBoese extends PlanObject {
 					Random generator = new Random();
 					nextKey = keys[generator.nextInt(keys.length)];
 				}
-				
+
 				try {
 					int money = Keilerei.fight(
 							getOpponentList().get(nextKey).attack,

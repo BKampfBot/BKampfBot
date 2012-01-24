@@ -70,7 +70,7 @@ public final class PlanBundesklatsche extends PlanObject {
 							Output.INFO);
 					return;
 				}
-				
+
 				Control.sleep(10);
 
 				// Bestätige Gewinn oder Verlust
@@ -80,7 +80,7 @@ public final class PlanBundesklatsche extends PlanObject {
 		} catch (JSONException e) {
 			Output.error(e);
 			return;
-		} catch (DiceException e){
+		} catch (DiceException e) {
 			return;
 		}
 	}
@@ -162,11 +162,11 @@ public final class PlanBundesklatsche extends PlanObject {
 		private static final long serialVersionUID = -2049167987518967561L;
 
 	}
-	
+
 	public JSONObject getLastResult() {
 		return lastResult;
 	}
-	
+
 	public JSONObject getConfig() {
 		return config;
 	}

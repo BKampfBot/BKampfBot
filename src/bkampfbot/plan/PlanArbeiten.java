@@ -102,7 +102,7 @@ public final class PlanArbeiten extends PlanObject {
 		}
 
 		int count = 60 * this.hours + 1;
-		
+
 		if (!Config.getPrevention()) {
 			// cut it into parts to safe session
 			while (count > 10) {
@@ -112,7 +112,7 @@ public final class PlanArbeiten extends PlanObject {
 				Control.current.getCharacter();
 			}
 		}
-			
+
 		Control.sleep(600 * count, 2);
 
 		Utils.visit("arbeitsamt/cancel");

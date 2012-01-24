@@ -72,18 +72,28 @@ public class Prevention {
 		urls[19] = new Url("city/index", 4, new Url("training"));
 		urls[20] = new Url("city/index", 3, new Url("kiosk"));
 		urls[21] = new Url("bundesklatsche/index");
-		urls[22] = new Url("bundesklatsche/index" , 4, new Url("bundesklatsche/bundeshelden"));
-		urls[23] = new Url("bundesklatsche/index" , 4, new Url("bundesklatsche/klatschenfreunde"));
-		urls[24] = new Url("bundesklatsche/index" , 4, new Url("bundesklatsche/klatschenmeister"));
-		
+		urls[22] = new Url("bundesklatsche/index", 4, new Url(
+				"bundesklatsche/bundeshelden"));
+		urls[23] = new Url("bundesklatsche/index", 4, new Url(
+				"bundesklatsche/klatschenfreunde"));
+		urls[24] = new Url("bundesklatsche/index", 4, new Url(
+				"bundesklatsche/klatschenmeister"));
+
 		// Nur für Vereinsmitglieder
-		urls[25] = (new Url("verein", 2, new Url("verein/shoutbox"))).setOnlyGuild();
-		urls[26] = (new Url("verein", 2, new Url("verein/mitglieder"))).setOnlyGuild();
-		urls[27] = (new Url("verein", 2, new Url("verein/gildenkasse"))).setOnlyGuild();
-		urls[28] = (new Url("verein", 2, new Url("verein/gildensaal"))).setOnlyGuild();
-		urls[29] = (new Url("verein", 2, new Url("verein/feindschaften"))).setOnlyGuild();
-		urls[30] = (new Url("verein", 2, new Url("verein/buendnisse"))).setOnlyGuild();
-		urls[31] = (new Url("verein", 2, new Url("guild_challenge/index"))).setOnlyGuild();
+		urls[25] = (new Url("verein", 2, new Url("verein/shoutbox")))
+				.setOnlyGuild();
+		urls[26] = (new Url("verein", 2, new Url("verein/mitglieder")))
+				.setOnlyGuild();
+		urls[27] = (new Url("verein", 2, new Url("verein/gildenkasse")))
+				.setOnlyGuild();
+		urls[28] = (new Url("verein", 2, new Url("verein/gildensaal")))
+				.setOnlyGuild();
+		urls[29] = (new Url("verein", 2, new Url("verein/feindschaften")))
+				.setOnlyGuild();
+		urls[30] = (new Url("verein", 2, new Url("verein/buendnisse")))
+				.setOnlyGuild();
+		urls[31] = (new Url("verein", 2, new Url("guild_challenge/index")))
+				.setOnlyGuild();
 	}
 
 	/**
@@ -121,9 +131,9 @@ public class Prevention {
 		int index;
 		do {
 			index = (new Random()).nextInt(urls.length);
-		
+
 		} while (!User.isGuildMember() && urls[index].isOnlyGuild());
-		
+
 		return urls[index];
 	}
 

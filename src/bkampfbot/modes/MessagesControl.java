@@ -1,5 +1,24 @@
 package bkampfbot.modes;
 
+/*
+ Copyright (C) 2011  georf@georf.de
+
+ This file is part of BKampfBot.
+
+ BKampfBot is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 2 of the License, or
+ any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,8 +43,7 @@ public class MessagesControl {
 
 		try {
 
-			JSONObject list = Utils.getJSON(
-					"pns/getFightsData/" + page)
+			JSONObject list = Utils.getJSON("pns/getFightsData/" + page)
 					.getJSONObject("list");
 
 			while (true) {
@@ -72,16 +90,16 @@ public class MessagesControl {
 
 				}
 
-				Output.println(
-						"1 = Löschen | 2 = Nächste | A = Alle löschen | q = Beenden",
-						Output.INFO);
-				
+				Output
+						.println(
+								"1 = Löschen | 2 = Nächste | A = Alle löschen | q = Beenden",
+								Output.INFO);
+
 				while (true) {
-					String input = ""; 
+					String input = "";
 					if (!delete)
 						input = Utils.getLine();
-					
-					
+
 					if (input.equals("1") || delete) {
 						// alle löschen
 
@@ -98,14 +116,12 @@ public class MessagesControl {
 										+ "\",\"id\":[" + ids + "]}"));
 						try {
 							Control.sleep(10);
-							
-							list = Utils.getJSON(
-									"pns/delete",
-									nvps).getJSONObject("list");
+
+							list = Utils.getJSON("pns/delete", nvps)
+									.getJSONObject("list");
 						} catch (JSONException en) {
-							list = Utils
-									.getJSON("pns/getFightsData/"
-											+ page).getJSONObject("list");
+							list = Utils.getJSON("pns/getFightsData/" + page)
+									.getJSONObject("list");
 						}
 						break;
 					}
@@ -115,7 +131,7 @@ public class MessagesControl {
 						showPage(page + 1, false);
 						return;
 					}
-					
+
 					if (input.equals("A")) {
 						showPage(1, true);
 					}
