@@ -1,4 +1,4 @@
-package bkampfbot.exception;
+package bkampfbot.exceptions;
 
 /*
  Copyright (C) 2011  georf@georf.de

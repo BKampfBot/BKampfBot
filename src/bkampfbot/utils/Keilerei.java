@@ -25,21 +25,21 @@ import json.JSONException;
 import json.JSONObject;
 import bkampfbot.Control;
 import bkampfbot.Utils;
-import bkampfbot.exception.BadOpponent;
-import bkampfbot.exception.FatalError;
-import bkampfbot.exception.LocationChangedException;
-import bkampfbot.exception.RestartLater;
+import bkampfbot.exceptions.BadOpponent;
+import bkampfbot.exceptions.FatalError;
+import bkampfbot.exceptions.LocationChangedException;
+import bkampfbot.exceptions.RestartLater;
 import bkampfbot.output.Output;
 import bkampfbot.output.TacticsLogFile;
 import bkampfbot.plan.PlanObject;
 import bkampfbot.state.Config;
+import bkampfbot.state.Opponent;
 import bkampfbot.state.User;
 
 public class Keilerei {
 
 	// for fighting
-	private final String attack;
-	private final String name;
+	private final Opponent opponent;
 
 	// after fight
 	private final AngriffOptions options;
@@ -50,21 +50,20 @@ public class Keilerei {
 	// for logging
 	private final String method;
 
-	public static int fight(String attack, String name, String method,
+	public static int fight(Opponent opp, String method,
 			AngriffOptions options, PlanObject current)
 			throws BadOpponent, FatalError, RestartLater {
 
-		Keilerei k = new Keilerei(attack, name, method, options, current);
+		Keilerei k = new Keilerei(opp, method, options, current);
 
 		return k.runFight();
 
 	}
 
-	private Keilerei(String attack, String name, String method, AngriffOptions options,
+	private Keilerei(Opponent opponent, String method, AngriffOptions options,
 			PlanObject current) {
 
-		this.attack = attack;
-		this.name = name;
+		this.opponent = opponent;
 
 		this.options = options;
 
@@ -79,7 +78,7 @@ public class Keilerei {
 		try {
 
 			// set tactics
-			String[] tactics = TacticsLogFile.getTactics(name);
+			String[] tactics = TacticsLogFile.getTactics(opponent.getName());
 
 			if (tactics != null) {
 
@@ -89,9 +88,9 @@ public class Keilerei {
 			}
 
 			Utils.visit("fights/fight");
-			Utils.visit(attack.substring(1));
+			Utils.visit(opponent.getAttack().substring(1));
 
-			Output.printTab("Kampf mit " + name + " - ", Output.INFO);
+			Output.printTab("Kampf mit " + opponent.getName() + " - ", Output.INFO);
 
 			Control.sleep(5);
 
@@ -210,7 +209,7 @@ public class Keilerei {
 
 		} catch (JSONException e) {
 			Output.println("nichts", 1);
-			throw new BadOpponent(attack, name);
+			throw new BadOpponent(opponent);
 		}
 	}
 }

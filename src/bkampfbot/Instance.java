@@ -58,9 +58,9 @@ import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
-import bkampfbot.exception.FatalError;
-import bkampfbot.exception.LocationChangedException;
-import bkampfbot.exception.RestartLater;
+import bkampfbot.exceptions.FatalError;
+import bkampfbot.exceptions.LocationChangedException;
+import bkampfbot.exceptions.RestartLater;
 import bkampfbot.modes.Gluecksrad;
 import bkampfbot.modes.Jagd;
 import bkampfbot.modes.Lottery;

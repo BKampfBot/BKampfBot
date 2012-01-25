@@ -26,7 +26,7 @@ import json.JSONArray;
 import json.JSONException;
 import json.JSONObject;
 import bkampfbot.PlanManager;
-import bkampfbot.exception.FatalError;
+import bkampfbot.exceptions.FatalError;
 import bkampfbot.output.Output;
 import bkampfbot.plan.PlanObject;
 

@@ -22,13 +22,9 @@ package bkampfbot;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import json.JSONArray;
 import json.JSONException;
 import json.JSONObject;
 import json.JSONTokener;
@@ -42,15 +38,14 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.cookie.DateParseException;
 import org.apache.http.impl.cookie.DateUtils;
-import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
-import bkampfbot.exception.FatalError;
-import bkampfbot.exception.LocationChangedException;
-import bkampfbot.exception.RestartLater;
+import bkampfbot.exceptions.FatalError;
+import bkampfbot.exceptions.LocationChangedException;
+import bkampfbot.exceptions.RestartLater;
 import bkampfbot.output.Output;
 import bkampfbot.state.Config;
 
@@ -121,55 +116,6 @@ public class Utils {
 		}
 		Output.println(" - Abbruch", 1);
 		return false;
-	}
-
-	public final static String findAttackById(String id) {
-		String page = Utils.getString("characters/profile/" + id);
-
-		int pos = page.indexOf("href=\"/fights/start/");
-		if (pos == -1)
-			return null;
-		page = page.substring(pos);
-		page = page.substring(0, page.indexOf("<img"));
-
-		Pattern p = Pattern.compile("/fights/start/([0-9]+)\"",
-				Pattern.MULTILINE);
-		Matcher m = p.matcher(page);
-		if (m.find())
-			return "/fights/start/" + m.group(1);
-
-		return null;
-	}
-
-	/**
-	 * Sucht den Benutzer in der WildeKeilereiListe und gibt die Angriffsurl
-	 * zurück
-	 * 
-	 * @param Name
-	 *            des Gegners
-	 * @return Url zum Kämpfen
-	 */
-	public final static String findAttackByName(String name) {
-
-		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
-		nvps.add(new BasicNameValuePair("playerName", name));
-		try {
-			JSONObject ob = Utils.getJSON("fights/searchCharacterJson/1", nvps);
-
-			JSONArray arr = ob.getJSONArray("list");
-			for (int i = 0; i < arr.length(); i++) {
-				JSONObject player = arr.getJSONObject(i);
-				if (player.getString("name").equalsIgnoreCase(name)) {
-					return player.getString("attack");
-				}
-			}
-			Output.printTabLn("Player " + name + " not found", 1);
-			return null;
-		} catch (JSONException e) {
-			Output.printTabLn("Player " + name + " not found", 1);
-			return null;
-		}
-
 	}
 
 	public static final JSONObject getJSON(String url) throws JSONException {

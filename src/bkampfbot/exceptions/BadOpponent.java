@@ -1,4 +1,6 @@
-package bkampfbot.exception;
+package bkampfbot.exceptions;
+
+import bkampfbot.state.Opponent;
 
 /*
  Copyright (C) 2011  georf@georf.de
@@ -24,19 +26,13 @@ package bkampfbot.exception;
  */
 public final class BadOpponent extends Exception {
 	private static final long serialVersionUID = 201102030046L;
-	private final String attack;
-	private final String name;
+	private final Opponent opponent;
 
-	public BadOpponent(String attack, String name) {
-		this.attack = attack;
-		this.name = name;
+	public BadOpponent(Opponent opp) {
+		this.opponent = opp;
 	}
 
-	public final String getAttack() {
-		return this.attack;
-	}
-
-	public final String getName() {
-		return this.name;
+	public final Opponent getOpponent() {
+		return opponent;
 	}
 }

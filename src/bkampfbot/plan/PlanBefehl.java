@@ -21,8 +21,8 @@ package bkampfbot.plan;
 
 import json.JSONException;
 import json.JSONObject;
-import bkampfbot.exception.FatalError;
-import bkampfbot.exception.RestartLater;
+import bkampfbot.exceptions.FatalError;
+import bkampfbot.exceptions.RestartLater;
 import bkampfbot.output.BefehlFile;
 import bkampfbot.output.Output;
 

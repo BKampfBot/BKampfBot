@@ -1,4 +1,4 @@
-package bkampfbot.exception;
+package bkampfbot.exceptions;
 
 /*
  Copyright (C) 2011  georf@georf.de
@@ -19,6 +19,19 @@ package bkampfbot.exception;
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-public class LocationChangedException extends Exception {
-	private static final long serialVersionUID = -8387480321406391659L;
+/**
+ * Sendet einen fatalen Fehler zum Controller.
+ * 
+ * Der Controller versucht danach, den kompletten Bot neu zu starten. Tritt
+ * öfter ein fataler Fehler auf, wird das Programm beendet.
+ */
+public final class FatalError extends Exception {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 201102020008L;
+
+	public FatalError(String message) {
+		super(message);
+	}
 }

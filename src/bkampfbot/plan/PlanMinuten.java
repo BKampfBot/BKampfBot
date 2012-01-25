@@ -20,7 +20,7 @@ package bkampfbot.plan;
  */
 
 import bkampfbot.Control;
-import bkampfbot.exception.FatalError;
+import bkampfbot.exceptions.FatalError;
 import bkampfbot.output.Output;
 
 import json.JSONException;

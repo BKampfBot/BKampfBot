@@ -23,8 +23,8 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import bkampfbot.PlanManager;
-import bkampfbot.exception.FatalError;
-import bkampfbot.exception.RestartLater;
+import bkampfbot.exceptions.FatalError;
+import bkampfbot.exceptions.RestartLater;
 import bkampfbot.output.Output;
 import bkampfbot.state.Config;
 

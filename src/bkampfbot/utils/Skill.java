@@ -25,7 +25,7 @@ import org.apache.http.NameValuePair;
 
 import bkampfbot.Control;
 import bkampfbot.Utils;
-import bkampfbot.exception.FatalError;
+import bkampfbot.exceptions.FatalError;
 import bkampfbot.output.Output;
 import bkampfbot.state.User;
 

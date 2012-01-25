@@ -1,4 +1,4 @@
-package bkampfbot.plan;
+package bkampfbot.exceptions;
 
 /*
  Copyright (C) 2011  georf@georf.de
@@ -19,26 +19,6 @@ package bkampfbot.plan;
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import bkampfbot.Control;
-import bkampfbot.exceptions.FatalError;
-import bkampfbot.output.Output;
-import json.JSONObject;
-
-/**
- * PlanStopp benötigt folgende Konfiguration: {"Stopp":true} oder {"Stopp":1}
- * 
- * @author georf
- * 
- */
-public final class PlanStopp extends PlanObject {
-
-	public PlanStopp(JSONObject object) throws FatalError {
-		this.setName("Stopp");
-	}
-
-	public final void run() {
-		Output.printClockLn("-> Stopp", 1);
-		Control.safeExit();
-	}
-
+public class LocationChangedException extends Exception {
+	private static final long serialVersionUID = -8387480321406391659L;
 }

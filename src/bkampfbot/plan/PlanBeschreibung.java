@@ -33,7 +33,7 @@ import org.apache.http.ParseException;
 import org.apache.http.message.BasicNameValuePair;
 
 import bkampfbot.Utils;
-import bkampfbot.exception.FatalError;
+import bkampfbot.exceptions.FatalError;
 import bkampfbot.output.Output;
 
 /**

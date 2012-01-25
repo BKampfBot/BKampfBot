@@ -22,10 +22,12 @@ package bkampfbot.plan;
 import json.JSONException;
 import json.JSONObject;
 import bkampfbot.Utils;
-import bkampfbot.exception.BadOpponent;
-import bkampfbot.exception.FatalError;
-import bkampfbot.exception.RestartLater;
+import bkampfbot.exceptions.BadOpponent;
+import bkampfbot.exceptions.FatalError;
+import bkampfbot.exceptions.NotFound;
+import bkampfbot.exceptions.RestartLater;
 import bkampfbot.output.Output;
+import bkampfbot.state.Opponent;
 import bkampfbot.utils.AngriffOptions;
 import bkampfbot.utils.Keilerei;
 
@@ -73,19 +75,22 @@ public final class PlanKampf extends PlanObject {
 			return;
 		}
 
-		String attack = Utils.findAttackById(this.idOrName);
-		if (attack == null) {
-			attack = Utils.findAttackByName(this.idOrName);
-		}
-
-		if (attack == null) {
-			Output.printTabLn(
-					"Kann Namen nicht finden. Abbruch dieses Kampfes.", 1);
-			return;
+		Opponent opponent;
+		try {
+			opponent = Opponent.getById(idOrName);
+		} catch (NotFound e) {
+			try {
+				opponent = Opponent.getByName(idOrName);
+			} catch (NotFound g) {
+				Output.printTabLn(
+						"Kann " + idOrName + " nicht finden, Abbruch",
+						Output.INFO);
+				return;
+			}
 		}
 
 		try {
-			Keilerei.fight(attack, this.idOrName, "Kampf", options, this);
+			Keilerei.fight(opponent, "Kampf", options, this);
 		} catch (BadOpponent o) {
 			Output.printTabLn("Angriff abgebrochen. "
 					+ "Vermutlich heute zu viele Kämpfe gegen diesen Gegner.",

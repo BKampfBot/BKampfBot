@@ -24,8 +24,8 @@ import json.JSONObject;
 import bkampfbot.Control;
 import bkampfbot.Utils;
 import bkampfbot.bundesklatsche.Field;
-import bkampfbot.exception.FatalError;
-import bkampfbot.exception.RestartLater;
+import bkampfbot.exceptions.FatalError;
+import bkampfbot.exceptions.RestartLater;
 import bkampfbot.output.Output;
 
 public final class PlanBundesklatsche extends PlanObject {

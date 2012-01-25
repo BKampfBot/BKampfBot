@@ -22,7 +22,7 @@ package bkampfbot.bundesklatsche;
 import json.JSONException;
 import json.JSONObject;
 import bkampfbot.Control;
-import bkampfbot.exception.FatalError;
+import bkampfbot.exceptions.FatalError;
 import bkampfbot.modes.Jagd;
 import bkampfbot.output.Output;
 import bkampfbot.plan.PlanAussendienst;

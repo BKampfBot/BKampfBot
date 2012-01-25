@@ -20,9 +20,7 @@ package bkampfbot.plan;
  */
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
-import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
@@ -32,11 +30,11 @@ import json.JSONArray;
 import json.JSONException;
 import json.JSONObject;
 import bkampfbot.Utils;
-import bkampfbot.exception.BadOpponent;
-import bkampfbot.exception.FatalError;
-import bkampfbot.exception.RestartLater;
+import bkampfbot.exceptions.BadOpponent;
+import bkampfbot.exceptions.FatalError;
+import bkampfbot.exceptions.RestartLater;
 import bkampfbot.output.Output;
-import bkampfbot.state.Config;
+import bkampfbot.state.Opponent;
 import bkampfbot.utils.AngriffOptions;
 import bkampfbot.utils.Keilerei;
 
@@ -103,14 +101,14 @@ public abstract class PlanBoese extends PlanObject {
 
 		Opponent toFight = getOpponent();
 		boolean fromList = true;
-		if (moneyAgain > 0 && toFight != null && toFight.canFight) {
+		if (moneyAgain > 0 && toFight != null && toFight.canFight()) {
 			fromList = false;
 			try {
 				Output.println(" (nochmal)", Output.INFO);
 
-				int money = Keilerei.fight(toFight.attack, toFight.name,
+				int money = Keilerei.fight(toFight,
 						"Böse", options, this);
-				toFight.fights++;
+				toFight.addFight();
 
 				if (money < this.moneyAgain) {
 					setOpponent(null);
@@ -118,7 +116,7 @@ public abstract class PlanBoese extends PlanObject {
 
 			} catch (BadOpponent opp) {
 				setOpponent(null);
-				toFight.canFight = false;
+				toFight.setDone();
 				fromList = true;
 				Output.printClock("-> " + getJsonObjectName(), Output.INFO);
 			}
@@ -191,19 +189,19 @@ public abstract class PlanBoese extends PlanObject {
 
 					// go through the list
 					for (int key : getOpponentList().keySet()) {
-						if (fights == -1 && getOpponentList().get(key).canFight) {
+						if (fights == -1 && getOpponentList().get(key).canFight()) {
 							nextKey = key;
-							fights = getOpponentList().get(key).fights;
+							fights = getOpponentList().get(key).getFights();
 						}
-						if (getOpponentList().get(key).canFight
-								&& getOpponentList().get(key).fights < fights) {
+						if (getOpponentList().get(key).canFight()
+								&& getOpponentList().get(key).getFights() < fights) {
 							nextKey = key;
-							fights = getOpponentList().get(key).fights;
+							fights = getOpponentList().get(key).getFights();
 						}
 					}
 
 					if (fights == -1) {
-						throw new BadOpponent("", "");
+						throw new BadOpponent(null);
 					}
 				} else {
 					Integer[] keys = getOpponentList().keySet().toArray(
@@ -214,10 +212,9 @@ public abstract class PlanBoese extends PlanObject {
 
 				try {
 					int money = Keilerei.fight(
-							getOpponentList().get(nextKey).attack,
-							getOpponentList().get(nextKey).name, "Böse",
+							getOpponentList().get(nextKey), "Böse",
 							options, this);
-					getOpponentList().get(nextKey).fights++;
+					getOpponentList().get(nextKey).addFight();
 
 					if (money >= this.moneyAgain) {
 						setOpponent(getOpponentList().get(nextKey));
@@ -226,7 +223,7 @@ public abstract class PlanBoese extends PlanObject {
 					}
 
 				} catch (BadOpponent e) {
-					getOpponentList().get(nextKey).canFight = false;
+					getOpponentList().get(nextKey).setDone();
 					return false;
 				}
 
@@ -273,7 +270,7 @@ public abstract class PlanBoese extends PlanObject {
 	private final class NoList extends Exception {
 		private static final long serialVersionUID = -2317742009841698364L;
 	}
-
+/*
 	protected final class Opponent {
 		public final String attack;
 		public final String name;
@@ -318,7 +315,7 @@ public abstract class PlanBoese extends PlanObject {
 			return selected;
 		}
 	}
-
+*/
 	protected final class OpponentList {
 		private ConcurrentHashMap<Integer, Opponent> list;
 
@@ -351,7 +348,10 @@ public abstract class PlanBoese extends PlanObject {
 
 		public boolean contains(int key) {
 			if (list.containsKey(key)) {
-				list.get(key).checkFightCounts().setSeleted();
+				Opponent opp = list.get(key);
+				opp.checkNewDay();
+				opp.select();
+				
 				return true;
 			} else {
 				return false;
@@ -364,7 +364,7 @@ public abstract class PlanBoese extends PlanObject {
 
 		public void unselectAll() {
 			for (Integer opp : list.keySet()) {
-				list.get(opp).unsetSelected();
+				list.get(opp).unselect();
 			}
 		}
 

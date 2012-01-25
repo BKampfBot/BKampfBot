@@ -33,11 +33,12 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
 import bkampfbot.Utils;
-import bkampfbot.exception.BadOpponent;
-import bkampfbot.exception.FatalError;
-import bkampfbot.exception.RestartLater;
+import bkampfbot.exceptions.BadOpponent;
+import bkampfbot.exceptions.FatalError;
+import bkampfbot.exceptions.RestartLater;
 import bkampfbot.output.Output;
 import bkampfbot.state.Config;
+import bkampfbot.state.Opponent;
 import bkampfbot.state.User;
 import bkampfbot.utils.AngriffOptions;
 import bkampfbot.utils.Keilerei;
@@ -233,8 +234,7 @@ public final class PlanAngriff extends PlanObject {
 		Opponent opp = this.findHighMoney();
 		if (opp != null) {
 			try {
-				int money = Keilerei.fight(opp.attack, opp.name,
-						"Angriff High", options, this);
+				int money = Keilerei.fight(opp, "Angriff High", options, this);
 
 				// Fight was won, we safe the opponent
 				if (money > Config.getFightAgain()) {
@@ -250,7 +250,7 @@ public final class PlanAngriff extends PlanObject {
 					}
 
 					// add to bad list
-					this.addBad(opp.name);
+					addBad(opp);
 
 					// Fight was won, but with low money
 				} else {
@@ -258,13 +258,13 @@ public final class PlanAngriff extends PlanObject {
 
 					if (useCache) {
 						PlanAngriff.highMoney.remove(opp);
-						this.addLowMoney(opp.attack, opp.name);
+						addLowMoney(opp);
 					}
 				}
 				return true;
 			} catch (BadOpponent e) {
 				// set done for today
-				opp.today = false;
+				opp.setDone();
 				return false;
 			}
 		}
@@ -294,6 +294,9 @@ public final class PlanAngriff extends PlanObject {
 				if (arr.length() > 0) {
 					for (int i = 0; i < arr.length(); i++) {
 						now = arr.getJSONObject(i);
+						
+						opp = new Opponent(now.getString("name"), now
+								.getString("attack"));
 
 						boolean guild;
 						try {
@@ -311,7 +314,7 @@ public final class PlanAngriff extends PlanObject {
 								&& (this.club.equals(Club.Whatever)
 										|| (guild && this.club.equals(Club.Yes)) || (!guild && this.club
 										.equals(Club.No)))
-								&& !this.badOpponent(now.getString("attack"))
+								&& !this.isBadOpponent(opp)
 								&& (this.hpMax <= 0 || Integer.valueOf(now
 										.getString("hp")) < this.hpMax)
 								&& (this.hpMin <= 0 || Integer.valueOf(now
@@ -319,17 +322,14 @@ public final class PlanAngriff extends PlanObject {
 								&& !this.isFriend(friends, now
 										.getString("name"))) {
 							try {
-								int result = Keilerei.fight(now
-										.getString("attack"), now
-										.getString("name"), "Angriff", options,
-										this);
+
+								int result = Keilerei.fight(opp, "Angriff",
+										options, this);
 								// Fight was won, we safe the opponent
 								if (result > Config.getFightAgain()) {
 									if (useCache) {
 										// save
-										this.addHighMoney(now
-												.getString("attack"), now
-												.getString("name"));
+										addHighMoney(opp);
 									}
 
 									this.won = true;
@@ -337,14 +337,12 @@ public final class PlanAngriff extends PlanObject {
 									// Fight was lost
 								} else if (result == -1) {
 									// save, here we don't need the name
-									this.addLowMoney(now.getString("attack"),
-											now.getString("name"));
+									this.addLowMoney(opp);
 
 									this.won = false;
 								} else {
 									// save, here we don't need the name
-									this.addLowMoney(now.getString("attack"),
-											now.getString("name"));
+									this.addLowMoney(opp);
 
 									this.won = true;
 								}
@@ -352,7 +350,7 @@ public final class PlanAngriff extends PlanObject {
 								Output.printTabLn("Add "
 										+ now.getString("name")
 										+ " to \"bad opponent\" list", 2);
-								this.addBad(now.getString("name"));
+								this.addBad(opp);
 							}
 
 							return true;
@@ -430,7 +428,7 @@ public final class PlanAngriff extends PlanObject {
 
 			// Set all counters to zero
 			for (Opponent opp : PlanAngriff.highMoney) {
-				opp.today = true;
+				opp.setNew();
 			}
 		}
 	}
@@ -442,7 +440,7 @@ public final class PlanAngriff extends PlanObject {
 	 * @param attack
 	 * @return true if on the list
 	 */
-	private final boolean badOpponent(String attack) {
+	private final boolean isBadOpponent(Opponent opponent) {
 		if (!useCache) {
 			return false;
 		}
@@ -452,13 +450,13 @@ public final class PlanAngriff extends PlanObject {
 					&& PlanAngriff.lowMoney[i] == null) {
 				break;
 			}
-			if (PlanAngriff.lowMoney[i].attack.equals(attack)) {
+			if (PlanAngriff.lowMoney[i].equals(opponent)) {
 				return true;
 			}
 		}
 
 		for (Opponent o : PlanAngriff.bad) {
-			if (o != null && o.attack == attack) {
+			if (o != null && o.equals(opponent)) {
 				return true;
 			}
 		}
@@ -580,15 +578,14 @@ public final class PlanAngriff extends PlanObject {
 	 * 
 	 * @param attack
 	 */
-	private final void addLowMoney(String attack, String name) {
+	private final void addLowMoney(Opponent opponent) {
 		if (!useCache) {
 			return;
 		}
 
 		Output.printTabLn("Add to \"low money\" list", 2);
 
-		PlanAngriff.lowMoney[PlanAngriff.lowMoneyPointer] = new Opponent(
-				attack, name);
+		PlanAngriff.lowMoney[PlanAngriff.lowMoneyPointer] = opponent;
 		PlanAngriff.lowMoneyPointer++;
 
 		if (PlanAngriff.lowMoneyPointer == PlanAngriff.lowMoney.length) {
@@ -601,14 +598,14 @@ public final class PlanAngriff extends PlanObject {
 	 * 
 	 * @param attack
 	 */
-	private final void addBad(String name) {
+	private final void addBad(Opponent opp) {
 		if (!useCache) {
 			return;
 		}
 
 		Output.printTabLn("Add to \"bad opponent\" list", 2);
 
-		PlanAngriff.bad[PlanAngriff.badPointer] = new Opponent(null, name);
+		PlanAngriff.bad[PlanAngriff.badPointer] = opp;
 		PlanAngriff.badPointer++;
 
 		if (PlanAngriff.badPointer == PlanAngriff.bad.length) {
@@ -622,40 +619,26 @@ public final class PlanAngriff extends PlanObject {
 	 * @param attack
 	 * @param name
 	 */
-	private final void addHighMoney(String attack, String name) {
+	private final void addHighMoney(Opponent opponent) {
 		if (!useCache) {
 			return;
 		}
 
-		Output.printTabLn("Add " + name + " to \"high money\" list", 2);
+		Output.printTabLn("Add " + opponent.getName()
+				+ " to \"high money\" list", 2);
 
-		// is inside?
+		// is already inside?
 		for (Opponent a : PlanAngriff.highMoney) {
-			if (a.attack.equals(attack)) {
+			if (a.equals(opponent)) {
 				return;
 			}
 		}
 
-		PlanAngriff.highMoney.add(new Opponent(attack, name));
+		PlanAngriff.highMoney.add(opponent);
 	}
 
 	private final class NoList extends Exception {
 		private static final long serialVersionUID = -2317742009841698364L;
-	}
-
-	private final class Opponent {
-		public final String attack;
-		public final String name;
-		public boolean today = true;
-
-		public Opponent(String attack, String name) {
-			this.attack = attack;
-			this.name = name;
-		}
-
-		public final boolean canFight() {
-			return this.today;
-		}
 	}
 
 	private final short getGuildFilter() {

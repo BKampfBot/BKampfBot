@@ -23,7 +23,7 @@ import json.JSONException;
 import json.JSONObject;
 import bkampfbot.Control;
 import bkampfbot.Utils;
-import bkampfbot.exception.FatalError;
+import bkampfbot.exceptions.FatalError;
 import bkampfbot.output.Output;
 import bkampfbot.state.Config;
 import bkampfbot.state.User;

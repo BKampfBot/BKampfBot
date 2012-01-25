@@ -20,7 +20,8 @@ package bkampfbot.plan;
  */
 
 import json.JSONObject;
-import bkampfbot.exception.FatalError;
+import bkampfbot.exceptions.FatalError;
+import bkampfbot.state.Opponent;
 
 public class PlanBoeseKrieg extends PlanBoese {
 	private static OpponentList list;
