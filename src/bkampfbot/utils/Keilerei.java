@@ -42,8 +42,7 @@ public class Keilerei {
 	private final String name;
 
 	// after fight
-	private int medicine;
-	private final int buyCrystal;
+	private final AngriffOptions options;
 
 	// for look ahead
 	private PlanObject current;
@@ -52,24 +51,22 @@ public class Keilerei {
 	private final String method;
 
 	public static int fight(String attack, String name, String method,
-			int medicine, PlanObject current, int buyCrystal)
+			AngriffOptions options, PlanObject current)
 			throws BadOpponent, FatalError, RestartLater {
 
-		Keilerei k = new Keilerei(attack, name, method, medicine, current,
-				buyCrystal);
+		Keilerei k = new Keilerei(attack, name, method, options, current);
 
 		return k.runFight();
 
 	}
 
-	private Keilerei(String attack, String name, String method, int medicine,
-			PlanObject current, int buyCrystal) {
+	private Keilerei(String attack, String name, String method, AngriffOptions options,
+			PlanObject current) {
 
 		this.attack = attack;
 		this.name = name;
 
-		this.medicine = medicine;
-		this.buyCrystal = buyCrystal;
+		this.options = options;
 
 		this.current = current;
 
@@ -80,7 +77,6 @@ public class Keilerei {
 
 		int returnValue = -1;
 		try {
-			
 
 			// set tactics
 			String[] tactics = TacticsLogFile.getTactics(name);
@@ -88,18 +84,17 @@ public class Keilerei {
 			if (tactics != null) {
 
 				Strategie.getRandom().setDefens(tactics).save();
-				
+
 				Control.sleep(15);
 			}
-			
 
 			Utils.visit("fights/fight");
 			Utils.visit(attack.substring(1));
 
 			Output.printTab("Kampf mit " + name + " - ", Output.INFO);
-			
+
 			Control.sleep(5);
-			
+
 			JSONObject fightData = Utils.getJSON("fights/fightData");
 			JSONObject fight = Utils.getJSON(fightData.getString("url")
 					.replace("/results/", "/getResults/").substring(1));
@@ -128,7 +123,10 @@ public class Keilerei {
 
 			int deci = -1;
 
-			if (buyCrystal >= 0 && buyCrystal >= returnValue) {
+			int buyCrystal = options.getBuyCrystal();
+			int medicine = options.getMedicine();
+			
+			if (buyCrystal >= 0 && ( returnValue < 0 || returnValue >= buyCrystal)) {
 				Output.printTab("Gebe Zwerg: ", Output.INFO);
 				try {
 					Utils.getString("fights/waitFight/buy", "fights/start");

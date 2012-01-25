@@ -39,6 +39,7 @@ import bkampfbot.exception.RestartLater;
 import bkampfbot.output.Output;
 import bkampfbot.state.Config;
 import bkampfbot.state.User;
+import bkampfbot.utils.AngriffOptions;
 import bkampfbot.utils.Keilerei;
 
 /**
@@ -77,14 +78,9 @@ public final class PlanAngriff extends PlanObject {
 	private boolean friend = false;
 
 	/**
-	 * Apotheke besuchen?
+	 * Weitere Optionen
 	 */
-	private int medicine = -1;
-
-	/**
-	 * Zwerg kaufen?
-	 */
-	private int buyCrystal = -1;
+	private final AngriffOptions options;
 
 	/**
 	 * Welches Bundesland?
@@ -175,25 +171,11 @@ public final class PlanAngriff extends PlanObject {
 			}
 
 			try {
-				if (angriff.getBoolean("Zwerg")) {
-					this.buyCrystal = Integer.MAX_VALUE;
-				}
-			} catch (JSONException r) {
-				try {
-					this.buyCrystal = angriff.getInt("Zwerg");
-				} catch (JSONException p) {
-				}
-			}
-
-			try {
 				this.raceToFight = angriff.getString("Land");
 			} catch (JSONException r) {
 			}
 
-			try {
-				this.medicine = angriff.getInt("Medizin");
-			} catch (JSONException r) {
-			}
+			options = new AngriffOptions(angriff);
 
 		} catch (JSONException e) {
 			throw new FatalError("Config error: Angriff config is bad\n"
@@ -252,7 +234,7 @@ public final class PlanAngriff extends PlanObject {
 		if (opp != null) {
 			try {
 				int money = Keilerei.fight(opp.attack, opp.name,
-						"Angriff High", medicine, this, buyCrystal);
+						"Angriff High", options, this);
 
 				// Fight was won, we safe the opponent
 				if (money > Config.getFightAgain()) {
@@ -339,8 +321,8 @@ public final class PlanAngriff extends PlanObject {
 							try {
 								int result = Keilerei.fight(now
 										.getString("attack"), now
-										.getString("name"), "Angriff",
-										medicine, this, buyCrystal);
+										.getString("name"), "Angriff", options,
+										this);
 								// Fight was won, we safe the opponent
 								if (result > Config.getFightAgain()) {
 									if (useCache) {

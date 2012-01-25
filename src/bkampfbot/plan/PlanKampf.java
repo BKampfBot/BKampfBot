@@ -26,6 +26,7 @@ import bkampfbot.exception.BadOpponent;
 import bkampfbot.exception.FatalError;
 import bkampfbot.exception.RestartLater;
 import bkampfbot.output.Output;
+import bkampfbot.utils.AngriffOptions;
 import bkampfbot.utils.Keilerei;
 
 /**
@@ -37,38 +38,26 @@ import bkampfbot.utils.Keilerei;
  */
 public final class PlanKampf extends PlanObject {
 	private String idOrName;
-	private int medicine = -1;
-	private int buyCrystal = -1;
+	private AngriffOptions options;
 
 	public PlanKampf(JSONObject object) throws FatalError {
 		this.setName("Kampf");
 
 		try {
-			this.idOrName = object.getString("Kampf");
+
+			idOrName = object.getString("Kampf");
+			options = new AngriffOptions(new JSONObject());
+
 		} catch (JSONException e) {
 
 			try {
 				JSONObject help = object.getJSONObject("Kampf");
 
-				try {
-					this.idOrName = help.getString("Gegner");
-				} catch (JSONException r) {
-				}
+				options = new AngriffOptions(help);
 
 				try {
-					this.medicine = help.getInt("Medizin");
+					idOrName = help.getString("Gegner");
 				} catch (JSONException r) {
-				}
-
-				try {
-					if (help.getBoolean("Zwerg")) {
-						this.buyCrystal = Integer.MAX_VALUE;
-					}
-				} catch (JSONException r) {
-					try {
-						this.buyCrystal = help.getInt("Zwerg");
-					} catch (JSONException p) {
-					}
 				}
 
 			} catch (JSONException t) {
@@ -96,8 +85,7 @@ public final class PlanKampf extends PlanObject {
 		}
 
 		try {
-			Keilerei.fight(attack, this.idOrName, "Kampf", medicine, this,
-					buyCrystal);
+			Keilerei.fight(attack, this.idOrName, "Kampf", options, this);
 		} catch (BadOpponent o) {
 			Output.printTabLn("Angriff abgebrochen. "
 					+ "Vermutlich heute zu viele Kämpfe gegen diesen Gegner.",

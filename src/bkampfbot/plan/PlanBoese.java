@@ -34,6 +34,7 @@ import bkampfbot.exception.FatalError;
 import bkampfbot.exception.RestartLater;
 import bkampfbot.output.Output;
 import bkampfbot.state.Config;
+import bkampfbot.utils.AngriffOptions;
 import bkampfbot.utils.Keilerei;
 
 /**
@@ -44,9 +45,8 @@ import bkampfbot.utils.Keilerei;
  */
 
 public abstract class PlanBoese extends PlanObject {
-	private int medicine = -1;
 	private int moneyAgain = -1;
-	protected int buyCrystal = -1;
+	protected final AngriffOptions options;
 	private boolean random = false;
 
 	// private static ConcurrentHashMap<Integer, Opponent> list;
@@ -57,10 +57,7 @@ public abstract class PlanBoese extends PlanObject {
 		try {
 			JSONObject help = object.getJSONObject(getJsonObjectName());
 
-			try {
-				this.medicine = help.getInt("Medizin");
-			} catch (JSONException r) {
-			}
+			options = new AngriffOptions(help);
 
 			try {
 				this.moneyAgain = help.getInt("nochmal");
@@ -70,17 +67,6 @@ public abstract class PlanBoese extends PlanObject {
 			try {
 				this.random = help.getBoolean("Zufall");
 			} catch (JSONException r) {
-			}
-
-			try {
-				if (help.getBoolean("Zwerg")) {
-					this.buyCrystal = Integer.MAX_VALUE;
-				}
-			} catch (JSONException r) {
-				try {
-					this.buyCrystal = help.getInt("Zwerg");
-				} catch (JSONException p) {
-				}
 			}
 
 		} catch (JSONException t) {
@@ -120,7 +106,7 @@ public abstract class PlanBoese extends PlanObject {
 				Output.println(" (nochmal)", Output.INFO);
 
 				int money = Keilerei.fight(toFight.attack, toFight.name,
-						"Böse", medicine, this, buyCrystal);
+						"Böse", options, this);
 				toFight.fights++;
 
 				if (money < this.moneyAgain) {
@@ -227,7 +213,7 @@ public abstract class PlanBoese extends PlanObject {
 					int money = Keilerei.fight(
 							getOpponentList().get(nextKey).attack,
 							getOpponentList().get(nextKey).name, "Böse",
-							medicine, this, buyCrystal);
+							options, this);
 					getOpponentList().get(nextKey).fights++;
 
 					if (money >= this.moneyAgain) {
