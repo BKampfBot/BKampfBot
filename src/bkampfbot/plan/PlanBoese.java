@@ -19,8 +19,11 @@ package bkampfbot.plan;
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -328,7 +331,10 @@ public abstract class PlanBoese extends PlanObject {
 		}
 
 		public Set<Integer> keySet() {
-			return list.keySet();
+			ArrayList<Integer> l = new ArrayList<Integer>(list.keySet());
+			Collections.shuffle(l);
+
+			return new HashSet<Integer>(l);
 		}
 
 		public int size() {
