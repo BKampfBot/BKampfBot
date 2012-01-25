@@ -215,8 +215,6 @@ public class Output {
 						+ "Optionen:\n"
 						+ "  --help  -h     		Zeigt diese Hilfe an\n"
 						+ "  --config=FILE  		Nimmt FILE als Konfiguration\n"
-						+ "  --output=INT   		Setzt INT als Output-Level\n"
-						+ "  --fightAgain=INT		Setzt INT als D-Mark für erneuten Angriff\n"
 						+ "\n"
 						+ "Tag-Modi:\n"
 						+ "  quiz           Tagesquiz\n"

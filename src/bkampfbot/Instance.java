@@ -64,7 +64,6 @@ import bkampfbot.exception.RestartLater;
 import bkampfbot.modes.Gluecksrad;
 import bkampfbot.modes.Jagd;
 import bkampfbot.modes.Lottery;
-import bkampfbot.modes.MessagesControl;
 import bkampfbot.modes.Pins;
 import bkampfbot.modes.Quiz;
 import bkampfbot.modes.ScratchTicket;
@@ -88,7 +87,7 @@ public final class Instance {
 	}
 
 	public enum Modus {
-		normal, daily, help, lottery, pins, messages, testproxy
+		normal, daily, help, lottery, pins, testproxy
 	}
 
 	// Configuration from file
@@ -489,37 +488,8 @@ public final class Instance {
 				continue;
 			}
 
-			if (arg.length() > 9
-					&& arg.substring(0, 9).equalsIgnoreCase("--output=")) {
-				try {
-					Output.setLevel(Integer.valueOf(arg.substring(9)));
-					Config.setOutputLevel(Integer.valueOf(arg.substring(9)));
-				} catch (NumberFormatException e) {
-					Output.printTabLn("Output-Level muss 0, 1 oder 2 sein", 0);
-				}
-
-				continue;
-			}
-
-			if (arg.length() > 13
-					&& arg.substring(0, 13).equalsIgnoreCase("--fightAgain=")) {
-				try {
-					Config.setFightAgain(Integer.valueOf(arg.substring(13)));
-				} catch (NumberFormatException e) {
-					Output.printTabLn("fightAgain muss eine Zahl sein", 0);
-				}
-
-				continue;
-			}
-
 			if (arg.equals("--help") || args.equals("-h")) {
 				this.modus = Modus.help;
-
-				continue;
-			}
-
-			if (arg.equals("messages") && this.modus.equals(Modus.normal)) {
-				this.modus = Modus.messages;
 
 				continue;
 			}
@@ -608,12 +578,6 @@ public final class Instance {
 		// for things without login
 		case help:
 		case testproxy:
-			break;
-
-		// call interactivly messages
-		case messages:
-			new MessagesControl();
-			Control.safeExit();
 			break;
 
 		case daily:
