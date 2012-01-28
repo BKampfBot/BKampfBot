@@ -81,7 +81,7 @@ public final class PlanBundesklatsche extends PlanObject {
 				Control.sleep(10);
 
 				// Bestätige Gewinn oder Verlust
-				next();
+				if (!next) next();
 
 			} while (next || dice());
 		} catch (JSONException e) {
