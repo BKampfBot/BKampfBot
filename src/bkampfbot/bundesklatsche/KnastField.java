@@ -22,6 +22,7 @@ package bkampfbot.bundesklatsche;
 import json.JSONException;
 import json.JSONObject;
 import bkampfbot.Control;
+import bkampfbot.exceptions.NextField;
 import bkampfbot.output.Output;
 import bkampfbot.plan.PlanBundesklatsche;
 
@@ -32,7 +33,7 @@ public class KnastField extends Field {
 	}
 
 	@Override
-	public boolean action() throws JSONException {
+	public boolean action() throws JSONException, NextField {
 		JSONObject result = getResult();
 		if (result.getJSONObject("action").getString("cont").equals("knast")) {
 			Output.printClockLn("In den Knast", Output.INFO);
@@ -52,8 +53,9 @@ public class KnastField extends Field {
 			return false;
 		} else {
 			Output.printClockLn("Knast: Freiwurf", Output.INFO);
+			getKlatsche().rollAndOutputDice();
 			Control.sleep(10);
-			return true;
+			throw new NextField();
 		}
 	}
 

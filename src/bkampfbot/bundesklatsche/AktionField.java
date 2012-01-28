@@ -21,9 +21,14 @@ package bkampfbot.bundesklatsche;
 
 import json.JSONException;
 import json.JSONObject;
+
+import org.apache.commons.lang.math.RandomUtils;
+
 import bkampfbot.Control;
 import bkampfbot.exceptions.FatalError;
 import bkampfbot.modes.Jagd;
+import bkampfbot.modes.Pins;
+import bkampfbot.modes.ScratchTicket;
 import bkampfbot.output.Output;
 import bkampfbot.plan.PlanAussendienst;
 import bkampfbot.plan.PlanBundesklatsche;
@@ -73,6 +78,14 @@ public class AktionField extends Field {
 
 		if (text
 				.equalsIgnoreCase("Du bist im Jagdfieber, löse ein Wort bei der Wörterjagd!")) {
+
+			try {
+				if (!getConfig().getBoolean("Jagd")) {
+					cancelButton();
+				}
+			} catch (JSONException e) {
+			}
+
 			Jagd jagd = new Jagd(1);
 			jagd.run();
 			return cancelButton(jagd.getWordsSolved() <= 0);
@@ -131,7 +144,7 @@ public class AktionField extends Field {
 				return cancelButton();
 			}
 		}
-		
+
 		if (text
 				.equalsIgnoreCase("Der alljährliche Schützenwettbewerb im Kastanienweitwurf steht an, steigere deinen Skill Schleuderkraft um 1 Punkt!")) {
 
@@ -150,20 +163,97 @@ public class AktionField extends Field {
 				return cancelButton();
 			}
 		}
-		
+
+		if (text
+				.equalsIgnoreCase("Heute steht alles im Zeichen deines persönlichen Glücks, steigere deinen Skill Glück um 1 Punkt!")) {
+
+			if (!getConfig().isNull("Glueck")) {
+
+				boolean bank = false;
+				try {
+					bank = getConfig().getBoolean("Glueck");
+				} catch (JSONException e) {
+				}
+
+				int bought = Skill.get("Glueck").buy(1, bank);
+				return cancelButton(bought <= 0);
+
+			} else {
+				return cancelButton();
+			}
+		}
+
 		if (text
 				.equalsIgnoreCase("Wer nicht wagt, der nicht gewinnt! Gehe ins Casino und drehe dreimal am einarmigen Banditen!")) {
 			if (User.getLevel() < 10) {
-				Output.printTabLn("Du darfst noch nicht ins Casino.", Output.INFO);
+				Output.printTabLn("Du darfst noch nicht ins Casino.",
+						Output.INFO);
 				return cancelButton();
 			}
-			
+
+			Output.print(
+					"Ist noch nicht implementiert, aber schon vorgesehen.",
+					Output.INFO);
 			// TODO casino
 		}
 
+		if (text
+				.equalsIgnoreCase("Deine kleine Zwergennichte hat Geburtstag, hebe 500 D-Mark von deinem Sparkassenkonto ab, um ihr etwas Schönes kaufen zu können!")) {
+
+			if (getConfig().has("Einzahlen")) {
+				try {
+					if (!getConfig().getBoolean("Einzahlen")) {
+						return cancelButton();
+					}
+				} catch (JSONException e) {
+				}
+			}
+			return cancelButton(!Bank.getMoney(500));
+		}
+
+		if (text
+				.equalsIgnoreCase("Du bist in famoser Kauflaune heute, erwerbe einen Pin im Shop!")) {
+
+			String[] pins = { "11", "21", "31", "41" };
+			String pinToBuy = pins[RandomUtils.nextInt(pins.length)];
+
+			try {
+				if (!getConfig().getBoolean("Pin")) {
+					return cancelButton();
+				}
+			} catch (JSONException e) {
+
+				try {
+					pinToBuy = getConfig().getString("Pin");
+				} catch (JSONException f) {
+				}
+			}
+
+			Pins p = new Pins(pinToBuy);
+
+			return cancelButton(p.run() <= 0);
+		}
+		
+		if (text
+				.equalsIgnoreCase("Kaufe ein Rubbellos bei Bogdan am Kiosk, vielleicht gelingt dir heute der große Wurf!")) {
+			
+			try {
+				if (!getConfig().getBoolean("Los")) {
+					return cancelButton();
+				}
+			} catch (JSONException e) {
+			}
+			
+			ScratchTicket st = new ScratchTicket(1);
+			return cancelButton(st.run() <= 0);
+		}
+
+		
+
 		/**
-		 * Noch zu implementieren:
-		 * Wer nicht wagt, der nicht gewinnt! Gehe ins Casino und drehe dreimal am einarmigen Banditen!
+		 * Noch zu implementieren: Wer nicht wagt, der nicht gewinnt! Gehe ins
+		 * Casino und drehe dreimal am einarmigen Banditen!
+		 * 
 		 * 
 		 */
 
@@ -175,6 +265,13 @@ public class AktionField extends Field {
 		return false;
 	}
 
+	/**
+	 * Wenn press true ist, wird auf Abbrechen gedrückt.
+	 * 
+	 * @param press
+	 * @return
+	 * @throws JSONException
+	 */
 	private boolean cancelButton(boolean press) throws JSONException {
 		if (press) {
 			Control.sleep(10);

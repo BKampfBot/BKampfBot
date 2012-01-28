@@ -503,6 +503,7 @@ public final class Instance {
 			// Argument passt nicht
 			Output.println("Argument \"" + arg + "\" nicht gültig",
 					Output.ERROR);
+			System.exit(1);
 		}
 	}
 

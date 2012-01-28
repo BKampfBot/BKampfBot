@@ -26,12 +26,23 @@ import json.JSONException;
 import json.JSONObject;
 
 public final class ScratchTicket {
+	private int count = 3;
 
 	public ScratchTicket() {
+		run();
+	}
+	
+	public ScratchTicket(int count) {
+		this.count = count;
+	}
+		
+	public int run() {
 		Output.printClockLn("Rubbellos", 1);
+		
+		int bought = 0;
 
 		try {
-			for (int i = 0; i < 3; i++) {
+			for (int i = 0; i < count; i++) {
 				Utils.visit("kiosk/");
 				Utils.visit("kiosk/losKaufen/");
 				Utils.visit("kiosk/lose/");
@@ -51,6 +62,8 @@ public final class ScratchTicket {
 				Control.sleep(15);
 
 				Utils.visit("kiosk/getLosWin");
+				
+				bought++;
 			}
 		} catch (JSONException e) {
 			Output
@@ -58,5 +71,7 @@ public final class ScratchTicket {
 							"Schon alle Lose für heute gekauft oder nicht genügend Punkte.",
 							1);
 		}
+		
+		return bought;
 	}
 }

@@ -25,7 +25,7 @@ public class AngriffOptions {
 		if (options.has("Zwerg")) {
 			try {
 				if (options.getBoolean("Zwerg")) {
-					buyCrystal = Integer.MAX_VALUE;
+					buyCrystal = 0;
 				}
 			} catch (JSONException r) {
 				try {

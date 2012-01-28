@@ -25,6 +25,7 @@ import bkampfbot.Control;
 import bkampfbot.Utils;
 import bkampfbot.bundesklatsche.Field;
 import bkampfbot.exceptions.FatalError;
+import bkampfbot.exceptions.NextField;
 import bkampfbot.exceptions.RestartLater;
 import bkampfbot.output.Output;
 
@@ -54,8 +55,10 @@ public final class PlanBundesklatsche extends PlanObject {
 
 			// is time for dice?
 			dice();
-
+			boolean next = false;
 			do {
+				next = false;
+
 				info(0);
 
 				int pos = Integer.valueOf(lastChar.getString("figur_pos"));
@@ -63,20 +66,24 @@ public final class PlanBundesklatsche extends PlanObject {
 				// Erzeuge Spielfeld
 				Field current = Field.getField(pos, this);
 
-				// Führe Spielfeld aus
-				if (!current.action()) {
-					Output.printTabLn(
-							"Konnte Spielfeld nicht vollständig abarbeiten.",
-							Output.INFO);
-					return;
+				try {
+					// Führe Spielfeld aus
+					if (!current.action()) {
+						Output
+								.printTabLn(
+										"Konnte Spielfeld nicht vollständig abarbeiten.",
+										Output.INFO);
+						return;
+					}
+				} catch (NextField e) {
+					next = true;
 				}
-
 				Control.sleep(10);
 
 				// Bestätige Gewinn oder Verlust
 				next();
 
-			} while (dice());
+			} while (next || dice());
 		} catch (JSONException e) {
 			Output.error(e);
 			return;
@@ -112,15 +119,19 @@ public final class PlanBundesklatsche extends PlanObject {
 		}
 
 		if (lastChar.getInt("rolls_ok") != 0) {
-			info(1);
-
-			Output.printClockLn("Würfel: "
-					+ lastResult.getJSONObject("action").getInt("blackdice"),
-					Output.DEBUG);
+			rollAndOutputDice();
 			return true;
 		}
 		Output.printTabLn("Nicht genügend Punkte zum Würfeln", Output.INFO);
 		throw new DiceException();
+	}
+
+	public void rollAndOutputDice() throws JSONException {
+		info(1);
+
+		Output.printClockLn("Würfel: "
+				+ lastResult.getJSONObject("action").getInt("blackdice"),
+				Output.DEBUG);
 	}
 
 	public JSONObject rollTheDice() throws JSONException {

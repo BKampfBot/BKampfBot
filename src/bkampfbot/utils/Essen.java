@@ -63,11 +63,11 @@ public class Essen {
 		int minPunkte = Integer.valueOf(kiosk.substring(0, kiosk.indexOf("\n"))
 				.replaceAll("[^0-9]", ""));
 
-		Output.println("für " + minPunkte + ": ", Output.INFO);
+		Output.print(" für " + minPunkte + ": ", Output.INFO);
 
 		if (punkte >= minPunkte) {
 
-			Output.print("Erfolgreich", Output.INFO);
+			Output.println("Erfolgreich", Output.INFO);
 			Utils.getString("kiosk/getGericht/");
 			return true;
 

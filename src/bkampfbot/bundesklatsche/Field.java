@@ -22,6 +22,7 @@ package bkampfbot.bundesklatsche;
 import json.JSONException;
 import json.JSONObject;
 import bkampfbot.exceptions.FatalError;
+import bkampfbot.exceptions.NextField;
 import bkampfbot.exceptions.RestartLater;
 import bkampfbot.plan.PlanBundesklatsche;
 
@@ -143,5 +144,5 @@ public abstract class Field {
 	}
 
 	public abstract boolean action() throws FatalError, RestartLater,
-			JSONException;
+			JSONException, NextField;
 }

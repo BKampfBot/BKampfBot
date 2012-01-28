@@ -38,10 +38,19 @@ import json.JSONTokener;
 public final class Pins {
 
 	private ArrayList<Integer> toBuy;
+	private int bought = 0;
 
 	public static String in;
 
 	public Pins() {
+		run();
+	}
+	
+	public Pins(String in) {
+		Pins.in = in;
+	}
+		
+	public int run() {
 		Output.printClockLn("Pins", 1);
 
 		String input = in.replaceAll("[^0-9,]", "");
@@ -61,12 +70,16 @@ public final class Pins {
 			while (toBuy.size() > 0) {
 				if (this.buy(toBuy.get(0))) {
 					this.toBuy.remove(0);
+					
+					bought++;
 				}
 				Control.sleep(10);
 			}
 		} catch (Exception e) {
 			Output.error(e);
 		}
+		
+		return bought;
 	}
 
 	private void addToList(int pId, int count) {
