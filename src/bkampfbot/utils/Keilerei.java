@@ -51,8 +51,8 @@ public class Keilerei {
 	private final String method;
 
 	public static int fight(Opponent opp, String method,
-			AngriffOptions options, PlanObject current)
-			throws BadOpponent, FatalError, RestartLater {
+			AngriffOptions options, PlanObject current) throws BadOpponent,
+			FatalError, RestartLater {
 
 		Keilerei k = new Keilerei(opp, method, options, current);
 
@@ -78,19 +78,13 @@ public class Keilerei {
 		try {
 
 			// set tactics
-			String[] tactics = TacticsLogFile.getTactics(opponent.getName());
-
-			if (tactics != null) {
-
-				Strategie.getRandom().setDefens(tactics).save();
-
-				Control.sleep(15);
-			}
+			setTactics();
 
 			Utils.visit("fights/fight");
 			Utils.visit(opponent.getAttack().substring(1));
 
-			Output.printTab("Kampf mit " + opponent.getName() + " - ", Output.INFO);
+			Output.printTab("Kampf mit " + opponent.getName() + " - ",
+					Output.INFO);
 
 			Control.sleep(5);
 
@@ -124,8 +118,9 @@ public class Keilerei {
 
 			int buyCrystal = options.getBuyCrystal();
 			int medicine = options.getMedicine();
-			
-			if (buyCrystal >= 0 && ( returnValue < 0 || returnValue >= buyCrystal)) {
+
+			if (buyCrystal >= 0
+					&& (returnValue < 0 || returnValue >= buyCrystal)) {
 				Output.printTab("Gebe Zwerg: ", Output.INFO);
 				try {
 					Utils.getString("fights/waitFight/buy", "fights/start");
@@ -210,6 +205,28 @@ public class Keilerei {
 		} catch (JSONException e) {
 			Output.println("nichts", 1);
 			throw new BadOpponent(opponent);
+		}
+	}
+
+	private void setTactics() throws JSONException {
+
+		// Wenn Taktik erwünscht
+		if (Config.getTactics()) {
+
+			if (Config.getFightDebug())
+				Output.printTab("Suche nach Taktik für " + opponent.getName()
+						+ ": ", Output.DEBUG);
+
+			String[] tactics = TacticsLogFile.getTactics(opponent.getName());
+
+			if (tactics != null) {
+				if (Config.getFightDebug())
+					Output.println("Erfolgreich", Output.DEBUG);
+
+				Strategie.getRandom().setDefens(tactics).save(true);
+				Control.sleep(15);
+			} else if (Config.getFightDebug())
+				Output.println("Fehlgeschlagen", Output.DEBUG);
 		}
 	}
 }

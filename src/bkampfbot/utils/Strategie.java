@@ -31,6 +31,7 @@ import json.JSONException;
 import json.JSONObject;
 
 import bkampfbot.Utils;
+import bkampfbot.output.Output;
 
 public class Strategie {
 	public static final String[] parts = {
@@ -129,11 +130,23 @@ public class Strategie {
 	}
 	
 	public Strategie save() throws JSONException {
+		return save(false);
+	}
+	
+	public Strategie save(boolean output) throws JSONException {
+
 		JSONArray a = new JSONArray(attack);
 		JSONArray d = new JSONArray(defens);
 		JSONObject j = new JSONObject();
 		j.put("attack", a);
 		j.put("defens", d);
+		
+		if (output) {
+			Output.printTabLn("Speichere neue Strategie", Output.DEBUG);
+			Output.printTabLn("    Abwehr:  "+d, Output.DEBUG);
+			Output.printTabLn("    Angriff: "+a, Output.DEBUG);
+		}
+		
 		
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 		nvps.add(new BasicNameValuePair("json", j.toString()));

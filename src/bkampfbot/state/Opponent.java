@@ -80,7 +80,7 @@ public class Opponent {
 			throw new NotFound();
 		}
 
-		page = profilePage.substring(pos);
+		page = profilePage.substring(pos + "<center><b>".length());
 		page = page.substring(0, page.indexOf("</b></center>")).trim();
 
 		o.setName(page);
@@ -102,6 +102,7 @@ public class Opponent {
 				JSONObject player = arr.getJSONObject(i);
 				if (player.getString("name").equalsIgnoreCase(name)) {
 					o.setAttack(player.getString("attack"));
+					return o;
 				}
 			}
 

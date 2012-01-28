@@ -28,6 +28,7 @@ import bkampfbot.Control;
 import bkampfbot.exceptions.FatalError;
 import bkampfbot.modes.Jagd;
 import bkampfbot.modes.Pins;
+import bkampfbot.modes.Quiz;
 import bkampfbot.modes.ScratchTicket;
 import bkampfbot.output.Output;
 import bkampfbot.plan.PlanAussendienst;
@@ -233,28 +234,40 @@ public class AktionField extends Field {
 
 			return cancelButton(p.run() <= 0);
 		}
-		
+
 		if (text
 				.equalsIgnoreCase("Kaufe ein Rubbellos bei Bogdan am Kiosk, vielleicht gelingt dir heute der große Wurf!")) {
-			
+
 			try {
 				if (!getConfig().getBoolean("Los")) {
 					return cancelButton();
 				}
 			} catch (JSONException e) {
 			}
-			
+
 			ScratchTicket st = new ScratchTicket(1);
 			return cancelButton(st.run() <= 0);
 		}
 
-		
+		if (text
+				.equalsIgnoreCase("Du fühlst dich geistig superfit heute! Löse das Tagesquiz mit mindestens 5 richtigen Antworten!")) {
+			try {
+				if (!getConfig().getBoolean("Quiz")) {
+					return cancelButton();
+				}
+			} catch (JSONException e) {
+			}
+
+			Quiz q = new Quiz(2);
+			return cancelButton(q.run() < 5);
+		}
 
 		/**
 		 * Noch zu implementieren: Wer nicht wagt, der nicht gewinnt! Gehe ins
 		 * Casino und drehe dreimal am einarmigen Banditen!
 		 * 
-		 * 
+		 * Du f³hlst dich geistig superfit heute! L÷se das Tagesquiz mit
+		 * mindestens 5 richtigen Antworten!
 		 */
 
 		// TODO Nicht implementiert

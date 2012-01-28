@@ -39,6 +39,20 @@ public final class Quiz {
 	public static int wrongAnswerCount = 0;
 
 	public Quiz() {
+		run();
+	}
+	
+	public Quiz(int wrongAnswerCount) {
+		Quiz.wrongAnswerCount = wrongAnswerCount;
+	}
+	
+	/**
+	 * Gibt Anzahl der richtigen Antworten zurück.
+	 * @return
+	 */
+	public int run() {
+		int count = 0;
+		
 		if (wrongAnswerCount == 0) {
 			Output.printClockLn("Tagesquiz", 1);
 		} else {
@@ -63,7 +77,7 @@ public final class Quiz {
 				questions = JSONObject.getNames(list);
 			} catch (JSONException e) {
 				Output.printTabLn("Quiz wurde heute schon erledigt.", 1);
-				return;
+				return 0;
 			}
 
 			Output.printTabLn("Hole Fragen:\n", 2);
@@ -88,6 +102,7 @@ public final class Quiz {
 					}
 				} else {
 					selected = Integer.valueOf(choices.getInsertOrder()[0]);
+					count++;
 				}
 
 				answer.put("number", selected);
@@ -122,5 +137,7 @@ public final class Quiz {
 		} catch (JSONException e) {
 			Output.error(e);
 		}
+		
+		return count;
 	}
 }

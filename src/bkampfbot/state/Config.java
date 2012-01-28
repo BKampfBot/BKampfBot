@@ -76,6 +76,8 @@ public class Config {
 	protected int jagdMin = 0;
 	protected boolean prevention = true;
 	protected boolean debug = false;
+	private boolean tactics = true;
+	private boolean fightDebug = false;
 
 	protected static Config instance = null;
 
@@ -215,10 +217,23 @@ public class Config {
 				} catch (JSONException e) {
 				}
 				setUserAgent(jsonConfig.getString(key));
+
 			} else if (key.equalsIgnoreCase("Verschleiern")) {
+
 				setPrevention(jsonConfig.getBoolean(key));
+
 			} else if (key.equalsIgnoreCase("Debug")) {
+
 				setDebug(jsonConfig.getBoolean(key));
+
+			} else if (key.equalsIgnoreCase("Taktik")) {
+
+				try {
+					setTactics(jsonConfig.getBoolean(key));
+				} catch (JSONException e) {
+					setFightDebug(jsonConfig.getString(key).equalsIgnoreCase("Debug"));
+				}
+
 			}
 		}
 	}
@@ -541,4 +556,21 @@ public class Config {
 	public static boolean getDebug() {
 		return getInstance().debug;
 	}
+
+	public static void setTactics(boolean tactics) {
+		getInstance().tactics = tactics;
+	}
+
+	public static boolean getTactics() {
+		return getInstance().tactics;
+	}
+
+	public static void setFightDebug(boolean debug) {
+		getInstance().fightDebug = debug;
+	}
+
+	public static boolean getFightDebug() {
+		return getInstance().fightDebug;
+	}
+
 }
