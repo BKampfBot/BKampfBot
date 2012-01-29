@@ -93,6 +93,25 @@ public class AktionField extends Field {
 		}
 
 		if (text
+				.equalsIgnoreCase("Für ein anstehendes Referat musst du besonders konzentriert sein, steigere deinen Wahrnehmungswert um 1 Punkt!")) {
+
+			if (!getConfig().isNull("Wahrnehmung")) {
+
+				boolean bank = false;
+				try {
+					bank = getConfig().getBoolean("Wahrnehmung");
+				} catch (JSONException e) {
+				}
+
+				int bought = Skill.get("Wahrnehmung").buy(1, bank);
+				return cancelButton(bought <= 0);
+
+			} else {
+				return cancelButton();
+			}
+		}
+
+		if (text
 				.equalsIgnoreCase("Du bist heute gut drauf in deiner Außendiensttätigkeit, absolviere einen leichten AD und kassiere einen Sonderbonus!")) {
 			JSONObject config = new JSONObject("{\"Aussendienst\":0}");
 			PlanAussendienst aussen = new PlanAussendienst(config);
