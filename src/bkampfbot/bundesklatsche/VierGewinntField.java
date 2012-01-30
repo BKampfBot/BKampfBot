@@ -35,11 +35,7 @@ public class VierGewinntField extends Field {
 
 		if (getResult().getJSONObject("char").getString("viergewinnt").equals(
 				"4")) {
-
-			Output.printTabLn("Nicht implementiert: "
-					+ this.getClass().getSimpleName(), Output.ERROR);
 			Output.printTabLn("Vier gewinnt steht auf 4", Output.INFO);
-			return false;
 		} else {
 			Output.printTabLn("Vier gewinnt", Output.INFO);
 		}
