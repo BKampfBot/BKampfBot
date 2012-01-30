@@ -31,9 +31,39 @@ import bkampfbot.output.Output;
 
 public final class PlanBundesklatsche extends PlanObject {
 
+	private final class DiceException extends Exception {
+		private static final long serialVersionUID = -2049167987518967561L;
+	}
+
+	private static JSONObject getData(int type) throws JSONException {
+		Control.sleep(5);
+		return Utils.getJSON("bundesklatsche/get_data/" + type);
+	}
+
+	public static String id2Card(int id) {
+		switch (id) {
+		default:
+			return "Unbekannt";
+		case 1:
+			return "Raus aus dem Knast";
+		case 3:
+			return "Freie Auswahl";
+		case 4:
+			return "Freiwurf";
+		case 5:
+			return "Neustart";
+		case 6:
+			return "Weitsprung";
+		}
+	}
+
 	private JSONObject lastResult = null;
+
 	private JSONObject lastChar = null;
+
 	private final JSONObject config;
+
+	private int[] cards = { 0, 0, 0, 0, 0, 0, 0, 0 };
 
 	public PlanBundesklatsche(JSONObject config) throws FatalError {
 		this.setName("Bundesklatsche");
@@ -42,53 +72,6 @@ public final class PlanBundesklatsche extends PlanObject {
 			this.config = config.getJSONObject(getName());
 		} catch (JSONException e) {
 			throw new FatalError("Bundesklatsche ist falsch konfiguriert.");
-		}
-	}
-
-	public void run() throws FatalError, RestartLater {
-		Output.printClockLn("-> Bundesklatsche", Output.INFO);
-
-		try {
-
-			// first get info
-			info(0);
-
-			// is time for dice?
-			dice();
-			boolean next = false;
-			do {
-				next = false;
-
-				info(0);
-
-				int pos = Integer.valueOf(lastChar.getString("figur_pos"));
-
-				// Erzeuge Spielfeld
-				Field current = Field.getField(pos, this);
-
-				try {
-					// Führe Spielfeld aus
-					if (!current.action()) {
-						Output
-								.printTabLn(
-										"Konnte Spielfeld nicht vollständig abarbeiten.",
-										Output.INFO);
-						return;
-					}
-				} catch (NextField e) {
-					next = true;
-				}
-				Control.sleep(10);
-
-				// Bestätige Gewinn oder Verlust
-				if (!next) next();
-
-			} while (next || dice());
-		} catch (JSONException e) {
-			Output.error(e);
-			return;
-		} catch (DiceException e) {
-			return;
 		}
 	}
 
@@ -126,26 +109,78 @@ public final class PlanBundesklatsche extends PlanObject {
 		throw new DiceException();
 	}
 
-	public void rollAndOutputDice() throws JSONException {
-		info(1);
-
-		Output.printClockLn("Würfel: "
-				+ lastResult.getJSONObject("action").getInt("blackdice"),
-				Output.DEBUG);
+	public boolean useCard(int id) throws JSONException {
+		// POST /bundesklatsche/get_data/0/3 HTTP/1.1\r\n
+		
+		// refresh
+		info(0);
+		
+		int field = getCard(id);
+		if (field == 0) {
+			return false;
+		}
+		
+		Utils.getString("/bundesklatsche/get_data/0/"+field);
+		
+		// refresh
+		info(0);
+		return true;
 	}
 
-	public JSONObject rollTheDice() throws JSONException {
-		return getData(1);
+	public boolean buyCard() {
+		/*
+		 * POST /bundesklatsche/buy_card/ HTTP/1.1\r\n
+		 * 
+		 * { "char": { "character_id": "744132", "race_id": "12", "rolls": "6",
+		 * "roll_date": "2012-01-30", "beute": "687", "sicher": "2570",
+		 * "klatschen": "76", "meister": "0", "figur_pos": "13", "cont":
+		 * "rollthedice", "num1": "0", "num2": "0", "var1": "", "sknum1": "0",
+		 * "skvar1": "", "viergewinnt": "3", "sk1": 3, "sk2": "0", "sk3": "0",
+		 * "sk4": "0", "sk5": "0", "sk6": "0", "sk7": "0", "sk8": "0",
+		 * "backpfeifen": 20, "last_sicher": "0", "last_klatschen": "49",
+		 * "last_meister": "0", "last_payout": "19", "last_round": "19",
+		 * "modified": "2012-01-30 02:13:45", "round": 20, "run": true },
+		 * "card_id": 3
+		 */
+		return false;
 	}
 
-	private static JSONObject getData(int type) throws JSONException {
-		Control.sleep(5);
-		return Utils.getJSON("bundesklatsche/get_data/" + type);
+	public int getCard(int id) {
+		for (int i = 0; i < cards.length; i++) {
+			if (id == i) {
+				return i + 1;
+			}
+		}
+		return 0;
+	}
+
+	public JSONObject getConfig() {
+		return config;
+	}
+
+	public JSONObject getLastResult() {
+		return lastResult;
 	}
 
 	private void info(int type) throws JSONException {
+		
+		Control.sleep(3);
+		
 		lastResult = getData(type);
 		lastChar = lastResult.getJSONObject("char");
+
+		// set cards
+		for (int i = 0; i < cards.length; i++) {
+			try {
+				cards[i] = lastChar.getInt("sk" + i);
+			} catch (JSONException e) {
+				try {
+					cards[i] = Integer.valueOf(lastChar.getString("sk" + i));
+				} catch (JSONException g) {
+					cards[i] = 0;
+				}
+			}
+		}
 
 		if (lastResult.getInt("payout") == 1) {
 			info(2);
@@ -165,20 +200,75 @@ public final class PlanBundesklatsche extends PlanObject {
 		info(1);
 	}
 
-	private final class DiceException extends Exception {
-
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = -2049167987518967561L;
-
+	public void printCards() {
+		for (int i = 0; i < cards.length; i++) {
+			if (cards[i] != 0) {
+				Output.printTabLn("  " + id2Card(cards[i]), Output.DEBUG);
+			}
+		}
 	}
 
-	public JSONObject getLastResult() {
-		return lastResult;
+	public void rollAndOutputDice() throws JSONException {
+		info(1);
+
+		Output.printClockLn("Würfel: "
+				+ lastResult.getJSONObject("action").getInt("blackdice"),
+				Output.DEBUG);
 	}
 
-	public JSONObject getConfig() {
-		return config;
+	public JSONObject rollTheDice() throws JSONException {
+		return getData(1);
+	}
+
+	public void run() throws FatalError, RestartLater {
+		Output.printClockLn("-> Bundesklatsche", Output.INFO);
+
+		try {
+
+			// first get info
+			info(0);
+
+			// is time for dice?
+			dice();
+
+			// print info about cards
+			printCards();
+
+			boolean next = false;
+			do {
+				next = false;
+
+				info(0);
+
+				int pos = Integer.valueOf(lastChar.getString("figur_pos"));
+
+				// Erzeuge Spielfeld
+				Field current = Field.getField(pos, this);
+
+				try {
+					// Führe Spielfeld aus
+					if (!current.action()) {
+						Output
+								.printTabLn(
+										"Konnte Spielfeld nicht vollständig abarbeiten.",
+										Output.INFO);
+						return;
+					}
+				} catch (NextField e) {
+					next = true;
+				}
+				Control.sleep(10);
+
+				// Bestätige Gewinn oder Verlust
+				if (!next)
+					next();
+
+			} while (next || dice());
+		} catch (JSONException e) {
+			Output.error(e);
+			return;
+		} catch (DiceException e) {
+			return;
+		}
 	}
 }
