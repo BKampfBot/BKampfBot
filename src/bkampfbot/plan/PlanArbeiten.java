@@ -153,7 +153,7 @@ public final class PlanArbeiten extends PlanObject {
 						int seconds = result.getInt("fullTime")
 								- result.getInt("currentTime") + 20;
 						Output.printTabLn(
-								"Letzte Arbeit wurde nicht beendet. Schlafe"
+								"Letzte Arbeit wurde nicht beendet. Schlafe "
 										+ Math.round(seconds / 60)
 										+ " Minuten.", 1);
 
