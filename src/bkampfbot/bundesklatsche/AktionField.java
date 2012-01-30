@@ -35,6 +35,7 @@ import bkampfbot.plan.PlanAussendienst;
 import bkampfbot.plan.PlanBundesklatsche;
 import bkampfbot.state.User;
 import bkampfbot.utils.Bank;
+import bkampfbot.utils.Casino;
 import bkampfbot.utils.Essen;
 import bkampfbot.utils.Skill;
 import bkampfbot.utils.Strategie;
@@ -209,12 +210,31 @@ public class AktionField extends Field {
 				Output.printTabLn("Du darfst noch nicht ins Casino.",
 						Output.INFO);
 				return cancelButton();
+			} else {
+				try {
+					if (!getConfig().getBoolean("Casino")) {
+						return cancelButton();
+					}
+				} catch (JSONException e) {
+				}
+				
+				Control.sleep(15);
+				
+				Casino bandit = new Casino(Casino.M100);
+				
+				Output.printTab("Drehe: ", Output.INFO);
+				for (int i = 0; i < 3; i++) {
+					if (bandit.run()) {
+						Output.print(bandit.getMoney()+" DM  ", Output.INFO);
+					} else {
+						Output.println("Fehler", Output.INFO);
+						return cancelButton();
+					}
+					Control.sleep(15);
+				}
+				Output.println("", Output.INFO);
+				return true;
 			}
-
-			Output.print(
-					"Ist noch nicht implementiert, aber schon vorgesehen.",
-					Output.INFO);
-			// TODO casino
 		}
 
 		if (text
