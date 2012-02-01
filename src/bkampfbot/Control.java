@@ -22,6 +22,7 @@ package bkampfbot;
 import bkampfbot.exceptions.FatalError;
 import bkampfbot.exceptions.RestartLater;
 import bkampfbot.output.Output;
+import bkampfbot.output.SimpleFile;
 import bkampfbot.state.Config;
 import bkampfbot.state.Prevention;
 
@@ -29,6 +30,7 @@ public class Control {
 	public final static String version = "1.3.2";
 
 	public static Instance current = null;
+
 
 	public final static void main(String[] args) {
 		for (int i = 0; i < 20; i++) {
@@ -62,6 +64,13 @@ public class Control {
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
+				
+				if (current.lastResponse != null) {
+					SimpleFile.write("debug-info.html", current.lastResponse);
+					Output.println("Bitte den Fehlerbericht »debug-info.html« melden", Output.ERROR);
+				}
+				
+				Control.sleep(6000, Output.ERROR);
 			}
 		}
 	}

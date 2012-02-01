@@ -81,6 +81,10 @@ import bkampfbot.state.Config;
 import bkampfbot.state.User;
 
 public final class Instance {
+	/**
+	 * for debugging
+	 */
+	public String lastResponse = null;
 
 	public enum Daily {
 		quiz, scratchTicket, glueck, wein, spiel, jagd

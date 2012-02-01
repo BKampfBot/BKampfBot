@@ -191,6 +191,11 @@ public class Utils {
 
 			if (entity != null) {
 				String ret = EntityUtils.toString(entity);
+				
+				// for debugging
+				Control.current.lastResponse = ret;
+				
+				
 				if (entity != null) {
 					entity.consumeContent();
 				}
@@ -225,6 +230,7 @@ public class Utils {
 
 			// Create a response handler
 			HttpResponse response = Control.current.httpclient.execute(http);
+			
 			HttpEntity entity = response.getEntity();
 
 			Header date = response.getFirstHeader("date");
@@ -238,6 +244,11 @@ public class Utils {
 
 			if (entity != null) {
 				String ret = EntityUtils.toString(entity);
+				
+				// for debugging
+				Control.current.lastResponse = ret;
+				
+				
 				if (entity != null) {
 					entity.consumeContent();
 				}
@@ -295,7 +306,7 @@ public class Utils {
 		page = page.substring(0, page.indexOf("</div>"));
 
 		page = page.substring(page.indexOf("<br />") + 6);
-		page = page.substring(0, page.indexOf(" "));
+		page = page.substring(0, page.indexOf("<"));
 
 		page = page.replaceAll("[^0-9/]+", "");
 
