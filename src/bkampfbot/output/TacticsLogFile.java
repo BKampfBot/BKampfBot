@@ -62,20 +62,40 @@ public class TacticsLogFile extends AbstractFile implements DoItLater {
 
 			JSONObject newOpponent = new JSONObject();
 			newOpponent.put("tactics", tactics);
-			newOpponent.put("time", (int) ((new Date()).getTime()/1000));
+			newOpponent.put("time", (int) ((new Date()).getTime() / 1000));
 
 			JSONObject content = new JSONObject(read("{}"));
 			if (content.has(name)) {
-				
-				boolean remove = true;
-				
-				if (content.getJSONObject(name).has("time")) {
-					int timestamp = content.getJSONObject(name).getInt("time");
-					if ((int) ((new Date()).getTime()/1000) - minSaveTime < timestamp) {
-						remove = false;
+
+				/*
+				 * Wenn die neue Menge eine Teilmenge ist, nicht ersetzen.
+				 */
+
+				boolean remove = false;
+
+				if (content.getJSONObject(name).has("tactics")) {
+					JSONArray oldTactics = content.getJSONObject(name)
+							.getJSONArray("tactics");
+
+					for (int i = 0; i < tactics.length(); i++) {
+						
+						boolean found = false;
+						
+						for (int j = 0; j < oldTactics.length(); j++) {
+							if (tactics.getString(i).equals(
+									oldTactics.getString(j))) {
+								found = true;
+								break;
+							}
+						}
+
+						if (!found) {
+							remove = true;
+							break;
+						}
 					}
 				}
-				
+
 				if (remove) {
 					content.remove(name);
 					content.put(name, newOpponent);
@@ -97,7 +117,8 @@ public class TacticsLogFile extends AbstractFile implements DoItLater {
 					Output.getInstance().htmlPath);
 			JSONObject content = new JSONObject(help.read("{}"));
 			if (content.has(name)) {
-				JSONArray t = content.getJSONObject(name).getJSONArray("tactics");
+				JSONArray t = content.getJSONObject(name).getJSONArray(
+						"tactics");
 				String[] tactics = new String[t.length()];
 				for (int i = 0; i < t.length(); i++) {
 					tactics[i] = t.getString(i);
