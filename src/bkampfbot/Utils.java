@@ -48,6 +48,7 @@ import bkampfbot.exceptions.LocationChangedException;
 import bkampfbot.exceptions.RestartLater;
 import bkampfbot.output.Output;
 import bkampfbot.state.Config;
+import bkampfbot.utils.ErrorLog;
 
 public class Utils {
 
@@ -191,11 +192,10 @@ public class Utils {
 
 			if (entity != null) {
 				String ret = EntityUtils.toString(entity);
-				
+
 				// for debugging
 				Control.current.lastResponse = ret;
-				
-				
+
 				if (entity != null) {
 					entity.consumeContent();
 				}
@@ -230,7 +230,7 @@ public class Utils {
 
 			// Create a response handler
 			HttpResponse response = Control.current.httpclient.execute(http);
-			
+
 			HttpEntity entity = response.getEntity();
 
 			Header date = response.getFirstHeader("date");
@@ -244,11 +244,10 @@ public class Utils {
 
 			if (entity != null) {
 				String ret = EntityUtils.toString(entity);
-				
+
 				// for debugging
 				Control.current.lastResponse = ret;
-				
-				
+
 				if (entity != null) {
 					entity.consumeContent();
 				}
@@ -261,6 +260,7 @@ public class Utils {
 		}
 	}
 
+	
 	/**
 	 * Lädt eine URL und verwirft das Ergebnis
 	 * 
@@ -298,19 +298,38 @@ public class Utils {
 				Control.current.waitForStatus();
 			}
 		} while (true);
+		
+		
 		int pos = page.indexOf("class=\"questanzahl\"");
-		if (pos == -1) {
-			throw new RestartLater();
-		}
+		if (badPosition(pos))
+			return false;
+		
 		page = page.substring(pos);
-		page = page.substring(0, page.indexOf("</div>"));
+		
+		pos = page.indexOf("</div>");
+		if (badPosition(pos))
+			return false;
 
-		page = page.substring(page.indexOf("<br />") + 6);
-		page = page.substring(0, page.indexOf("<"));
+		page = page.substring(0, pos);
+
+		pos = page.indexOf("<br />");
+		if (badPosition(pos))
+			return false;
+		
+		page = page.substring(pos + 6);
+		
+		pos = page.indexOf("<");
+		if (badPosition(pos))
+			return false;
+		
+		page = page.substring(0, pos);
 
 		page = page.replaceAll("[^0-9/]+", "");
 
 		pos = page.indexOf('/');
+		if (badPosition(pos))
+			return false;
+		
 		int available = Integer.parseInt(page.substring(0, pos));
 		int maximum = Integer.parseInt(page.substring(pos + 1));
 
@@ -352,5 +371,13 @@ public class Utils {
 		} else {
 			return races.get(race.toLowerCase());
 		}
+	}
+
+	public static final boolean badPosition(int pos) {
+		if (pos == -1) {
+			new ErrorLog("Falsche Position\n\n"+Control.current.lastResponse);
+			return true;
+		}
+		return false;
 	}
 }
