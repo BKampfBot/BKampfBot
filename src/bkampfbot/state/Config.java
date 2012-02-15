@@ -74,6 +74,7 @@ public class Config {
 	protected String proxyPassword = null;
 	protected int jagdMax = 0;
 	protected int jagdMin = 0;
+	protected int jagdProzent = 100;
 	protected boolean prevention = true;
 	protected boolean debug = false;
 	private boolean tactics = true;
@@ -216,7 +217,13 @@ public class Config {
 					setJagdMax(jagd.getInt("max"));
 				} catch (JSONException e) {
 				}
-				setUserAgent(jsonConfig.getString(key));
+				
+				try {
+					JSONObject jagd = jsonConfig.getJSONObject(key);
+					setJagdProzent(jagd.getInt("Prozent"));
+				} catch (JSONException e) {
+				}
+
 
 			} else if (key.equalsIgnoreCase("Verschleiern")) {
 
@@ -571,6 +578,14 @@ public class Config {
 
 	public static boolean getFightDebug() {
 		return getInstance().fightDebug;
+	}
+	
+	public static void setJagdProzent(int p) {
+		getInstance().jagdProzent = p;
+	}
+
+	public static int getJagdProzent() {
+		return getInstance().jagdProzent;
 	}
 
 }

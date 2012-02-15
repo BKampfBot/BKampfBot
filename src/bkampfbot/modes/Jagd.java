@@ -88,7 +88,7 @@ public final class Jagd {
 									Output.ERROR);
 				}
 
-				for (int i = 0; i < 5 && availablePoints > 20 && score < 100
+				for (int i = 0; i < 5 && availablePoints > 20 && score < Config.getJagdProzent()
 						&& doMore(); i++) {
 					JSONObject current = data.getJSONObject(i);
 
