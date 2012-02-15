@@ -114,9 +114,19 @@ public class AktionField extends Field {
 
 		if (text
 				.equalsIgnoreCase("Du bist heute gut drauf in deiner Außendiensttätigkeit, absolviere einen leichten AD und kassiere einen Sonderbonus!")) {
-			JSONObject config = new JSONObject("{\"Aussendienst\":0}");
-			PlanAussendienst aussen = new PlanAussendienst(config);
-			aussen.run();
+
+			boolean doit = true;
+			try {
+				if (!getConfig().getBoolean("Aussendienst")) {
+					doit = false;
+				}
+			} catch (JSONException e) {
+			}
+			if (doit) {
+				JSONObject config = new JSONObject("{\"Aussendienst\":0}");
+				PlanAussendienst aussen = new PlanAussendienst(config);
+				aussen.run();
+			}
 			return true;
 		}
 
@@ -217,15 +227,15 @@ public class AktionField extends Field {
 					}
 				} catch (JSONException e) {
 				}
-				
+
 				Control.sleep(15);
-				
+
 				Casino bandit = new Casino(Casino.M100);
-				
+
 				Output.printTab("Drehe: ", Output.INFO);
 				for (int i = 0; i < 3; i++) {
 					if (bandit.run()) {
-						Output.print(bandit.getMoney()+" DM  ", Output.INFO);
+						Output.print(bandit.getMoney() + " DM  ", Output.INFO);
 					} else {
 						Output.println("Fehler", Output.INFO);
 						return cancelButton();
