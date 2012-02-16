@@ -42,14 +42,16 @@ public class Opponent {
 	private int fights = 0;
 	private boolean canFight = true;
 	private boolean selected = false;
-	private GregorianCalendar date;
+	private GregorianCalendar date = new GregorianCalendar();
 
 	private Opponent() {
+		date.setTime(Config.getDate());
 	}
 
 	public Opponent(String name, String attack) {
 		this.name = name;
 		this.attack = attack;
+		date.setTime(Config.getDate());
 	}
 
 	public final static Opponent getById(String id) throws NotFound {

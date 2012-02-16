@@ -171,14 +171,15 @@ public abstract class PlanBoese extends PlanObject {
 					if (!getOpponentList().contains(id)) {
 						Output.printTabLn("Füge " + now.getString("name")
 								+ " zur Liste hinzu", 2);
-						getOpponentList().put(id, now.getString("attack"),
-								now.getString("name"));
+						getOpponentList().put(id, now.getString("name"),
+								now.getString("attack"));
 					}
 				}
 
 				// delete all others
 				getOpponentList().deleteUnselected();
 
+				Output.print("asdf", 1);
 				int nextKey = 0;
 
 				// From up to down?
@@ -339,7 +340,9 @@ public abstract class PlanBoese extends PlanObject {
 		}
 
 		public Opponent put(int key, String name, String value) {
-			return list.put(key, new Opponent(name, value));
+			Opponent opp = new Opponent(name, value);
+			opp.select();
+			return list.put(key, opp);
 		}
 
 		public Opponent get(int key) {
