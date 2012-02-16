@@ -36,6 +36,7 @@ public class VierGewinntField extends Field {
 		if (getResult().getJSONObject("char").getString("viergewinnt").equals(
 				"4")) {
 			Output.printTabLn("Vier gewinnt steht auf 4", Output.INFO);
+			Output.println("=====\nBitte melde mal jemand folgende Ausgabe:\n"+getResult()+"\n=====\n", Output.DEBUG);
 		} else {
 			Output.printTabLn("Vier gewinnt", Output.INFO);
 		}
