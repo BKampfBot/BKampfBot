@@ -179,7 +179,6 @@ public abstract class PlanBoese extends PlanObject {
 				// delete all others
 				getOpponentList().deleteUnselected();
 
-				Output.print("asdf", 1);
 				int nextKey = 0;
 
 				// From up to down?
