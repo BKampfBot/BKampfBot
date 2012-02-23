@@ -43,7 +43,7 @@ public final class PlanBundesklatsche extends PlanObject {
 	public static String id2Card(int id) {
 		switch (id) {
 		default:
-			return "Unbekannt";
+			return "Unbekannt: "+id;
 		case 1:
 			return "Raus aus dem Knast";
 		case 3:
@@ -54,6 +54,10 @@ public final class PlanBundesklatsche extends PlanObject {
 			return "Neustart";
 		case 6:
 			return "Weitsprung";
+		case 7:
+			return "Dampfhammer";
+		case 11:
+			return "Rückfahrschein";
 		}
 	}
 
@@ -122,9 +126,22 @@ public final class PlanBundesklatsche extends PlanObject {
 		
 		Utils.getString("/bundesklatsche/get_data/0/"+field);
 		
+		Output.printTabLn("Benutze "+id2Card(id), Output.INFO);
+		
 		// refresh
 		info(0);
 		return true;
+	}
+	
+	public boolean useCardAsk(int id) throws JSONException {
+		boolean use = true;
+
+		try {
+			use = getConfig().getBoolean("Karten");
+		} catch (JSONException e) {
+		}
+
+		return (use && useCard(id));
 	}
 
 	public boolean buyCard() {

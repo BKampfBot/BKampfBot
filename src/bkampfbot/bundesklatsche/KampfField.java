@@ -79,6 +79,13 @@ public class KampfField extends Field {
 		int start = Integer.valueOf(getResult().getJSONObject("char")
 				.getString("num2"));
 
+		// Dampfhammer einsetzen
+		if (fightsToDo == 10 && start == 0 && getKlatsche().useCardAsk(7)) {
+			start = Integer.valueOf(getResult().getJSONObject("char")
+					.getString("num2"));
+
+		}
+
 		for (int i = start; i < fightsToDo; i++) {
 			if (Config.getDebug()) {
 				Output.printTabLn("Angriff " + (i + 1) + " von " + fightsToDo,
@@ -95,5 +102,4 @@ public class KampfField extends Field {
 		}
 		return true;
 	}
-
 }

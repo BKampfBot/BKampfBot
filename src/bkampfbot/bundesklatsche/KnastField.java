@@ -37,6 +37,11 @@ public class KnastField extends Field {
 		JSONObject result = getResult();
 		if (result.getJSONObject("action").getString("cont").equals("knast")) {
 			Output.printClockLn("In den Knast", Output.INFO);
+
+			if (getKlatsche().useCardAsk(1)) {
+				return true;
+			}
+
 			for (int i = 0; i < 10; i++) {
 
 				JSONObject action = result.getJSONObject("action");
