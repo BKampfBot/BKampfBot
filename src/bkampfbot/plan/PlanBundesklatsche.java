@@ -30,6 +30,14 @@ import bkampfbot.exceptions.RestartLater;
 import bkampfbot.output.Output;
 
 public final class PlanBundesklatsche extends PlanObject {
+	public final static int CARD_KNASTRAUS = 1;
+	public final static int CARD_BEUTESICHERN = 2;
+	public final static int CARD_FREIEAUSWAHL = 3;
+	public final static int CARD_FREIWURF = 4;
+	public final static int CARD_NEUSTART = 5;
+	public final static int CARD_WEITSPRUNG = 6;
+	public final static int CARD_DAMPFHAMMER = 7;
+	public final static int CARD_FAHRSCHEIN = 11;
 
 	private final class DiceException extends Exception {
 		private static final long serialVersionUID = -2049167987518967561L;
@@ -43,20 +51,22 @@ public final class PlanBundesklatsche extends PlanObject {
 	public static String id2Card(int id) {
 		switch (id) {
 		default:
-			return "Unbekannt: "+id;
-		case 1:
+			return "Unbekannt: " + id;
+		case CARD_KNASTRAUS:
 			return "Raus aus dem Knast";
-		case 3:
+		case CARD_BEUTESICHERN:
+			return "Beute sichern";
+		case CARD_FREIEAUSWAHL:
 			return "Freie Auswahl";
-		case 4:
+		case CARD_FREIWURF:
 			return "Freiwurf";
-		case 5:
+		case CARD_NEUSTART:
 			return "Neustart";
-		case 6:
+		case CARD_WEITSPRUNG:
 			return "Weitsprung";
-		case 7:
+		case CARD_DAMPFHAMMER:
 			return "Dampfhammer";
-		case 11:
+		case CARD_FAHRSCHEIN:
 			return "Rückfahrschein";
 		}
 	}
@@ -95,14 +105,14 @@ public final class PlanBundesklatsche extends PlanObject {
 
 		if (rolls >= maxRollsConfig) {
 			Output.printTabLn("Maximale Würfe erreicht", Output.INFO);
-			throw new DiceException();
+			return useDiceCards();
 		}
 
 		int maxRolls = lastChar.getInt("max_rolls");
 
 		if (rolls >= maxRolls) {
 			Output.printTabLn("Maximale Würfe des Tages erreicht", Output.INFO);
-			throw new DiceException();
+			return useDiceCards();
 		}
 
 		if (lastChar.getInt("rolls_ok") != 0) {
@@ -110,29 +120,56 @@ public final class PlanBundesklatsche extends PlanObject {
 			return true;
 		}
 		Output.printTabLn("Nicht genügend Punkte zum Würfeln", Output.INFO);
-		throw new DiceException();
+		return useDiceCards();
+	}
+
+	/**
+	 * Versucht nochmal Würfe frei zu machen. Dafür wird die Freiwurf oder die
+	 * Neustartkarte eingesetzt, falls eine vorhanden ist. Ansonsten komme eine
+	 * DiceException
+	 * 
+	 * @return
+	 * @throws DiceException
+	 * @throws JSONException
+	 */
+	private boolean useDiceCards() throws DiceException, JSONException {
+		if (useCardAsk(CARD_FREIWURF)) {
+			rollAndOutputDice();
+			return true;
+		} else if (useCardAsk(CARD_NEUSTART)) {
+			rollAndOutputDice();
+			return true;
+		} else {
+			throw new DiceException();
+		}
 	}
 
 	public boolean useCard(int id) throws JSONException {
-		// POST /bundesklatsche/get_data/0/3 HTTP/1.1\r\n
-		
+
+		// Würfel eine 2 (id = 6)
+		// POST /bundesklatsche/get_data/0/3/2 HTTP/1.1\r\n
+
+		// Freiwurf (id = 4)
+		// POST /bundesklatsche/get_data/0/1
+
 		// refresh
 		info(0);
-		
+
 		int field = getCard(id);
+
 		if (field == 0) {
 			return false;
 		}
-		
-		Utils.getString("/bundesklatsche/get_data/0/"+field);
-		
-		Output.printTabLn("Benutze "+id2Card(id), Output.INFO);
-		
+
+		Utils.getString("bundesklatsche/get_data/0/" + field);
+
+		Output.printTabLn("Benutze " + id2Card(id), Output.INFO);
+
 		// refresh
 		info(0);
 		return true;
 	}
-	
+
 	public boolean useCardAsk(int id) throws JSONException {
 		boolean use = true;
 
@@ -164,7 +201,7 @@ public final class PlanBundesklatsche extends PlanObject {
 
 	public int getCard(int id) {
 		for (int i = 0; i < cards.length; i++) {
-			if (id == i) {
+			if (id == cards[i]) {
 				return i + 1;
 			}
 		}
@@ -180,19 +217,20 @@ public final class PlanBundesklatsche extends PlanObject {
 	}
 
 	private void info(int type) throws JSONException {
-		
+
 		Control.sleep(3);
-		
+
 		lastResult = getData(type);
 		lastChar = lastResult.getJSONObject("char");
 
 		// set cards
 		for (int i = 0; i < cards.length; i++) {
 			try {
-				cards[i] = lastChar.getInt("sk" + i);
+				cards[i] = lastChar.getInt("sk" + (i + 1));
 			} catch (JSONException e) {
 				try {
-					cards[i] = Integer.valueOf(lastChar.getString("sk" + i));
+					cards[i] = Integer.valueOf(lastChar.getString("sk"
+							+ (i + 1)));
 				} catch (JSONException g) {
 					cards[i] = 0;
 				}
@@ -226,6 +264,7 @@ public final class PlanBundesklatsche extends PlanObject {
 	}
 
 	public void rollAndOutputDice() throws JSONException {
+
 		info(1);
 
 		Output.printClockLn("Würfel: "
@@ -234,6 +273,7 @@ public final class PlanBundesklatsche extends PlanObject {
 	}
 
 	public JSONObject rollTheDice() throws JSONException {
+
 		return getData(1);
 	}
 

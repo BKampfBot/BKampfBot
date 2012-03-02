@@ -38,7 +38,7 @@ public class KnastField extends Field {
 		if (result.getJSONObject("action").getString("cont").equals("knast")) {
 			Output.printClockLn("In den Knast", Output.INFO);
 
-			if (getKlatsche().useCardAsk(1)) {
+			if (getKlatsche().useCardAsk(PlanBundesklatsche.CARD_KNASTRAUS)) {
 				return true;
 			}
 
@@ -57,6 +57,9 @@ public class KnastField extends Field {
 					+ this.getClass().getSimpleName(), Output.ERROR);
 			return false;
 		} else {
+			
+			/*System.out.println("Geschenk!!!!");
+			System.exit(1);*/
 			Output.printClockLn("Knast: Freiwurf", Output.INFO);
 			getKlatsche().rollAndOutputDice();
 			Control.sleep(10);

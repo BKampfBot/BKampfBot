@@ -80,11 +80,21 @@ public class KampfField extends Field {
 				.getString("num2"));
 
 		// Dampfhammer einsetzen
-		if (fightsToDo == 10 && start == 0 && getKlatsche().useCardAsk(7)) {
+		if (fightsToDo == 10
+				&& start == 0
+				&& getKlatsche()
+						.useCardAsk(PlanBundesklatsche.CARD_DAMPFHAMMER)) {
 			start = Integer.valueOf(getResult().getJSONObject("char")
 					.getString("num2"));
 
 		}
+
+		// Stromschlag einsetzen
+		/*
+		 * if (fightsToDo == 3 && fieldName.equals("E-Werk")) {
+		 * System.out.println("Stromschlag!!!!"); getKlatsche().printCards(); //
+		 * System.exit(1); }
+		 */
 
 		for (int i = start; i < fightsToDo; i++) {
 			if (Config.getDebug()) {
