@@ -136,8 +136,10 @@ public class User {
 			setRaceSecondary("Nordrhein-Westfalen");
 		} else if (race.compareToIgnoreCase("Nieders.") == 0) {
 			setRaceSecondary("Niedersachsen");
+		} else if (race.compareToIgnoreCase("Schl.-Holst.") == 0) {
+			setRaceSecondary("Schleswig-Holstein");
 		}
-		
+
 		// "Hessen"
 		// "Sachsen-Anhalt"
 		// Thüringen -> OK
