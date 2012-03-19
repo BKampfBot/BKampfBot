@@ -102,8 +102,7 @@ public class KampfField extends Field {
 						Output.DEBUG);
 			}
 
-			PlanAngriff elem = new PlanAngriff(config);
-			elem.setUseCache(false);
+			PlanAngriff elem = new PlanAngriff(config, race);
 			elem.run();
 
 			if (!elem.won()) {

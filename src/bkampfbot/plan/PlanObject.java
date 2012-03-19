@@ -43,7 +43,7 @@ public class PlanObject {
 		}
 
 		if (keys[0].equalsIgnoreCase("Angriff")) {
-			return new PlanAngriff(object);
+			return new PlanAngriff(object, "PlanManager");
 		} else if (keys[0].equalsIgnoreCase("Aussendienst")) {
 			return new PlanAussendienst(object);
 		} else if (keys[0].equalsIgnoreCase("Bank")) {
