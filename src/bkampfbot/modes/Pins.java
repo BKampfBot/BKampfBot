@@ -29,13 +29,14 @@ import org.apache.http.message.BasicNameValuePair;
 import bkampfbot.Control;
 import bkampfbot.Utils;
 import bkampfbot.output.Output;
+import bkampfbot.plan.PlanObject;
 
 import json.JSONArray;
 import json.JSONException;
 import json.JSONObject;
 import json.JSONTokener;
 
-public final class Pins {
+public final class Pins extends PlanObject {
 
 	private ArrayList<Integer> toBuy;
 	private int bought = 0;
@@ -49,8 +50,16 @@ public final class Pins {
 	public Pins(String in) {
 		Pins.in = in;
 	}
+	
+	public Pins(JSONObject setup) {
+		setName("Pins");
+	}
+	
+	public void run() {
+		buy();
+	}
 		
-	public int run() {
+	public int buy() {
 		Output.printClockLn("Pins", 1);
 
 		String input = in.replaceAll("[^0-9,]", "");

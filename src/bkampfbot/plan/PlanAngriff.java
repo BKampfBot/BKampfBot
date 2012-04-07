@@ -226,7 +226,7 @@ public final class PlanAngriff extends PlanObject {
 		Opponent opp = oppCache.findHighMoney();
 		if (opp != null) {
 			try {
-				int money = Keilerei.fight(opp, "Angriff High", options, this);
+				int money = Keilerei.fight(opp, "Angriff nochmal", options, this);
 
 				// Fight was won, we safe the opponent
 				if (money > Config.getFightAgain()) {

@@ -33,30 +33,50 @@ import org.apache.http.message.BasicNameValuePair;
 import bkampfbot.Control;
 import bkampfbot.Utils;
 import bkampfbot.output.Output;
+import bkampfbot.plan.PlanObject;
 
-public final class Quiz {
+public final class Quiz extends PlanObject {
 
 	public static int wrongAnswerCount = 0;
+	private int wrongAnswers = -1;
 
 	public Quiz() {
 		run();
 	}
-	
+
 	public Quiz(int wrongAnswerCount) {
-		Quiz.wrongAnswerCount = wrongAnswerCount;
+		wrongAnswers = wrongAnswerCount;
 	}
-	
+
+	public Quiz(JSONObject setup) {
+		setName("Tagesquiz");
+
+		try {
+			wrongAnswers = setup.getInt("falsch");
+		} catch (JSONException e) {
+		}
+	}
+
+	public void run() {
+		runQuiz();
+	}
+
 	/**
 	 * Gibt Anzahl der richtigen Antworten zurück.
+	 * 
 	 * @return
 	 */
-	public int run() {
+	public int runQuiz() {
 		int count = 0;
-		
-		if (wrongAnswerCount == 0) {
+		int wrongOnes = wrongAnswers;
+
+		if (wrongOnes < 0)
+			wrongOnes = wrongAnswerCount;
+
+		if (wrongOnes == 0) {
 			Output.printClockLn("Tagesquiz", 1);
 		} else {
-			Output.printClockLn("Tagesquiz mit " + wrongAnswerCount
+			Output.printClockLn("Tagesquiz mit " + wrongOnes
 					+ " falschen Antworten", 1);
 		}
 
@@ -94,11 +114,11 @@ public final class Quiz {
 
 				int selected;
 
-				if (wrongAnswerCount != 0) {
+				if (wrongOnes != 0) {
 					selected = new Random().nextInt(4) + 1;
 					if (selected != Integer
 							.valueOf(choices.getInsertOrder()[0])) {
-						wrongAnswerCount--;
+						wrongOnes--;
 					}
 				} else {
 					selected = Integer.valueOf(choices.getInsertOrder()[0]);
@@ -137,7 +157,7 @@ public final class Quiz {
 		} catch (JSONException e) {
 			Output.error(e);
 		}
-		
+
 		return count;
 	}
 }

@@ -32,12 +32,21 @@ import org.apache.http.message.BasicNameValuePair;
 
 import bkampfbot.Utils;
 import bkampfbot.output.Output;
+import bkampfbot.plan.PlanObject;
 
-public final class Lottery {
+public final class Lottery extends PlanObject{
 	public static int[] numbers = new int[5];
 	public static boolean random = true;
 
 	public Lottery() {
+		run();
+	}
+	
+	public Lottery( JSONObject setup) {
+		setName("Lotto");
+	}
+	
+	public void run() {
 		Output.printClockLn("Lotterie", 1);
 
 		if (random) {

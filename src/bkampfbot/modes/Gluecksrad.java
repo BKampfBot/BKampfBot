@@ -22,12 +22,21 @@ package bkampfbot.modes;
 import java.util.Random;
 import bkampfbot.Utils;
 import bkampfbot.output.Output;
+import bkampfbot.plan.PlanObject;
 
 import json.JSONObject;
 
-public final class Gluecksrad {
+public final class Gluecksrad extends PlanObject {
 
 	public Gluecksrad() {
+		run();
+	}
+	
+	public Gluecksrad(JSONObject setup) {
+		setName("Gluecksrad");
+	}
+		
+	public void run() {
 		try {
 			Output.printClockLn("Glücksrad", 1);
 

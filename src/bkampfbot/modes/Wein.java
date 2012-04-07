@@ -27,13 +27,22 @@ import java.util.Random;
 import bkampfbot.Control;
 import bkampfbot.Utils;
 import bkampfbot.output.Output;
+import bkampfbot.plan.PlanObject;
 
 
 import json.JSONObject;
 
-public final class Wein {
+public final class Wein extends PlanObject {
 
 	public Wein() {
+		run();
+	}
+	
+	public Wein(JSONObject setup) {
+		setName("Weinkeller");
+	}
+	
+	public void run() {
 		Output.printClockLn("Weinfässer", 1);
 		
 		try {

@@ -37,11 +37,12 @@ import bkampfbot.Control;
 import bkampfbot.Utils;
 import bkampfbot.output.Output;
 import bkampfbot.output.SimpleFile;
+import bkampfbot.plan.PlanObject;
 import bkampfbot.state.Config;
 
-public final class Jagd {
+public final class Jagd extends PlanObject {
 
-	private final String[] names = { "Film", "Sprichwort", "Musik", "Games",
+	private static final String[] names = { "Film", "Sprichwort", "Musik", "Games",
 			"Sport" };
 
 	private int wordsToRun = -1;
@@ -63,6 +64,10 @@ public final class Jagd {
 	 */
 	public Jagd() {
 		this.run();
+	}
+	
+	public Jagd(JSONObject setup) {
+		setName("Jagd");
 	}
 
 	public void run() {

@@ -32,11 +32,20 @@ import org.apache.http.message.BasicNameValuePair;
 import bkampfbot.Control;
 import bkampfbot.Utils;
 import bkampfbot.output.Output;
+import bkampfbot.plan.PlanObject;
 import bkampfbot.state.Config;
 
-public final class Tagesspiel {
+public final class Tagesspiel extends PlanObject {
 
 	public Tagesspiel() {
+		run();
+	}
+	
+	public Tagesspiel(JSONObject setup) {
+		setName("Tagesspiel");
+	}
+	
+	public void run() {
 		Output.printClockLn("Tagesspiel", 1);
 
 		String page = Utils.getString("city/index");

@@ -281,7 +281,7 @@ public class AktionField extends Field {
 
 			Pins p = new Pins(pinToBuy);
 
-			return cancelButton(p.run() <= 0);
+			return cancelButton(p.buy() <= 0);
 		}
 
 		if (text
@@ -295,7 +295,7 @@ public class AktionField extends Field {
 			}
 
 			ScratchTicket st = new ScratchTicket(1);
-			return cancelButton(st.run() <= 0);
+			return cancelButton(st.buy() <= 0);
 		}
 
 		if (text
@@ -308,7 +308,7 @@ public class AktionField extends Field {
 			}
 
 			Quiz q = new Quiz(2);
-			return cancelButton(q.run() < 5);
+			return cancelButton(q.runQuiz() < 5);
 		}
 
 		/**

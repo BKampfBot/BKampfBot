@@ -22,10 +22,11 @@ package bkampfbot.modes;
 import bkampfbot.Control;
 import bkampfbot.Utils;
 import bkampfbot.output.Output;
+import bkampfbot.plan.PlanObject;
 import json.JSONException;
 import json.JSONObject;
 
-public final class ScratchTicket {
+public final class ScratchTicket extends PlanObject{
 	private int count = 3;
 
 	public ScratchTicket() {
@@ -35,8 +36,16 @@ public final class ScratchTicket {
 	public ScratchTicket(int count) {
 		this.count = count;
 	}
+	
+	public ScratchTicket(JSONObject setup) {
+		setName("Rubbellos");
+	}
+	
+	public void run() {
+		buy();
+	}
 		
-	public int run() {
+	public int buy() {
 		Output.printClockLn("Rubbellos", 1);
 		
 		int bought = 0;
