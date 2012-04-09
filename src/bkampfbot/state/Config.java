@@ -27,6 +27,7 @@ import json.JSONException;
 import json.JSONObject;
 import bkampfbot.PlanManager;
 import bkampfbot.exceptions.FatalError;
+import bkampfbot.modes.Jagd;
 import bkampfbot.output.Output;
 import bkampfbot.plan.PlanObject;
 
@@ -72,9 +73,6 @@ public class Config {
 	protected int proxyPort = 0;
 	protected String proxyUsername = null;
 	protected String proxyPassword = null;
-	protected int jagdMax = 0;
-	protected int jagdMin = 0;
-	protected int jagdProzent = 100;
 	protected boolean prevention = true;
 	protected boolean debug = false;
 	private boolean tactics = true;
@@ -212,15 +210,7 @@ public class Config {
 				// Useragent
 			} else if (key.equalsIgnoreCase("jagd")) {
 				try {
-					JSONObject jagd = jsonConfig.getJSONObject(key);
-					setJagdMin(jagd.getInt("min"));
-					setJagdMax(jagd.getInt("max"));
-				} catch (JSONException e) {
-				}
-				
-				try {
-					JSONObject jagd = jsonConfig.getJSONObject(key);
-					setJagdProzent(jagd.getInt("Prozent"));
+					Jagd.setInstance(new Jagd(jsonConfig.getJSONObject(key)));
 				} catch (JSONException e) {
 				}
 
@@ -268,21 +258,6 @@ public class Config {
 		getInstance().configFile = configFile;
 	}
 
-	public static void setJagdMin(int int1) {
-		getInstance().jagdMin = int1;
-	}
-
-	public static int getJagdMin() {
-		return getInstance().jagdMin;
-	}
-
-	public static void setJagdMax(int int1) {
-		getInstance().jagdMax = int1;
-	}
-
-	public static int getJagdMax() {
-		return getInstance().jagdMax;
-	}
 
 	/**
 	 * @return the host
@@ -578,14 +553,6 @@ public class Config {
 
 	public static boolean getFightDebug() {
 		return getInstance().fightDebug;
-	}
-	
-	public static void setJagdProzent(int p) {
-		getInstance().jagdProzent = p;
-	}
-
-	public static int getJagdProzent() {
-		return getInstance().jagdProzent;
 	}
 
 }

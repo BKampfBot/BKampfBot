@@ -24,6 +24,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import json.JSONArray;
@@ -38,36 +39,69 @@ import bkampfbot.Utils;
 import bkampfbot.output.Output;
 import bkampfbot.output.SimpleFile;
 import bkampfbot.plan.PlanObject;
-import bkampfbot.state.Config;
 
 public final class Jagd extends PlanObject {
 
-	private static final String[] names = { "Film", "Sprichwort", "Musik", "Games",
-			"Sport" };
+	private static final String[] names = { "Film", "Sprichwort", "Musik",
+			"Games", "Sport" };
+
+	private static Jagd mode = null;
 
 	private int wordsToRun = -1;
 
+	private int letterMin = 0;
+	private int letterMax = 0;
+	private int percent = 100;
+	private boolean luck = false;
+
 	private int wordsSolved = 0;
 
-	/**
-	 * Führt die Wörterjagd nicht direkt aus. Man muss die run() manuell
-	 * aufrufen.
-	 * 
-	 * @param wordsToRun
-	 */
-	public Jagd(int wordsToRun) {
-		this.wordsToRun = wordsToRun;
+	public Jagd(JSONObject setup) {
+		super("Wörterjagd");
+
+		try {
+			letterMin = setup.getInt("min");
+		} catch (JSONException e) {
+		}
+		try {
+			letterMax = setup.getInt("max");
+		} catch (JSONException e) {
+		}
+		try {
+			percent = setup.getInt("Prozent");
+		} catch (JSONException e) {
+		}
+		try {
+			luck = setup.getBoolean("Versuchen");
+		} catch (JSONException e) {
+		}
+
+		if (percent > 100) {
+			percent = 100;
+		}
+
+		if (percent < 0) {
+			percent = 0;
+		}
+
 	}
 
-	/**
-	 * Führt die Wörterjagd aus
-	 */
-	public Jagd() {
-		this.run();
+	public static Jagd getInstance() {
+		return getInstance(-1);
 	}
-	
-	public Jagd(JSONObject setup) {
-		setName("Jagd");
+
+	public static void setInstance(Jagd j) {
+		mode = j;
+	}
+
+	public static Jagd getInstance(int wordsToRun) {
+		if (mode == null) {
+			mode = new Jagd(new JSONObject());
+		}
+
+		mode.wordsToRun = wordsToRun;
+
+		return mode;
 	}
 
 	public void run() {
@@ -93,8 +127,8 @@ public final class Jagd extends PlanObject {
 									Output.ERROR);
 				}
 
-				for (int i = 0; i < 5 && availablePoints > 20 && score < Config.getJagdProzent()
-						&& doMore(); i++) {
+				for (int i = 0; i < 5 && availablePoints > 20
+						&& score < percent && doMore(); i++) {
 					JSONObject current = data.getJSONObject(i);
 
 					Output.printTab(names[i] + ": ", Output.DEBUG);
@@ -107,37 +141,40 @@ public final class Jagd extends PlanObject {
 					}
 
 					Output.println(" zu lösen", Output.DEBUG);
-					ArrayList<Character> alpha = new ArrayList<Character>();
-					for (int j = 65; j < 65 + 26; j++) {
-						alpha.add((char) j);
-					}
 
-					// check for letters
-					for (int z = 0; z < Config.getJagdMax(); z++) {
-						if (availablePoints < current.getInt("costletter")) {
-							return;
+					if (letterMax > 0) {
+						ArrayList<Character> alpha = new ArrayList<Character>();
+						for (int j = 65; j < 65 + 26; j++) {
+							alpha.add((char) j);
 						}
 
-						if (z >= Config.getJagdMin() && Math.random() > 0.4) {
-							continue;
+						// check for letters
+						for (int z = 0; z < letterMax; z++) {
+							if (availablePoints < current.getInt("costletter")) {
+								return;
+							}
+
+							if (z >= letterMin && Math.random() > 0.4) {
+								continue;
+							}
+							int currentAlpha = (new Random()).nextInt(alpha
+									.size() - 1);
+							char currentLetter = alpha.get(currentAlpha);
+							alpha.remove(currentAlpha);
+
+							Output.printTabLn("Kaufe ein " + currentLetter,
+									Output.INFO);
+
+							List<NameValuePair> nvps = new ArrayList<NameValuePair>();
+							nvps.add(new BasicNameValuePair("buyletter",
+									currentLetter + ""));
+							nvps.add(new BasicNameValuePair("type", "letter"));
+							Utils.getString("games/buyWheel", nvps);
+
+							availablePoints -= current.getInt("costletter");
+
+							Control.sleep(45);
 						}
-						int currentAlpha = (new Random())
-								.nextInt(alpha.size() - 1);
-						char currentLetter = alpha.get(currentAlpha);
-						alpha.remove(currentAlpha);
-
-						Output.printTabLn("Kaufe ein " + currentLetter,
-								Output.INFO);
-
-						List<NameValuePair> nvps = new ArrayList<NameValuePair>();
-						nvps.add(new BasicNameValuePair("buyletter",
-								currentLetter + ""));
-						nvps.add(new BasicNameValuePair("type", "letter"));
-						Utils.getString("games/buyWheel", nvps);
-
-						availablePoints -= current.getInt("costletter");
-
-						Control.sleep(45);
 					}
 
 					String md5;
@@ -167,7 +204,7 @@ public final class Jagd extends PlanObject {
 					nvpn.add(new BasicNameValuePair("type", "slogan"));
 					nvpn.add(new BasicNameValuePair("secret", md5));
 
-					Control.sleep(new Random().nextInt(100) + 100);
+					// Control.sleep(new Random().nextInt(100) + 100);
 
 					String res = Utils.getString("games/buyWheel", nvpn);
 
@@ -183,7 +220,47 @@ public final class Jagd extends PlanObject {
 					availablePoints -= 20;
 
 				}
-			} while (availablePoints > 20 && score < 100 && doMore());
+
+				// Auf gut Glück -klicken
+				if (score >= percent && luck) {
+					int level = 0;
+
+					if (score >= 100) {
+						level = 100;
+					} else if (score >= 75) {
+						level = 75;
+					} else if (score >= 50) {
+						level = 50;
+					} else if (score >= 20) {
+						level = 20;
+					} else if (score >= 10) {
+						level = 10;
+					}
+
+					if (level > 0) {
+						//Control.sleep(40, Output.INFO);
+
+						// errorStatus=ok&modus=item&item_pic=wurf387.png&item_type=ring&wintext=Teekessel+mit+ohrenbet%C3%A4ubender+Pfeife
+						String line = Utils.getString("games/payout");
+						Map<String, String> para = Utils.getUrlParameters(line);
+
+						if (para.get("modus").equals("item")) {
+							Output.printClockLn("Gewinn: "
+									+ para.get("item_type") + ", "
+									+ para.get("wintext"), Output.INFO);
+						} else if (para.get("modus").equals("trost")) {
+							Output.printClockLn("Gewinn: "
+									+ para.get("wintext") + " "
+									+ para.get("preis"), Output.INFO);
+						} else {
+							Output.println(para.toString(), Output.INFO);
+						}
+
+						score -= level;
+					}
+				}
+
+			} while (availablePoints > 20 && score < percent && doMore());
 
 		} catch (JSONException e) {
 			Output.error(e);

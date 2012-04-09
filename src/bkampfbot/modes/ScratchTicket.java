@@ -29,16 +29,17 @@ import json.JSONObject;
 public final class ScratchTicket extends PlanObject{
 	private int count = 3;
 
-	public ScratchTicket() {
-		run();
+	public static ScratchTicket getInstance() {
+		return new ScratchTicket(new JSONObject());
 	}
 	
 	public ScratchTicket(int count) {
+		super("Rubbellos");
 		this.count = count;
 	}
 	
 	public ScratchTicket(JSONObject setup) {
-		setName("Rubbellos");
+		super("Rubbellos");
 	}
 	
 	public void run() {

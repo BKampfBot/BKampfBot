@@ -23,6 +23,7 @@ import json.JSONException;
 import json.JSONObject;
 import bkampfbot.Utils;
 import bkampfbot.exceptions.BadOpponent;
+import bkampfbot.exceptions.ConfigError;
 import bkampfbot.exceptions.FatalError;
 import bkampfbot.exceptions.NotFound;
 import bkampfbot.exceptions.RestartLater;
@@ -42,34 +43,27 @@ public final class PlanKampf extends PlanObject {
 	private String idOrName;
 	private AngriffOptions options;
 
-	public PlanKampf(JSONObject object) throws FatalError {
-		this.setName("Kampf");
+	public PlanKampf(JSONObject help, Object name) throws FatalError {
+		super("Kampf");
 
-		try {
-
-			idOrName = object.getString("Kampf");
+		if (name != null && name instanceof String) {
+			idOrName = (String) name;
 			options = new AngriffOptions(new JSONObject());
-
-		} catch (JSONException e) {
+		} else {
 
 			try {
-				JSONObject help = object.getJSONObject("Kampf");
-
 				options = new AngriffOptions(help);
 
-				try {
-					idOrName = help.getString("Gegner");
-				} catch (JSONException r) {
-				}
+				idOrName = help.getString("Gegner");
 
 			} catch (JSONException t) {
-				throw new FatalError("Config error: Kampf");
+				throw new ConfigError("Kampf");
 			}
 		}
 	}
 
-	public final void run() throws FatalError, RestartLater {
-		Output.printClockLn("-> Kampf (" + this.idOrName + ")", 1);
+	public final void run() throws RestartLater, FatalError {
+		printJump("(" + idOrName + ")");
 
 		if (!Utils.fightAvailable(15)) {
 			return;

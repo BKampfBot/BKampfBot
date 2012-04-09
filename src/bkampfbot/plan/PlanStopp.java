@@ -19,10 +19,9 @@ package bkampfbot.plan;
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import json.JSONObject;
 import bkampfbot.Control;
 import bkampfbot.exceptions.FatalError;
-import bkampfbot.output.Output;
-import json.JSONObject;
 
 /**
  * PlanStopp benötigt folgende Konfiguration: {"Stopp":true} oder {"Stopp":1}
@@ -33,11 +32,12 @@ import json.JSONObject;
 public final class PlanStopp extends PlanObject {
 
 	public PlanStopp(JSONObject object) throws FatalError {
-		this.setName("Stopp");
+		super("Stopp");
 	}
 
 	public final void run() {
-		Output.printClockLn("-> Stopp", 1);
+		printJump();
+
 		Control.safeExit();
 	}
 

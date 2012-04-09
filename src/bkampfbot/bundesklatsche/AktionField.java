@@ -20,7 +20,6 @@ package bkampfbot.bundesklatsche;
  */
 
 import json.JSONException;
-import json.JSONObject;
 
 import org.apache.commons.lang.math.RandomUtils;
 
@@ -31,9 +30,9 @@ import bkampfbot.modes.Pins;
 import bkampfbot.modes.Quiz;
 import bkampfbot.modes.ScratchTicket;
 import bkampfbot.output.Output;
-import bkampfbot.plan.PlanAussendienst;
 import bkampfbot.plan.PlanBundesklatsche;
 import bkampfbot.state.User;
+import bkampfbot.utils.Aussendienst;
 import bkampfbot.utils.Bank;
 import bkampfbot.utils.Casino;
 import bkampfbot.utils.Essen;
@@ -88,7 +87,7 @@ public class AktionField extends Field {
 			} catch (JSONException e) {
 			}
 
-			Jagd jagd = new Jagd(1);
+			Jagd jagd = Jagd.getInstance(1);
 			jagd.run();
 			return cancelButton(jagd.getWordsSolved() <= 0);
 		}
@@ -123,8 +122,7 @@ public class AktionField extends Field {
 			} catch (JSONException e) {
 			}
 			if (doit) {
-				JSONObject config = new JSONObject("{\"Aussendienst\":0}");
-				PlanAussendienst aussen = new PlanAussendienst(config);
+				Aussendienst aussen = new Aussendienst(0);
 				aussen.run();
 			}
 			return true;

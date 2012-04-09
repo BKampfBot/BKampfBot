@@ -38,29 +38,18 @@ public final class PlanGolden extends PlanObject {
 
 	private int medicine = -1;
 
-	public PlanGolden(JSONObject object) throws FatalError {
-		this.setName("Golden");
+	public PlanGolden(JSONObject help) throws FatalError {
+		super("Golden");
 
 		try {
-			object.getBoolean("Golden");
-		} catch (JSONException e) {
-
-			try {
-				JSONObject help = object.getJSONObject("Golden");
-
-				try {
-					this.medicine = help.getInt("Medizin");
-				} catch (JSONException r) {
-				}
-
-			} catch (JSONException t) {
-				throw new FatalError("Config error: Golden");
-			}
+			this.medicine = help.getInt("Medizin");
+		} catch (JSONException r) {
 		}
+
 	}
 
 	public final void run() throws FatalError {
-		Output.printClockLn("-> Golden", 1);
+		printJump();
 
 		if (!Utils.fightAvailable(20)) {
 			return;

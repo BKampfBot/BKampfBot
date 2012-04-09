@@ -25,7 +25,7 @@ package bkampfbot.exceptions;
  * Der Controller versucht danach, den kompletten Bot neu zu starten. Tritt
  * öfter ein fataler Fehler auf, wird das Programm beendet.
  */
-public final class FatalError extends Exception {
+public class FatalError extends Exception {
 	/**
 	 * 
 	 */

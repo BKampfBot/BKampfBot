@@ -80,13 +80,9 @@ public final class PlanBundesklatsche extends PlanObject {
 	private int[] cards = { 0, 0, 0, 0, 0, 0, 0, 0 };
 
 	public PlanBundesklatsche(JSONObject config) throws FatalError {
-		this.setName("Bundesklatsche");
+		super("Bundesklatsche");
 
-		try {
-			this.config = config.getJSONObject(getName());
-		} catch (JSONException e) {
-			throw new FatalError("Bundesklatsche ist falsch konfiguriert.");
-		}
+		this.config = config;
 	}
 
 	private boolean dice() throws JSONException, DiceException {
@@ -278,7 +274,7 @@ public final class PlanBundesklatsche extends PlanObject {
 	}
 
 	public void run() throws FatalError, RestartLater {
-		Output.printClockLn("-> Bundesklatsche", Output.INFO);
+		printJump();
 
 		try {
 

@@ -43,16 +43,17 @@ public final class Pins extends PlanObject {
 
 	public static String in;
 
-	public Pins() {
-		run();
+	public static Pins getInstance() {
+		return new Pins(new JSONObject());
 	}
 	
 	public Pins(String in) {
+		super("Pins");
 		Pins.in = in;
 	}
 	
 	public Pins(JSONObject setup) {
-		setName("Pins");
+		super("Pins");
 	}
 	
 	public void run() {

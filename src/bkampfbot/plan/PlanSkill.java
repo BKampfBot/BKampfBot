@@ -21,8 +21,8 @@ package bkampfbot.plan;
 
 import json.JSONException;
 import json.JSONObject;
+import bkampfbot.exceptions.ConfigError;
 import bkampfbot.exceptions.FatalError;
-import bkampfbot.output.Output;
 import bkampfbot.utils.Skill;
 
 /**
@@ -37,11 +37,10 @@ public final class PlanSkill extends PlanObject {
 	private int count = -1;
 	private boolean bank = false;
 
-	public PlanSkill(JSONObject object) throws FatalError {
-		this.setName("Skill");
+	public PlanSkill(JSONObject skill) throws FatalError {
+		super("Skill");
 
 		try {
-			JSONObject skill = object.getJSONObject(getName());
 			category = skill.getString("Kategorie");
 
 			try {
@@ -56,12 +55,12 @@ public final class PlanSkill extends PlanObject {
 			}
 
 		} catch (JSONException e) {
-			throw new FatalError("Config error: Skill config is bad");
+			throw new ConfigError("Skill");
 		}
 	}
 
 	public final void run() throws FatalError {
-		Output.printClockLn("-> Skill (" + category + ")", Output.INFO);
+		printJump("(" + category + ")");
 
 		Skill.get(category).buy(count, bank);
 	}

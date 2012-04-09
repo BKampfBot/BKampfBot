@@ -32,6 +32,7 @@ import org.apache.http.message.BasicNameValuePair;
 
 import bkampfbot.Utils;
 import bkampfbot.exceptions.BadOpponent;
+import bkampfbot.exceptions.ConfigError;
 import bkampfbot.exceptions.FatalError;
 import bkampfbot.exceptions.RestartLater;
 import bkampfbot.output.Output;
@@ -99,78 +100,71 @@ public final class PlanAngriff extends PlanObject {
 	 * @param object
 	 * @throws FatalError
 	 */
-	public PlanAngriff(JSONObject object, String scope) throws FatalError {
-		this.setName("Angriff");
+	public PlanAngriff(JSONObject angriff, String scope) throws FatalError {
+		super("Angriff");
+
+		// {"Angriff":{"Verein":1,"Stufe":1,"Respekt":1000000,
+		// "Land":"Mecklenburg-Vorpommern"}}
 
 		try {
-			// {"Angriff":{"Verein":1,"Stufe":1,"Respekt":1000000,
-			// "Land":"Mecklenburg-Vorpommern"}}
-			JSONObject angriff = object.getJSONObject("Angriff");
-
-			try {
-				int c = angriff.getInt("Verein");
-				if (c == 0)
-					this.club = Club.Whatever;
-				else if (c == 1)
-					this.club = Club.Yes;
-				else if (c == -1)
-					this.club = Club.No;
-				else
-					new FatalError("Config error: Verein have to be 1,-1 or 0");
-			} catch (JSONException r) {
-			}
-
-			try {
-				this.level = angriff.getInt("Stufe");
-			} catch (JSONException r) {
-			}
-
-			// Attribute havn't set
-			try {
-				hpMax = angriff.getInt("Respekt");
-			} catch (JSONException r) {
-				try {
-					JSONObject help = angriff.getJSONObject("Respekt");
-
-					try {
-						hpMax = help.getInt("Max");
-					} catch (JSONException h) {
-					}
-
-					try {
-						hpMax = help.getInt("max");
-					} catch (JSONException h) {
-					}
-
-					try {
-						hpMin = help.getInt("Min");
-					} catch (JSONException h) {
-					}
-
-					try {
-						hpMin = help.getInt("min");
-					} catch (JSONException h) {
-					}
-				} catch (JSONException z) {
-				}
-			}
-
-			try {
-				this.friend = angriff.getBoolean("Freunde");
-			} catch (JSONException r) {
-			}
-
-			try {
-				this.raceToFight = angriff.getString("Land");
-			} catch (JSONException r) {
-			}
-
-			options = new AngriffOptions(angriff);
-
-		} catch (JSONException e) {
-			throw new FatalError("Config error: Angriff config is bad\n"
-					+ e.getMessage());
+			int c = angriff.getInt("Verein");
+			if (c == 0)
+				this.club = Club.Whatever;
+			else if (c == 1)
+				this.club = Club.Yes;
+			else if (c == -1)
+				this.club = Club.No;
+			else
+				new ConfigError("Verein muss 1,-1 oder 0 sein");
+		} catch (JSONException r) {
 		}
+
+		try {
+			this.level = angriff.getInt("Stufe");
+		} catch (JSONException r) {
+		}
+
+		// Attribute havn't set
+		try {
+			hpMax = angriff.getInt("Respekt");
+		} catch (JSONException r) {
+			try {
+				JSONObject help = angriff.getJSONObject("Respekt");
+
+				try {
+					hpMax = help.getInt("Max");
+				} catch (JSONException h) {
+				}
+
+				try {
+					hpMax = help.getInt("max");
+				} catch (JSONException h) {
+				}
+
+				try {
+					hpMin = help.getInt("Min");
+				} catch (JSONException h) {
+				}
+
+				try {
+					hpMin = help.getInt("min");
+				} catch (JSONException h) {
+				}
+			} catch (JSONException z) {
+			}
+		}
+
+		try {
+			this.friend = angriff.getBoolean("Freunde");
+		} catch (JSONException r) {
+		}
+
+		try {
+			this.raceToFight = angriff.getString("Land");
+		} catch (JSONException r) {
+		}
+
+		options = new AngriffOptions(angriff);
 
 		// Cache holen
 		oppCache = OpponentCache.getInstance(scope);
@@ -226,7 +220,8 @@ public final class PlanAngriff extends PlanObject {
 		Opponent opp = oppCache.findHighMoney();
 		if (opp != null) {
 			try {
-				int money = Keilerei.fight(opp, "Angriff nochmal", options, this);
+				int money = Keilerei.fight(opp, "Angriff nochmal", options,
+						this);
 
 				// Fight was won, we safe the opponent
 				if (money > Config.getFightAgain()) {

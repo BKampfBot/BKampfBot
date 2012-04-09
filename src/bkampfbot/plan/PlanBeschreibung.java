@@ -33,6 +33,7 @@ import org.apache.http.ParseException;
 import org.apache.http.message.BasicNameValuePair;
 
 import bkampfbot.Utils;
+import bkampfbot.exceptions.ConfigError;
 import bkampfbot.exceptions.FatalError;
 import bkampfbot.output.Output;
 
@@ -48,23 +49,18 @@ public final class PlanBeschreibung extends PlanObject {
 	private String content = "Ich war bisher zu faul eine Beschreibung einzugeben, "
 			+ "hole ich aber sicher bald nach!";
 
-	public PlanBeschreibung(JSONObject object) throws FatalError {
-		this.setName("Beschreibung");
+	public PlanBeschreibung(JSONObject setup, Object obj) throws FatalError {
+		super("Beschreibung");
 
-		try {
-			try {
-				object.getBoolean("Beschreibung");
-			} catch (JSONException e) {
-				this.content = object.getString("Beschreibung");
-			}
-		} catch (JSONException e) {
-			throw new FatalError(
-					"Config error: Beschreibung have to be true or String");
+		if (obj == null || ! (obj instanceof String)) {
+			throw new ConfigError("Beschreibung");
+		} else {
+			content = (String) obj;
 		}
 	}
 
 	public final void run() {
-		Output.printClock("-> Beschreibung", 1);
+		printJump();
 
 		try {
 

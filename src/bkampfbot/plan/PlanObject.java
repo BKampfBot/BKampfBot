@@ -23,6 +23,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import bkampfbot.PlanManager;
+import bkampfbot.exceptions.ConfigError;
 import bkampfbot.exceptions.FatalError;
 import bkampfbot.exceptions.RestartLater;
 import bkampfbot.modes.Gluecksrad;
@@ -39,106 +40,121 @@ import bkampfbot.state.Config;
 import json.JSONException;
 import json.JSONObject;
 
-public class PlanObject {
+public abstract class PlanObject {
 	private String name;
 	protected PlanManager planManager;
 
-	public static PlanObject get(JSONObject object) throws FatalError {
+	public static PlanObject get(JSONObject object) throws JSONException, FatalError {
 		String[] keys = JSONObject.getNames(object);
 		if (keys == null || keys.length != 1) {
-			throw new FatalError(
-					"Konfiguration enthält Fehler in der Struktur.");
+			throw new ConfigError("Fehler in der Struktur");
 		}
 
-		if (keys[0].equalsIgnoreCase("Angriff")) {
-			
-			return new PlanAngriff(object, "PlanManager");
-			
-		} else if (keys[0].equalsIgnoreCase("Aussendienst")) {
-			return new PlanAussendienst(object);
-			
-		} else if (keys[0].equalsIgnoreCase("Bank")) {
-			return new PlanBank(object);
-			
-		} else if (keys[0].equalsIgnoreCase("BoeseBeute")) {
-			return new PlanBoeseBeute(object);
-			
-		} else if (keys[0].equalsIgnoreCase("BoeseKrieg")) {
-			return new PlanBoeseKrieg(object);
-			
-		} else if (keys[0].equalsIgnoreCase("BoeseRespekt")) {
-			return new PlanBoeseRespekt(object);
-			
-		} else if (keys[0].equalsIgnoreCase("Minuten")) {
-			return new PlanMinuten(object);
-			
-		} else if (keys[0].equalsIgnoreCase("Stopp")) {
-			return new PlanStopp(object);
-			
-		} else if (keys[0].equalsIgnoreCase("Neustart")) {
-			return new PlanNeustart(object);
-			
-		} else if (keys[0].equalsIgnoreCase("Arbeiten")) {
-			return new PlanArbeiten(object);
-			
-		} else if (keys[0].equalsIgnoreCase("Kampf")) {
-			return new PlanKampf(object);
-			
-		} else if (keys[0].equalsIgnoreCase("Beschreibung")) {
-			return new PlanBeschreibung(object);
-			
-		} else if (keys[0].equalsIgnoreCase("Befehl")) {
-			return new PlanBefehl(object);
-			
-		} else if (keys[0].equalsIgnoreCase("Golden")) {
-			return new PlanGolden(object);
-			
-		} else if (keys[0].equalsIgnoreCase("Booster")) {
-			return new PlanBooster(object);
-			
-		} else if (keys[0].equalsIgnoreCase("Skill")) {
-			return new PlanSkill(object);
-			
-		} else if (keys[0].equalsIgnoreCase("Bundesklatsche")) {
-			return new PlanBundesklatsche(object);
-			
-			
+		JSONObject setup = new JSONObject();
+		Object obj = null;
+		String lower = keys[0].toLowerCase();
+		
+		try {
+			setup = object.getJSONObject(keys[0]);
+		} catch (JSONException e) {
+			obj = object.get(keys[0]);
+		}
+
+		if (lower.equals("angriff")) {
+
+			return new PlanAngriff(setup, "PlanManager");
+
+		} else if (lower.equals("aussendienst")) {
+			return new PlanAussendienst(setup, obj);
+
+		} else if (lower.equals("bank")) {
+			return new PlanBank(setup, obj);
+
+		} else if (lower.equals("boesebeute")) {
+			return new PlanBoeseBeute(setup);
+
+		} else if (lower.equals("boesekrieg")) {
+			return new PlanBoeseKrieg(setup);
+
+		} else if (lower.equals("boeserespekt")) {
+			return new PlanBoeseRespekt(setup);
+
+		} else if (lower.equals("minuten")) {
+			return new PlanMinuten(setup, obj);
+
+		} else if (lower.equals("stopp")) {
+			return new PlanStopp(setup);
+
+		} else if (lower.equals("neustart")) {
+			return new PlanNeustart(setup);
+
+		} else if (lower.equals("arbeiten")) {
+			return new PlanArbeiten(setup, obj);
+
+		} else if (lower.equals("kampf")) {
+			return new PlanKampf(setup, obj);
+
+		} else if (lower.equals("beschreibung")) {
+			return new PlanBeschreibung(setup, obj);
+
+		} else if (lower.equals("befehl")) {
+			return new PlanBefehl(setup);
+
+		} else if (lower.equals("golden")) {
+			return new PlanGolden(setup);
+
+		} else if (lower.equals("booster")) {
+			return new PlanBooster(setup, obj);
+
+		} else if (lower.equals("skill")) {
+			return new PlanSkill(setup);
+
+		} else if (lower.equals("bundesklatsche")) {
+			return new PlanBundesklatsche(setup);
+
 			// Es folgen die Modi
-		} else if (keys[0].equalsIgnoreCase("Gluecksrad")) {
-			return new Gluecksrad(object);
-			
-		} else if (keys[0].equalsIgnoreCase("Jagd")) {
-			return new Jagd(object);
-			
-		} else if (keys[0].equalsIgnoreCase("Lotto")) {
-			return new Lottery(object);
-			
-		} else if (keys[0].equalsIgnoreCase("Pins")) {
-			return new Pins(object);
-			
-		} else if (keys[0].equalsIgnoreCase("Tagesquiz")) {
-			return new Quiz(object);
-			
-		} else if (keys[0].equalsIgnoreCase("Rubbellos")) {
-			return new ScratchTicket(object);
-			
-		} else if (keys[0].equalsIgnoreCase("Tagesspiel")) {
-			return new Tagesspiel(object);
-			
-		} else if (keys[0].equalsIgnoreCase("Weinkeller")) {
-			return new Wein(object);
+		} else if (lower.equals("gluecksrad")) {
+			return new Gluecksrad(setup);
+
+		} else if (lower.equals("jagd")) {
+			return new Jagd(setup);
+
+		} else if (lower.equals("lotto")) {
+			return new Lottery(setup);
+
+		} else if (lower.equals("pins")) {
+			return new Pins(setup);
+
+		} else if (lower.equals("tagesquiz")) {
+			return new Quiz(setup);
+
+		} else if (lower.equals("rubbellos")) {
+			return new ScratchTicket(setup);
+
+		} else if (lower.equals("tagesspiel")) {
+			return new Tagesspiel(setup);
+
+		} else if (lower.equals("weinkeller")) {
+			return new Wein(setup);
 		}
 
-		throw new FatalError("Die Konfiguration ist nicht korrekt. "
-				+ "Du benutzt ein Planelement, welches nicht definiert wurde.");
+		throw new ConfigError("Du benutzt ein Planelement, welches nicht definiert wurde.");
+	}
+
+	protected PlanObject(String name) {
+		this.name = name;
 	}
 
 	protected final void setName(String name) {
 		this.name = name;
 	}
 
-	public final String getName() {
-		return this.name;
+	protected void printJump(String add) {
+		Output.printClockLn("-> " + name + " " + add, Output.INFO);
+	}
+
+	protected void printJump() {
+		Output.printClockLn("-> " + name, Output.INFO);
 	}
 
 	public void run() throws FatalError, JSONException, RestartLater {
@@ -172,7 +188,7 @@ public class PlanObject {
 			;
 
 		if (planManager.wasLookAhead()) {
-			Output.printClockLn("Springe zurück -> " + getName(), Output.INFO);
+			Output.printClockLn("Springe zurück -> " + name, Output.INFO);
 		}
 
 		return (int) ((finish.getTimeInMillis() - new GregorianCalendar()
@@ -185,5 +201,21 @@ public class PlanObject {
 
 	public boolean isPreRunningable() {
 		return false;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	protected void configError() throws ConfigError {
+		throw new ConfigError(getName());
+	}
+	
+	protected boolean isInt(Object obj) {
+		return (obj != null && obj instanceof Integer);
+	}
+	
+	protected boolean isStr(Object obj) {
+		return (obj != null && obj instanceof String);
 	}
 }

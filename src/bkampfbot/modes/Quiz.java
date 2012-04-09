@@ -40,16 +40,17 @@ public final class Quiz extends PlanObject {
 	public static int wrongAnswerCount = 0;
 	private int wrongAnswers = -1;
 
-	public Quiz() {
-		run();
+	public static Quiz getInstance() {
+		return new Quiz(new JSONObject());
 	}
 
 	public Quiz(int wrongAnswerCount) {
+		super("Tagesquiz");
 		wrongAnswers = wrongAnswerCount;
 	}
 
 	public Quiz(JSONObject setup) {
-		setName("Tagesquiz");
+		super("Tagesquiz");
 
 		try {
 			wrongAnswers = setup.getInt("falsch");

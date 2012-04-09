@@ -24,31 +24,28 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 
+import json.JSONObject;
 import bkampfbot.Control;
 import bkampfbot.Utils;
 import bkampfbot.output.Output;
 import bkampfbot.plan.PlanObject;
 
-
-import json.JSONObject;
-
 public final class Wein extends PlanObject {
 
-	public Wein() {
-		run();
+	public static Wein getInstance() {
+		return new Wein(new JSONObject());
 	}
-	
+
 	public Wein(JSONObject setup) {
-		setName("Weinkeller");
+		super("Weinkeller");
 	}
-	
+
 	public void run() {
-		Output.printClockLn("Weinfässer", 1);
-		
+		printJump();
+
 		try {
 
-			String s = Utils
-					.getString("guild_challenge/index");
+			String s = Utils.getString("guild_challenge/index");
 			int i = s.indexOf("var flashvars = {");
 			i = s.indexOf("var flashvars = {", i + 1);
 			i = s.indexOf("var flashvars = {", i + 1);
@@ -56,17 +53,14 @@ public final class Wein extends PlanObject {
 			s = s.substring(0, s.indexOf('\n'));
 			final String guild_id = s.replaceAll("[^0-9]", "");
 
-			JSONObject result = Utils
-					.getJSON("guild_challenge/getData/"
-							+ guild_id);
+			JSONObject result = Utils.getJSON("guild_challenge/getData/"
+					+ guild_id);
 
 			if (result.getInt("game") == 1) {
 
-				Utils
-						.visit("games/kisten/0");
+				Utils.visit("games/kisten/0");
 
-				JSONObject befor = Utils
-										.getJSON("games/getGameWarehouse");
+				JSONObject befor = Utils.getJSON("games/getGameWarehouse");
 
 				int wait = new Random().nextInt(30) + 30;
 				Control.sleep(wait * 10, 2);
@@ -86,9 +80,7 @@ public final class Wein extends PlanObject {
 
 				md5 = md5.toLowerCase();
 
-				JSONObject win = Utils
-										.getJSON("games/punkteWarehouse/"
-												+ md5);
+				JSONObject win = Utils.getJSON("games/punkteWarehouse/" + md5);
 
 				if (win.getInt("result") == 1) {
 					Output.printTabLn("Weinkeller gewonnen", 1);

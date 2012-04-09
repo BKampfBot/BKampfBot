@@ -28,7 +28,7 @@ public class PlanBoeseRespekt extends PlanBoese {
 	private static Opponent last;
 
 	public PlanBoeseRespekt(JSONObject object) throws FatalError {
-		super(object);
+		super(object, "BoeseRespekt");
 
 		if (PlanBoeseRespekt.list == null) {
 			PlanBoeseRespekt.list = new OpponentList();
@@ -42,11 +42,6 @@ public class PlanBoeseRespekt extends PlanBoese {
 
 	public static void initiate() {
 		PlanBoeseRespekt.list = null;
-	}
-
-	@Override
-	protected final String getJsonObjectName() {
-		return "BoeseRespekt";
 	}
 
 	@Override

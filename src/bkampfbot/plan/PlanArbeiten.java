@@ -53,33 +53,32 @@ public final class PlanArbeiten extends PlanObject {
 	private int hours;
 	private boolean stop = false;
 
-	public PlanArbeiten(JSONObject object) throws FatalError {
-		this.setName("Arbeiten");
+	public PlanArbeiten(JSONObject o, Object obj) throws FatalError {
+		super("Arbeiten");
 
-		try {
-			this.hours = object.getInt("Arbeiten");
-		} catch (JSONException e) {
+		if (isInt(obj)) {
+			hours = (Integer) obj;
+		} else {
+			
 			try {
-				JSONObject o = object.getJSONObject("Arbeiten");
-				this.hours = o.getInt("Stunden");
-				this.stop = o.getBoolean("Stopp");
+				hours = o.getInt("Stunden");
+				stop = o.getBoolean("Stopp");
 			} catch (JSONException en) {
-				throw new FatalError(
-						"Config error: Arbeiten have to be an integer or a correct object");
+				configError();
 			}
 		}
 
 		if (this.hours < 1) {
 			Output.println("Config: Arbeiten is set to 1 hour.", 0);
-			this.hours = 1;
-		} else if (this.hours > 10) {
+			hours = 1;
+		} else if (hours > 10) {
 			Output.println("Config: Arbeiten is set to 10 hours.", 0);
-			this.hours = 10;
+			hours = 10;
 		}
 	}
 
 	public final void run() throws FatalError, JSONException {
-		Output.printClockLn("-> Arbeiten (" + this.hours + " Stunden)", 1);
+		printJump("(" + hours + " Stunden)");
 
 		Utils.visit("arbeitsamt/index/gold");
 

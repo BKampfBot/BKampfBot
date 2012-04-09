@@ -73,12 +73,12 @@ import bkampfbot.modes.Wein;
 import bkampfbot.output.Output;
 import bkampfbot.plan.PlanAngriff;
 import bkampfbot.plan.PlanArbeiten;
-import bkampfbot.plan.PlanAussendienst;
 import bkampfbot.plan.PlanBoeseBeute;
 import bkampfbot.plan.PlanBoeseKrieg;
 import bkampfbot.plan.PlanBoeseRespekt;
 import bkampfbot.state.Config;
 import bkampfbot.state.User;
+import bkampfbot.utils.Aussendienst;
 
 public final class Instance {
 	/**
@@ -196,7 +196,7 @@ public final class Instance {
 			break;
 
 		case service:
-			returnValue = PlanAussendienst.finish();
+			returnValue = Aussendienst.finish();
 			break;
 
 		case training:
@@ -595,32 +595,32 @@ public final class Instance {
 				switch (d) {
 				// call "Rubbellos"
 				case scratchTicket:
-					new ScratchTicket();
+					ScratchTicket.getInstance().run();
 					break;
 
 				// call "Tagesquiz"
 				case quiz:
-					new Quiz();
+					Quiz.getInstance().run();
 					break;
 
 				// call "Lotto"
 				case glueck:
-					new Gluecksrad();
+					Gluecksrad.getInstance().run();
 					break;
 
 				// call "Weinfässer"
 				case wein:
-					new Wein();
+					Wein.getInstance().run();
 					break;
 
 				// call "Tagesspiel"
 				case spiel:
-					new Tagesspiel();
+					Tagesspiel.getInstance().run();
 					break;
 
 				// call "Wörterjagd"
 				case jagd:
-					new Jagd();
+					Jagd.getInstance().run();
 					break;
 
 				}
@@ -630,13 +630,13 @@ public final class Instance {
 
 		// call "Lotto"
 		case lottery:
-			new Lottery();
+			Lottery.getInstance().run();
 			Control.safeExit();
 			break;
 
 		// call "Pins"
 		case pins:
-			new Pins();
+			Pins.getInstance().run();
 			Control.safeExit();
 			break;
 

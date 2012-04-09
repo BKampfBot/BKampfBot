@@ -19,10 +19,9 @@ package bkampfbot.plan;
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import json.JSONObject;
 import bkampfbot.exceptions.FatalError;
 import bkampfbot.exceptions.RestartLater;
-import bkampfbot.output.Output;
-import json.JSONObject;
 
 /**
  * 
@@ -35,11 +34,12 @@ import json.JSONObject;
 public final class PlanNeustart extends PlanObject {
 
 	public PlanNeustart(JSONObject object) throws FatalError {
-		this.setName("Neustart");
+		super("Neustart");
 	}
 
 	public final void run() throws RestartLater {
-		Output.printClockLn("-> Neustart", 1);
+		printJump();
+
 		throw new RestartLater("Neustart");
 	}
 

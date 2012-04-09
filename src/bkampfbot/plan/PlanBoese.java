@@ -52,26 +52,19 @@ public abstract class PlanBoese extends PlanObject {
 
 	// private static ConcurrentHashMap<Integer, Opponent> list;
 
-	public PlanBoese(JSONObject object) throws FatalError {
-		this.setName(getJsonObjectName());
+	public PlanBoese(JSONObject help, String name) throws FatalError {
+		super(name);
+
+		options = new AngriffOptions(help);
 
 		try {
-			JSONObject help = object.getJSONObject(getJsonObjectName());
+			this.moneyAgain = help.getInt("nochmal");
+		} catch (JSONException r) {
+		}
 
-			options = new AngriffOptions(help);
-
-			try {
-				this.moneyAgain = help.getInt("nochmal");
-			} catch (JSONException r) {
-			}
-
-			try {
-				this.random = help.getBoolean("Zufall");
-			} catch (JSONException r) {
-			}
-
-		} catch (JSONException t) {
-			throw new FatalError("Config error: " + getJsonObjectName());
+		try {
+			this.random = help.getBoolean("Zufall");
+		} catch (JSONException r) {
 		}
 
 		// GET /fights/enemysListJson HTTP/1.1
@@ -79,8 +72,6 @@ public abstract class PlanBoese extends PlanObject {
 		// {"list":[{"attack":"\/fights\/start\/100249","profil":"\/characters\/profile\/AABEHN","id":"100249","signup_id":"100249","race":"Meck.-Vorp.","name":"hali","level":"29","hp":"614816"}],"nexturl":null,"prevurl":null}
 		// {"list":[{"attack":"\/fights\/start\/163988","profil":"\/characters\/profile\/AGELLM","id":"163988","signup_id":"163988","race":"Meck.-Vorp.","name":"alfMeier","level":"20","hp":"388186"},{"attack":"\/fights\/start\/149359","profil":"\/characters\/profile\/AEKFIN","id":"149359","signup_id":"149359","race":"Meck.-Vorp.","name":"!!!!!Stampras!!","level":"21","hp":"429425"},{"attack":"\/fights\/start\/100249","profil":"\/characters\/profile\/AABEHN","id":"100249","signup_id":"100249","race":"Meck.-Vorp.","name":"hali","level":"29","hp":"614873"}],"nexturl":null,"prevurl":null}
 	}
-
-	protected abstract String getJsonObjectName();
 
 	protected abstract String getEnemyListUri();
 
@@ -91,8 +82,7 @@ public abstract class PlanBoese extends PlanObject {
 	protected abstract void setOpponent(Opponent l);
 
 	public final void run() throws FatalError, RestartLater {
-
-		Output.printClock("-> " + getJsonObjectName(), Output.INFO);
+		printJump();
 
 		// check for status (1.0.beta6)
 		if (!Utils.fightAvailable(15)) {
@@ -106,8 +96,7 @@ public abstract class PlanBoese extends PlanObject {
 			try {
 				Output.println(" (nochmal)", Output.INFO);
 
-				int money = Keilerei.fight(toFight,
-						"Böse", options, this);
+				int money = Keilerei.fight(toFight, "Böse", options, this);
 				toFight.addFight();
 
 				if (money < this.moneyAgain) {
@@ -118,7 +107,8 @@ public abstract class PlanBoese extends PlanObject {
 				setOpponent(null);
 				toFight.setDone();
 				fromList = true;
-				Output.printClock("-> " + getJsonObjectName(), Output.INFO);
+
+				printJump();
 			}
 
 		}
@@ -189,7 +179,8 @@ public abstract class PlanBoese extends PlanObject {
 
 					// go through the list
 					for (int key : getOpponentList().keySet()) {
-						if (fights == -1 && getOpponentList().get(key).canFight()) {
+						if (fights == -1
+								&& getOpponentList().get(key).canFight()) {
 							nextKey = key;
 							fights = getOpponentList().get(key).getFights();
 						}
@@ -211,9 +202,8 @@ public abstract class PlanBoese extends PlanObject {
 				}
 
 				try {
-					int money = Keilerei.fight(
-							getOpponentList().get(nextKey), "Böse",
-							options, this);
+					int money = Keilerei.fight(getOpponentList().get(nextKey),
+							"Böse", options, this);
 					getOpponentList().get(nextKey).addFight();
 
 					if (money >= this.moneyAgain) {
@@ -270,52 +260,33 @@ public abstract class PlanBoese extends PlanObject {
 	private final class NoList extends Exception {
 		private static final long serialVersionUID = -2317742009841698364L;
 	}
-/*
-	protected final class Opponent {
-		public final String attack;
-		public final String name;
-		public int fights = 0;
-		public boolean canFight = true;
-		public Calendar countDate;
-		private boolean selected = true;
 
-		public Opponent(String attack, String name) {
-			this.attack = attack;
-			this.name = name;
-			this.countDate = new GregorianCalendar();
-			this.countDate.setTime(Config.getDate());
-		}
-
-		public final Opponent checkFightCounts() {
-			Calendar today = new GregorianCalendar();
-			today.setTime(Config.getDate());
-			today.set(Calendar.HOUR, 0);
-			today.set(Calendar.MINUTE, 0);
-
-			if (this.countDate.before(today)) {
-				this.countDate = new GregorianCalendar();
-
-				// Set all counters to zero
-				this.fights = 0;
-				this.canFight = true;
-			}
-
-			return this;
-		}
-
-		public void setSeleted() {
-			selected = true;
-		}
-
-		public void unsetSelected() {
-			selected = false;
-		}
-
-		public boolean selected() {
-			return selected;
-		}
-	}
-*/
+	/*
+	 * protected final class Opponent { public final String attack; public final
+	 * String name; public int fights = 0; public boolean canFight = true;
+	 * public Calendar countDate; private boolean selected = true;
+	 * 
+	 * public Opponent(String attack, String name) { this.attack = attack;
+	 * this.name = name; this.countDate = new GregorianCalendar();
+	 * this.countDate.setTime(Config.getDate()); }
+	 * 
+	 * public final Opponent checkFightCounts() { Calendar today = new
+	 * GregorianCalendar(); today.setTime(Config.getDate());
+	 * today.set(Calendar.HOUR, 0); today.set(Calendar.MINUTE, 0);
+	 * 
+	 * if (this.countDate.before(today)) { this.countDate = new
+	 * GregorianCalendar();
+	 * 
+	 * // Set all counters to zero this.fights = 0; this.canFight = true; }
+	 * 
+	 * return this; }
+	 * 
+	 * public void setSeleted() { selected = true; }
+	 * 
+	 * public void unsetSelected() { selected = false; }
+	 * 
+	 * public boolean selected() { return selected; } }
+	 */
 	protected final class OpponentList {
 		private ConcurrentHashMap<Integer, Opponent> list;
 
@@ -353,7 +324,7 @@ public abstract class PlanBoese extends PlanObject {
 				Opponent opp = list.get(key);
 				opp.checkNewDay();
 				opp.select();
-				
+
 				return true;
 			} else {
 				return false;

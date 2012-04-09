@@ -19,7 +19,6 @@ package bkampfbot.plan;
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import json.JSONException;
 import json.JSONObject;
 import bkampfbot.exceptions.FatalError;
 import bkampfbot.output.Output;
@@ -36,13 +35,13 @@ import bkampfbot.utils.Bank;
 public final class PlanBank extends PlanObject {
 	private int money;
 
-	public PlanBank(JSONObject object) throws FatalError {
-		this.setName("Bank");
+	public PlanBank(JSONObject object, Object obj) throws FatalError {
+		super("Bank");
 
-		try {
-			this.money = object.getInt("Bank");
-		} catch (JSONException e) {
-			throw new FatalError("Config error: Bank have to be an integer");
+		if (obj != null && obj instanceof Integer) {
+			money = (Integer) obj;
+		} else {
+			configError();
 		}
 
 		if (this.money < 0) {
@@ -51,13 +50,8 @@ public final class PlanBank extends PlanObject {
 		}
 	}
 
-	public PlanBank(int money) {
-		this.setName("Bank");
-		this.money = money;
-	}
-
 	public final void run() {
-		Output.printClockLn("-> Bank", Output.INFO);
+		printJump();
 
 		Bank.putMoney(money);
 	}

@@ -22,8 +22,11 @@ package bkampfbot;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import json.JSONException;
 import json.JSONObject;
@@ -260,7 +263,6 @@ public class Utils {
 		}
 	}
 
-	
 	/**
 	 * Lädt eine URL und verwirft das Ergebnis
 	 * 
@@ -298,14 +300,13 @@ public class Utils {
 				Control.current.waitForStatus();
 			}
 		} while (true);
-		
-		
+
 		int pos = page.indexOf("class=\"questanzahl\"");
 		if (badPosition(pos))
 			return false;
-		
+
 		page = page.substring(pos);
-		
+
 		pos = page.indexOf("</div>");
 		if (badPosition(pos))
 			return false;
@@ -315,13 +316,13 @@ public class Utils {
 		pos = page.indexOf("<br />");
 		if (badPosition(pos))
 			return false;
-		
+
 		page = page.substring(pos + 6);
-		
+
 		pos = page.indexOf("<");
 		if (badPosition(pos))
 			return false;
-		
+
 		page = page.substring(0, pos);
 
 		page = page.replaceAll("[^0-9/]+", "");
@@ -329,7 +330,7 @@ public class Utils {
 		pos = page.indexOf('/');
 		if (badPosition(pos))
 			return false;
-		
+
 		int available = Integer.parseInt(page.substring(0, pos));
 		int maximum = Integer.parseInt(page.substring(pos + 1));
 
@@ -375,9 +376,37 @@ public class Utils {
 
 	public static final boolean badPosition(int pos) {
 		if (pos == -1) {
-			new ErrorLog("Falsche Position\n\n"+Control.current.lastResponse);
+			new ErrorLog("Falsche Position\n\n" + Control.current.lastResponse);
 			return true;
 		}
 		return false;
+	}
+
+	public static Map<String, String> getUrlParameters(String url) {
+		Map<String, String> params = new HashMap<String, String>();
+
+		String[] urlParts = url.split("\\?");
+		if (urlParts.length > 1) {
+			url = urlParts[1];
+		}
+
+		for (String param : url.split("&")) {
+
+			try {
+				String pair[] = param.split("=");
+
+				String key = URLDecoder.decode(pair[0], "UTF-8");
+
+				String value = "";
+				if (pair.length > 1) {
+					value = URLDecoder.decode(pair[1], "UTF-8");
+				}
+
+				params.put(key, value);
+			} catch (UnsupportedEncodingException e) {
+			}
+		}
+
+		return params;
 	}
 }

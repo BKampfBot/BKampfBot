@@ -22,6 +22,7 @@ package bkampfbot.plan;
 import json.JSONException;
 import json.JSONObject;
 import bkampfbot.Utils;
+import bkampfbot.exceptions.ConfigError;
 import bkampfbot.exceptions.FatalError;
 import bkampfbot.output.LogFile;
 import bkampfbot.output.Output;
@@ -37,12 +38,14 @@ public final class PlanBooster extends PlanObject {
 
 	private int booster;
 
-	public PlanBooster(JSONObject object) throws FatalError {
-		this.setName("Booster");
-		try {
-			this.booster = object.getInt("Booster");
-		} catch (JSONException e) {
-			throw new FatalError("Config error: Booster config is bad");
+	public PlanBooster(JSONObject object, Object boost) throws FatalError {
+		super("Booster");
+
+		if (boost != null && boost instanceof Integer) {
+			booster = (Integer) boost;
+
+		} else {
+			throw new ConfigError("Booster");
 		}
 
 		switch (this.booster) {
@@ -66,7 +69,7 @@ public final class PlanBooster extends PlanObject {
 
 	public final void run() {
 		try {
-			Output.printClockLn("-> Booster " + this.booster, 1);
+			printJump("" + booster);
 
 			String s = Utils.getString("guild_challenge/index");
 			int i = s.indexOf("var flashvars = {");

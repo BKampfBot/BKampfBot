@@ -38,12 +38,12 @@ public final class Lottery extends PlanObject{
 	public static int[] numbers = new int[5];
 	public static boolean random = true;
 
-	public Lottery() {
-		run();
+	public static Lottery getInstance() {
+		return new Lottery(new JSONObject());
 	}
 	
 	public Lottery( JSONObject setup) {
-		setName("Lotto");
+		super("Lotto");
 	}
 	
 	public void run() {

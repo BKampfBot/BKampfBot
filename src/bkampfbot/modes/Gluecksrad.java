@@ -27,13 +27,13 @@ import bkampfbot.plan.PlanObject;
 import json.JSONObject;
 
 public final class Gluecksrad extends PlanObject {
-
-	public Gluecksrad() {
-		run();
+	
+	public static Gluecksrad getInstance() {
+		return new Gluecksrad(new JSONObject());
 	}
 	
 	public Gluecksrad(JSONObject setup) {
-		setName("Gluecksrad");
+		super("Gluecksrad");
 	}
 		
 	public void run() {

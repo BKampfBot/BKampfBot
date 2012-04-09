@@ -37,16 +37,16 @@ import bkampfbot.state.Config;
 
 public final class Tagesspiel extends PlanObject {
 
-	public Tagesspiel() {
-		run();
+	public static Tagesspiel getInstance() {
+		return new Tagesspiel(new JSONObject());
 	}
-	
+
 	public Tagesspiel(JSONObject setup) {
-		setName("Tagesspiel");
+		super("Tagesspiel");
 	}
-	
+
 	public void run() {
-		Output.printClockLn("Tagesspiel", 1);
+		printJump();
 
 		String page = Utils.getString("city/index");
 

@@ -19,12 +19,11 @@ package bkampfbot.plan;
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import json.JSONObject;
 import bkampfbot.Control;
+import bkampfbot.exceptions.ConfigError;
 import bkampfbot.exceptions.FatalError;
 import bkampfbot.output.Output;
-
-import json.JSONException;
-import json.JSONObject;
 
 /**
  * PlanMinuten benötigt folgende Konfiguration: {"Minuten":3}
@@ -35,32 +34,32 @@ import json.JSONObject;
 public final class PlanMinuten extends PlanObject {
 	private int count;
 
-	public PlanMinuten(JSONObject object) throws FatalError {
-		this.setName("Minuten");
+	public PlanMinuten(JSONObject object, Object min) throws FatalError {
+		super("Minuten");
 
-		try {
-			this.count = object.getInt("Minuten");
-		} catch (JSONException e) {
-			throw new FatalError("Config error: Minuten have to be an integer");
+		if (min != null && min instanceof Integer) {
+			count = (Integer) min;
+		} else {
+			throw new ConfigError("Minuten");
 		}
 
-		if (this.count < 0) {
+		if (count < 0) {
 			Output.println("Config: Minuten is set to 0.", 0);
-			this.count = 0;
+			count = 0;
 		}
 	}
 
 	public final void run() throws FatalError {
-		Output.printClockLn("-> Minuten (" + this.count + ")", 1);
+		printJump("(" + count + ")");
 
 		// cut it into parts to safe session
-		int count = this.count;
-		while (count > 10) {
+		int c = count;
+		while (c > 10) {
 			// sleep for 10 min
 			Control.sleep(6000, 2);
-			count -= 10;
+			c -= 10;
 			Control.current.getCharacter();
 		}
-		Control.sleep(600 * count, 2);
+		Control.sleep(600 * c, 2);
 	}
 }

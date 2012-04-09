@@ -24,7 +24,6 @@ import json.JSONObject;
 import bkampfbot.exceptions.FatalError;
 import bkampfbot.exceptions.RestartLater;
 import bkampfbot.output.BefehlFile;
-import bkampfbot.output.Output;
 
 /**
  * PlanBefehl benötigt folgende Konfiguration: {"Befehl":true} o
@@ -35,30 +34,20 @@ import bkampfbot.output.Output;
 
 public final class PlanBefehl extends PlanObject {
 	public PlanBefehl(JSONObject object) throws FatalError {
-		this.setName("Befehl");
-
-		try {
-			object.getBoolean("Befehl");
-
-		} catch (JSONException e) {
-			throw new FatalError("Config error: Befehl have to be true");
-		}
+		super("Befehl");
 	}
 
 	public final void run() throws FatalError, RestartLater, JSONException {
-		Output.printClock("-> Befehl", 1);
 
 		BefehlFile file = new BefehlFile();
 
 		JSONObject now = file.getBefehl();
 		while (now != null) {
-			Output.println(" (get one)", 1);
-			PlanObject doit = new PlanObject();
-			doit = PlanObject.get(now);
+			printJump("(hole einen)");
+			PlanObject doit = PlanObject.get(now);
 			doit.run();
 			now = file.getBefehl();
-			Output.printClock("-> Befehl", 1);
 		}
-		Output.println(" (nothing)", 1);
+		printJump("(nichts)");
 	}
 }
