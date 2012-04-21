@@ -73,9 +73,6 @@ public class KampfField extends Field {
 			angriff.put("Land", race);
 		}
 
-		JSONObject config = new JSONObject();
-		config.put("Angriff", angriff);
-
 		int start = Integer.valueOf(getResult().getJSONObject("char")
 				.getString("num2"));
 
@@ -102,7 +99,7 @@ public class KampfField extends Field {
 						Output.DEBUG);
 			}
 
-			PlanAngriff elem = new PlanAngriff(config, race);
+			PlanAngriff elem = new PlanAngriff(angriff, race);
 			elem.run();
 
 			if (!elem.won()) {
