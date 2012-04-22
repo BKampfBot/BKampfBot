@@ -34,7 +34,8 @@ public class PlanManager {
 	private PlanObject[] plans;
 	private int insertPointer = 0;
 	private boolean aussendienst = false;
-	private boolean infinity = true;
+	private int loops = -1;
+	private int currentLoop = 0;
 
 	private int runningPlan = -1;
 	private int lookAheadPlan = -1;
@@ -63,7 +64,7 @@ public class PlanManager {
 	}
 
 	public void setUninfinity() {
-		infinity = false;
+		loops = 1;
 	}
 
 	public final void run() throws FatalError, RestartLater {
@@ -135,8 +136,10 @@ public class PlanManager {
 				// Während des Abarbeitens wurde ein neuer Tag angebrochen
 				return;
 			}
+			
+			currentLoop++;
 
-		} while (infinity);
+		} while (isLoop());
 	}
 
 	public final boolean runLookAhead() throws FatalError, RestartLater {
@@ -187,7 +190,7 @@ public class PlanManager {
 			}
 			return i + 1;
 		} else {
-			if (infinity)
+			if (isLoop())
 				return getNextPlan(-1);
 			else 
 				return -1;
@@ -202,5 +205,24 @@ public class PlanManager {
 			Output.println(plan.getName()
 					+ " hat einen unbehandelbaren Fehler erzeugt.", 0);
 		}
+	}
+
+	public void setLoop(int length) {
+		
+		
+		this.loops = length;
+		
+	}
+
+	public void reset() {
+		currentLoop = 0;
+	}
+	
+	private boolean isLoop() {
+		if (loops == -1) {
+			return true;
+		}
+		
+		return (loops > currentLoop);
 	}
 }

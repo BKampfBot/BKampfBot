@@ -44,7 +44,8 @@ public abstract class PlanObject {
 	private String name;
 	protected PlanManager planManager;
 
-	public static PlanObject get(JSONObject object) throws JSONException, FatalError {
+	public static PlanObject get(JSONObject object) throws JSONException,
+			FatalError {
 		String[] keys = JSONObject.getNames(object);
 		if (keys == null || keys.length != 1) {
 			throw new ConfigError("Fehler in der Struktur");
@@ -53,7 +54,7 @@ public abstract class PlanObject {
 		JSONObject setup = new JSONObject();
 		Object obj = null;
 		String lower = keys[0].toLowerCase();
-		
+
 		try {
 			setup = object.getJSONObject(keys[0]);
 		} catch (JSONException e) {
@@ -136,9 +137,27 @@ public abstract class PlanObject {
 
 		} else if (lower.equals("weinkeller")) {
 			return new Wein(setup);
+
+		} else if (lower.equals("nichts")) {
+			return new PlanObject("Nichts") {
+				@Override
+				public void run() throws FatalError, JSONException,
+						RestartLater {
+					printJump();
+				}
+
+			};
+			// counter for planmanager
+		} else if (lower.matches("^[0-9]+x$")) {
+			return new PlanPlan(setup, obj, Integer.valueOf(lower.replaceAll(
+					"[^0-9]", "")));
+		} else if (lower.equals("unendlich")) {
+			return new PlanPlan(setup, obj, -1);
+
 		}
 
-		throw new ConfigError("Du benutzt ein Planelement, welches nicht definiert wurde.");
+		throw new ConfigError(
+				"Du benutzt ein Planelement, welches nicht definiert wurde.");
 	}
 
 	protected PlanObject(String name) {
@@ -157,10 +176,7 @@ public abstract class PlanObject {
 		Output.printClockLn("-> " + name, Output.INFO);
 	}
 
-	public void run() throws FatalError, JSONException, RestartLater {
-		Output.printClockLn(this.getClass().getName()
-				+ " does not implement run()", 0);
-	}
+	public abstract void run() throws FatalError, JSONException, RestartLater;
 
 	/**
 	 * Ruft die nächsten Pläne vom Planmanger auf, falls die es unterstützen.
@@ -202,19 +218,19 @@ public abstract class PlanObject {
 	public boolean isPreRunningable() {
 		return false;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
-	
+
 	protected void configError() throws ConfigError {
 		throw new ConfigError(getName());
 	}
-	
+
 	protected boolean isInt(Object obj) {
 		return (obj != null && obj instanceof Integer);
 	}
-	
+
 	protected boolean isStr(Object obj) {
 		return (obj != null && obj instanceof String);
 	}
