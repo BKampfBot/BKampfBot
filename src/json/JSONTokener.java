@@ -416,7 +416,7 @@ public class JSONTokener {
      * @return  A JSONException object, suitable for throwing
      */
     public final JSONException syntaxError(String message) {
-        return new JSONException(message + toString(), this.getInputString());
+        return new JSONException(message + toString(), this.getInputString(), index);
     }
 
 

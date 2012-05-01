@@ -9,6 +9,7 @@ public class JSONException extends Exception {
 	private static final long serialVersionUID = 4917590362036726380L;
 	private Throwable cause;
 	private String inputString;
+	private int index = -1;
 
     /**
      * Constructs a JSONException with an explanatory message.
@@ -32,7 +33,17 @@ public class JSONException extends Exception {
         this.inputString = input;
     }
     
+    public JSONException(String message, String input, int index) {
+        super(message);
+        this.inputString = input;
+        this.index = index;
+    }
+    
     public final String getInputString() {
     	return this.inputString;
+    }
+    
+    public final int getIndex() {
+    	return this.index;
     }
 }

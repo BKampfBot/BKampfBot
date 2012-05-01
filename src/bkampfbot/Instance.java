@@ -147,6 +147,7 @@ public final class Instance {
 
 				// Kommentare werden ausgelassen
 				if (strLine.length() > 0 && strLine.substring(0, 1).equals("#")) {
+					configString += "\n";
 					continue;
 				}
 				configString += strLine + "\n";
@@ -160,11 +161,12 @@ public final class Instance {
 						new JSONTokener(configString));
 				Config.parseJsonConfig(config);
 			} catch (JSONException e) {
+				int lines = configString.substring(0, e.getIndex()).replaceAll("[^\n]", "").length();
 				throw new FatalError("Die Struktur der Konfigurationsdatei "
 						+ "stimmt nicht. Versuche den Inhalt der "
 						+ "Datei mit einem externen Werkzeug zu "
 						+ "reparieren. Dafür gibt es Webseiten, "
-						+ "die JSON-Objekte validieren können."
+						+ "die JSON-Objekte validieren können. Vermutlich in der Zeile " + lines + "."
 						+ "\n\nAls Hinweis hier noch die Fehlerausgabe:\n"
 						+ e.getMessage() + "\n\nEingabe war:\n"
 						+ e.getInputString());
