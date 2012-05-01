@@ -110,6 +110,13 @@ public class Strategie {
 			defens[2] = tactics[2];
 		}
 		
+		while(defens[0].equals(defens[1])) {
+			defens[1] = parts[(new Random()).nextInt(parts.length)];
+		} 
+		while(defens[0].equals(defens[2]) || defens[1].equals(defens[2])) {
+			defens[2] = parts[(new Random()).nextInt(parts.length)];
+		} 
+		
 		return this;
 	}
 	
