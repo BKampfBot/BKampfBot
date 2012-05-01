@@ -204,7 +204,7 @@ public final class Jagd extends PlanObject {
 					nvpn.add(new BasicNameValuePair("type", "slogan"));
 					nvpn.add(new BasicNameValuePair("secret", md5));
 
-					// Control.sleep(new Random().nextInt(100) + 100);
+					Control.sleep(new Random().nextInt(100) + 100);
 
 					String res = Utils.getString("games/buyWheel", nvpn);
 
@@ -238,7 +238,7 @@ public final class Jagd extends PlanObject {
 					}
 
 					if (level > 0) {
-						//Control.sleep(40, Output.INFO);
+						Control.sleep(40, Output.INFO);
 
 						// errorStatus=ok&modus=item&item_pic=wurf387.png&item_type=ring&wintext=Teekessel+mit+ohrenbet%C3%A4ubender+Pfeife
 						String line = Utils.getString("games/payout");
