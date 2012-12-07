@@ -228,7 +228,7 @@ public final class Instance {
 	 *            gibt an, ob es der Aufruf nach dem Login ist
 	 */
 	private final String getCharacter(boolean login) throws FatalError {
-		HttpGet httpget = new HttpGet(Config.getHost() + "characters/index");
+		HttpGet httpget = new HttpGet(Config.getHost() + "characters");
 		httpget
 				.addHeader("Accept",
 						"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
