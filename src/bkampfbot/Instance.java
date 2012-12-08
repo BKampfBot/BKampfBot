@@ -253,9 +253,7 @@ public final class Instance {
 
 				this.testStatus(s);
 
-				int navi2 = s.indexOf("/img/flash/navi_or2.swf");
-				navi2 = s.indexOf("flashvars", navi2 + 1);
-				navi2 = s.indexOf("flashvars", navi2 + 1);
+				int navi2 = s.indexOf("flashvars");
 				int lineFront = s.indexOf('{', navi2);
 				int lineEnd = s.indexOf(';', lineFront + 1);
 				String s2 = s.substring(lineFront + 1, lineEnd + 1);
