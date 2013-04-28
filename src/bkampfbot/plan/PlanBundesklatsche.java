@@ -37,6 +37,9 @@ public final class PlanBundesklatsche extends PlanObject {
 	public final static int CARD_NEUSTART = 5;
 	public final static int CARD_WEITSPRUNG = 6;
 	public final static int CARD_DAMPFHAMMER = 7;
+	public final static int CARD_KNASTGESCHENK = 8;
+	public final static int CARD_PROTEIN = 9;
+	public final static int CARD_STROMSCHLAG = 10;
 	public final static int CARD_FAHRSCHEIN = 11;
 
 	private final class DiceException extends Exception {
