@@ -103,6 +103,15 @@ public class OpponentCache {
 
 		return null;
 	}
+	
+	/**
+	 * length of highmoney list
+	 * 
+	 * @return null if nobody found or the opponent
+	 */
+	public final int lenghtHighMoney() {
+		return highMoney.size();
+	}
 
 	/**
 	 * Reset the counter if started a new day

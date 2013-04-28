@@ -29,6 +29,7 @@ import bkampfbot.plan.PlanAngriff;
 import bkampfbot.plan.PlanBundesklatsche;
 import bkampfbot.state.Config;
 import bkampfbot.state.User;
+import bkampfbot.utils.OpponentCache;
 
 public class KampfField extends Field {
 
@@ -93,18 +94,27 @@ public class KampfField extends Field {
 		 * System.exit(1); }
 		 */
 
+		int cacheLenght = 0;
+		OpponentCache oc = OpponentCache.getInstance(race);
+		
 		for (int i = start; i < fightsToDo; i++) {
 			if (Config.getDebug()) {
 				Output.printTabLn("Angriff " + (i + 1) + " von " + fightsToDo,
 						Output.DEBUG);
 			}
 
-			PlanAngriff elem = new PlanAngriff(angriff, race);
-			elem.run();
+			
+			do {
+				cacheLenght = oc.lenghtHighMoney();
 
-			if (!elem.won()) {
-				i--;
-			}
+				PlanAngriff elem = new PlanAngriff(angriff, race);
+				elem.run();
+				
+	
+				if (!elem.won()) {
+					i--;
+				}
+			} while (oc.lenghtHighMoney() > cacheLenght);
 		}
 		return true;
 	}
