@@ -37,12 +37,19 @@ import bkampfbot.state.Config;
 
 public final class Tagesspiel extends PlanObject {
 
+	boolean zwerg = false;
+
 	public static Tagesspiel getInstance() {
 		return new Tagesspiel(new JSONObject());
 	}
 
 	public Tagesspiel(JSONObject setup) {
 		super("Tagesspiel");
+
+		try {
+			zwerg = setup.getBoolean("Zwergeneinsatz");
+		} catch (JSONException e) {
+		}
 	}
 
 	public void run() {
@@ -62,7 +69,7 @@ public final class Tagesspiel extends PlanObject {
 
 			String resulte = Utils.getString("city/winning", nvps2);
 			if (resulte.equals("{\"success\":1}")) {
-				Output.printTabLn("10 Fleispunkte bekommen", 1);
+				Output.printTabLn("10 Fleispunkte bekommen", Output.INFO);
 			}
 		}
 
@@ -70,15 +77,32 @@ public final class Tagesspiel extends PlanObject {
 
 			page = Utils.getString("games");
 
-			if (page.indexOf("<img src=\"" + Config.getHost()
-					+ "layout/game.png\"") == -1) {
-				Output.printTabLn("Tagesspiel schon erledigt.", 1);
+			if (!zwerg
+					&& page.indexOf("<img src=\"" + Config.getHost()
+							+ "layout/game.png\"") == -1) {
+				Output.printTabLn("Tagesspiel schon erledigt.", Output.INFO);
 				return;
 			}
 
-			page = page.substring(page.indexOf("<img src=\"" + Config.getHost()
-					+ "layout/game.png\"") - 50);
+			if (zwerg
+					&& page.indexOf("<img src=\"" + Config.getHost()
+							+ "layout/game2.png\"") == -1) {
+				Output.printTabLn(
+						"Maximale Anzahl der Spiele erreicht für heute!", Output.INFO);
+				return;
+			}
 
+			if (page.indexOf("<img src=\"" + Config.getHost()
+					+ "layout/game.png\"") == -1) {
+				Output.printTabLn("Tagesspiel für 1 Zwerg.", Output.INFO);
+				page = page.substring(page.indexOf("<img src=\""
+						+ Config.getHost() + "layout/game2.png\"") - 50);
+
+			} else {
+
+				page = page.substring(page.indexOf("<img src=\""
+						+ Config.getHost() + "layout/game.png\"") - 50);
+			}
 			page = page.substring(0, 50);
 			page = page.substring(page.indexOf("<a href=\""));
 			page = page.replaceAll("[^0-9]", "");
@@ -95,9 +119,9 @@ public final class Tagesspiel extends PlanObject {
 			JSONObject result = Utils.getJSON("games/punkte/" + fleis + "/"
 					+ ((1177 + fleis) * 177 + 77) * fleis);
 			if (result.getInt("result") == 1) {
-				Output.printTabLn("Tagesspiel gewonnen", 1);
+				Output.printTabLn("Tagesspiel gewonnen", Output.INFO);
 			} else {
-				Output.printTabLn("Tagesspiel verloren", 1);
+				Output.printTabLn("Tagesspiel verloren", Output.INFO);
 			}
 		} catch (JSONException e) {
 			Output.error(e);
