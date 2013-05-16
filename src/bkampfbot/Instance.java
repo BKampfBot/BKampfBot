@@ -87,7 +87,7 @@ public final class Instance {
 	public String lastResponse = null;
 
 	public enum Daily {
-		quiz, scratchTicket, glueck, wein, spiel, jagd
+		quiz, scratchTicket, glueck, wein, spiel, jagd, spielZwerg
 	}
 
 	public enum Modus {
@@ -475,6 +475,16 @@ public final class Instance {
 				continue;
 			}
 
+			if (arg.equals("spielmitzwerg")
+					&& (this.modus.equals(Modus.normal) || this.modus
+							.equals(Modus.daily))) {
+				this.modus = Modus.daily;
+				this.daily[dailyCount] = Daily.spielZwerg;
+				dailyCount++;
+
+				continue;
+			}
+
 			if (arg.equals("jagd")
 					&& (this.modus.equals(Modus.normal) || this.modus
 							.equals(Modus.daily))) {
@@ -616,6 +626,11 @@ public final class Instance {
 				// call "Tagesspiel"
 				case spiel:
 					Tagesspiel.getInstance().run();
+					break;
+
+				// call "Tagesspiel"
+				case spielZwerg:
+					Tagesspiel.getInstance(true).run();
 					break;
 
 				// call "Wörterjagd"

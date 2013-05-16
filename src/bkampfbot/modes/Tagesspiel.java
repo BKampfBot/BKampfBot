@@ -42,6 +42,12 @@ public final class Tagesspiel extends PlanObject {
 	public static Tagesspiel getInstance() {
 		return new Tagesspiel(new JSONObject());
 	}
+	
+	public static Tagesspiel getInstance(boolean zwerg) {
+		Tagesspiel t = getInstance();
+		t.zwerg = zwerg;
+		return t;
+	}
 
 	public Tagesspiel(JSONObject setup) {
 		super("Tagesspiel");
@@ -86,7 +92,8 @@ public final class Tagesspiel extends PlanObject {
 
 			if (zwerg
 					&& page.indexOf("<img src=\"" + Config.getHost()
-							+ "layout/game2.png\"") == -1) {
+							+ "layout/game2.png\"") == -1 && page.indexOf("<img src=\"" + Config.getHost()
+									+ "layout/game.png\"") == -1) {
 				Output.printTabLn(
 						"Maximale Anzahl der Spiele erreicht für heute!", Output.INFO);
 				return;
