@@ -58,6 +58,11 @@ public class KnastField extends Field {
 			return false;
 		} else {
 			
+			if (getKlatsche().useCardAsk(PlanBundesklatsche.CARD_KNASTGESCHENK)) {
+				Output.printClockLn("Knastgeschenk erhalten", Output.INFO);
+				return true;
+			}
+			
 			/*System.out.println("Geschenk!!!!");
 			System.exit(1);*/
 			Output.printClockLn("Knast: Freiwurf", Output.INFO);

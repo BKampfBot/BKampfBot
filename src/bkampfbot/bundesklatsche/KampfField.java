@@ -88,29 +88,30 @@ public class KampfField extends Field {
 		}
 
 		// Stromschlag einsetzen
-		/*
-		 * if (fightsToDo == 3 && fieldName.equals("E-Werk")) {
-		 * System.out.println("Stromschlag!!!!"); getKlatsche().printCards(); //
-		 * System.exit(1); }
-		 */
+		if (fightsToDo == 3
+				&& fieldName.equals("E-Werk")
+				&& start == 0
+				&& getKlatsche()
+						.useCardAsk(PlanBundesklatsche.CARD_STROMSCHLAG)) {
+			start = Integer.valueOf(getResult().getJSONObject("char")
+					.getString("num2"));
+		}
 
 		int cacheLenght = 0;
 		OpponentCache oc = OpponentCache.getInstance(race);
-		
+
 		for (int i = start; i < fightsToDo; i++) {
 			if (Config.getDebug()) {
 				Output.printTabLn("Angriff " + (i + 1) + " von " + fightsToDo,
 						Output.DEBUG);
 			}
 
-			
 			do {
 				cacheLenght = oc.lenghtHighMoney();
 
 				PlanAngriff elem = new PlanAngriff(angriff, race);
 				elem.run();
-				
-	
+
 				if (!elem.won()) {
 					i--;
 				}

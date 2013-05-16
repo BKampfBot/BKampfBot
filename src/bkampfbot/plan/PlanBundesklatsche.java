@@ -69,6 +69,12 @@ public final class PlanBundesklatsche extends PlanObject {
 			return "Weitsprung";
 		case CARD_DAMPFHAMMER:
 			return "Dampfhammer";
+		case CARD_KNASTGESCHENK:
+			return "Knastgeschenk";
+		case CARD_PROTEIN:
+			return "Protein";
+		case CARD_STROMSCHLAG:
+			return "Stromschlag";
 		case CARD_FAHRSCHEIN:
 			return "Rückfahrschein";
 		}
@@ -80,7 +86,7 @@ public final class PlanBundesklatsche extends PlanObject {
 
 	private final JSONObject config;
 
-	private int[] cards = { 0, 0, 0, 0, 0, 0, 0, 0 };
+	private int[] cards = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 	public PlanBundesklatsche(JSONObject config) throws FatalError {
 		super("Bundesklatsche");
@@ -304,10 +310,9 @@ public final class PlanBundesklatsche extends PlanObject {
 				try {
 					// Führe Spielfeld aus
 					if (!current.action()) {
-						Output
-								.printTabLn(
-										"Konnte Spielfeld nicht vollständig abarbeiten.",
-										Output.INFO);
+						Output.printTabLn(
+								"Konnte Spielfeld nicht vollständig abarbeiten.",
+								Output.INFO);
 						return;
 					}
 				} catch (NextField e) {

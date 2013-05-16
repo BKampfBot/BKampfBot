@@ -50,7 +50,8 @@ public class AktionField extends Field {
 		Control.sleep(10);
 
 		/**
-		 * "action": { "cont": "", "done": 0, "gold": 159, "text":"Der Schwimmkurs im hiesigen Hallenbad fordert deine ganze Kraft, steigere deinen Fitnesswert um  1 Punkt!"
+		 * "action": { "cont": "", "done": 0, "gold": 159, "text":
+		 * "Der Schwimmkurs im hiesigen Hallenbad fordert deine ganze Kraft, steigere deinen Fitnesswert um  1 Punkt!"
 		 * , "cancel": 1, "klatschen": 3 },
 		 */
 		String text = getResult().getJSONObject("action").getString("text");
@@ -58,10 +59,12 @@ public class AktionField extends Field {
 		Output.printClockLn("Aktionsfeld", Output.INFO);
 		Output.printTabLn(text, Output.DEBUG);
 
-		if (text
-				.equalsIgnoreCase("Der Schwimmkurs im hiesigen Hallenbad fordert deine ganze Kraft, steigere deinen Fitnesswert um  1 Punkt!")) {
+		if (text.equalsIgnoreCase("Der Schwimmkurs im hiesigen Hallenbad fordert deine ganze Kraft, steigere deinen Fitnesswert um  1 Punkt!")) {
 
-			if (!getConfig().isNull("Fitness")) {
+			if (getKlatsche().useCardAsk(PlanBundesklatsche.CARD_PROTEIN)) {
+				Output.printClockLn("Karte Protein gesetzt", Output.INFO);
+				return cancelButton();
+			} else if (!getConfig().isNull("Fitness")) {
 
 				boolean bank = false;
 				try {
@@ -77,8 +80,7 @@ public class AktionField extends Field {
 			}
 		}
 
-		if (text
-				.equalsIgnoreCase("Du bist im Jagdfieber, löse ein Wort bei der Wörterjagd!")) {
+		if (text.equalsIgnoreCase("Du bist im Jagdfieber, löse ein Wort bei der Wörterjagd!")) {
 
 			try {
 				if (!getConfig().getBoolean("Jagd")) {
@@ -92,8 +94,7 @@ public class AktionField extends Field {
 			return cancelButton(jagd.getWordsSolved() <= 0);
 		}
 
-		if (text
-				.equalsIgnoreCase("Für ein anstehendes Referat musst du besonders konzentriert sein, steigere deinen Wahrnehmungswert um 1 Punkt!")) {
+		if (text.equalsIgnoreCase("Für ein anstehendes Referat musst du besonders konzentriert sein, steigere deinen Wahrnehmungswert um 1 Punkt!")) {
 
 			if (!getConfig().isNull("Wahrnehmung")) {
 
@@ -111,8 +112,7 @@ public class AktionField extends Field {
 			}
 		}
 
-		if (text
-				.equalsIgnoreCase("Du bist heute gut drauf in deiner Außendiensttätigkeit, absolviere einen leichten AD und kassiere einen Sonderbonus!")) {
+		if (text.equalsIgnoreCase("Du bist heute gut drauf in deiner Außendiensttätigkeit, absolviere einen leichten AD und kassiere einen Sonderbonus!")) {
 
 			boolean doit = true;
 			try {
@@ -128,14 +128,12 @@ public class AktionField extends Field {
 			return true;
 		}
 
-		if (text
-				.equalsIgnoreCase("Die nächste Rate für deinen neuerworbenen Fernseher ist fällig, zahle 300 D-Mark auf dein Sparkassenkonto  ein um diese begleichen zu können!")) {
+		if (text.equalsIgnoreCase("Die nächste Rate für deinen neuerworbenen Fernseher ist fällig, zahle 300 D-Mark auf dein Sparkassenkonto  ein um diese begleichen zu können!")) {
 
 			return cancelButton(!Bank.putMoney(300));
 		}
 
-		if (text
-				.equalsIgnoreCase("Du warst im Fitnesscenter und hast stundenlang deine Armmuskulatur trainiert, steigere deinen Skill Mukkies um 1 Punkt!")) {
+		if (text.equalsIgnoreCase("Du warst im Fitnesscenter und hast stundenlang deine Armmuskulatur trainiert, steigere deinen Skill Mukkies um 1 Punkt!")) {
 
 			if (!getConfig().isNull("Mukkies")) {
 
@@ -153,14 +151,12 @@ public class AktionField extends Field {
 			}
 		}
 
-		if (text
-				.equalsIgnoreCase("Man wirft dir vor berechenbar zu sein, speichere eine neue Kampfstrategie ab!")) {
+		if (text.equalsIgnoreCase("Man wirft dir vor berechenbar zu sein, speichere eine neue Kampfstrategie ab!")) {
 			Strategie.getRandom().save();
 			return true;
 		}
 
-		if (text
-				.equalsIgnoreCase("Du warst heute den ganzen Tag auf den Beinen und hast irrsinnigen Hunger, besuche Bogdan und kauf dir eins seiner Gourmet-Essen!")) {
+		if (text.equalsIgnoreCase("Du warst heute den ganzen Tag auf den Beinen und hast irrsinnigen Hunger, besuche Bogdan und kauf dir eins seiner Gourmet-Essen!")) {
 
 			boolean essen = true;
 			try {
@@ -174,8 +170,7 @@ public class AktionField extends Field {
 			}
 		}
 
-		if (text
-				.equalsIgnoreCase("Der alljährliche Schützenwettbewerb im Kastanienweitwurf steht an, steigere deinen Skill Schleuderkraft um 1 Punkt!")) {
+		if (text.equalsIgnoreCase("Der alljährliche Schützenwettbewerb im Kastanienweitwurf steht an, steigere deinen Skill Schleuderkraft um 1 Punkt!")) {
 
 			if (!getConfig().isNull("Schleuderkraft")) {
 
@@ -193,8 +188,7 @@ public class AktionField extends Field {
 			}
 		}
 
-		if (text
-				.equalsIgnoreCase("Heute steht alles im Zeichen deines persönlichen Glücks, steigere deinen Skill Glück um 1 Punkt!")) {
+		if (text.equalsIgnoreCase("Heute steht alles im Zeichen deines persönlichen Glücks, steigere deinen Skill Glück um 1 Punkt!")) {
 
 			if (!getConfig().isNull("Glueck")) {
 
@@ -212,8 +206,7 @@ public class AktionField extends Field {
 			}
 		}
 
-		if (text
-				.equalsIgnoreCase("Wer nicht wagt, der nicht gewinnt! Gehe ins Casino und drehe dreimal am einarmigen Banditen!")) {
+		if (text.equalsIgnoreCase("Wer nicht wagt, der nicht gewinnt! Gehe ins Casino und drehe dreimal am einarmigen Banditen!")) {
 			if (User.getLevel() < 10) {
 				Output.printTabLn("Du darfst noch nicht ins Casino.",
 						Output.INFO);
@@ -245,8 +238,7 @@ public class AktionField extends Field {
 			}
 		}
 
-		if (text
-				.equalsIgnoreCase("Deine kleine Zwergennichte hat Geburtstag, hebe 500 D-Mark von deinem Sparkassenkonto ab, um ihr etwas Schönes kaufen zu können!")) {
+		if (text.equalsIgnoreCase("Deine kleine Zwergennichte hat Geburtstag, hebe 500 D-Mark von deinem Sparkassenkonto ab, um ihr etwas Schönes kaufen zu können!")) {
 
 			if (getConfig().has("Einzahlen")) {
 				try {
@@ -259,8 +251,7 @@ public class AktionField extends Field {
 			return cancelButton(!Bank.getMoney(500));
 		}
 
-		if (text
-				.equalsIgnoreCase("Du bist in famoser Kauflaune heute, erwerbe einen Pin im Shop!")) {
+		if (text.equalsIgnoreCase("Du bist in famoser Kauflaune heute, erwerbe einen Pin im Shop!")) {
 
 			String[] pins = { "11", "21", "31", "41" };
 			String pinToBuy = pins[RandomUtils.nextInt(pins.length)];
@@ -282,8 +273,7 @@ public class AktionField extends Field {
 			return cancelButton(p.buy() <= 0);
 		}
 
-		if (text
-				.equalsIgnoreCase("Kaufe ein Rubbellos bei Bogdan am Kiosk, vielleicht gelingt dir heute der große Wurf!")) {
+		if (text.equalsIgnoreCase("Kaufe ein Rubbellos bei Bogdan am Kiosk, vielleicht gelingt dir heute der große Wurf!")) {
 
 			try {
 				if (!getConfig().getBoolean("Los")) {
@@ -296,8 +286,7 @@ public class AktionField extends Field {
 			return cancelButton(st.buy() <= 0);
 		}
 
-		if (text
-				.equalsIgnoreCase("Du fühlst dich geistig superfit heute! Löse das Tagesquiz mit mindestens 5 richtigen Antworten!")) {
+		if (text.equalsIgnoreCase("Du fühlst dich geistig superfit heute! Löse das Tagesquiz mit mindestens 5 richtigen Antworten!")) {
 			try {
 				if (!getConfig().getBoolean("Quiz")) {
 					return cancelButton();
@@ -313,8 +302,6 @@ public class AktionField extends Field {
 		 * Noch zu implementieren: Wer nicht wagt, der nicht gewinnt! Gehe ins
 		 * Casino und drehe dreimal am einarmigen Banditen!
 		 * 
-		 * Du f³hlst dich geistig superfit heute! L÷se das Tagesquiz mit
-		 * mindestens 5 richtigen Antworten!
 		 */
 
 		// TODO Nicht implementiert
