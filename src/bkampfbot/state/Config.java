@@ -75,7 +75,7 @@ public class Config {
 	protected String proxyPassword = null;
 	protected boolean prevention = true;
 	protected boolean debug = false;
-	private boolean tactics = true;
+	private boolean tactics = false; // Ausgeschaltet bei Version 1.3.8rc4
 	private boolean fightDebug = false;
 
 	protected static Config instance = null;

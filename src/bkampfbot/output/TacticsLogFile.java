@@ -49,6 +49,7 @@ public class TacticsLogFile extends AbstractFile implements DoItLater {
 					boolean ok = false;
 					for (int j = 0; j < tactics.length(); j++) {
 						if (tactics.getString(j).equals(
+								// das folgende ist jetzt ein INT
 								current.getString("attack"))) {
 							ok = true;
 							break;
