@@ -27,6 +27,9 @@ public class TacticsLogFile extends AbstractFile implements DoItLater {
 
 	@Override
 	public void doIt() {
+		boolean ok = true;
+		String key = "";
+
 		if (this.data == null) {
 			return;
 		}
@@ -45,18 +48,19 @@ public class TacticsLogFile extends AbstractFile implements DoItLater {
 						continue;
 					if (current.getString("action").equals("win"))
 						continue;
+					if (!current.has("attack"))
+						continue;
 
-					boolean ok = false;
+					ok = false;
+					key = id2name(current.getInt("attack"));
 					for (int j = 0; j < tactics.length(); j++) {
-						if (tactics.getString(j).equals(
-								// das folgende ist jetzt ein INT
-								current.getString("attack"))) {
+						if (tactics.getString(j).equals(key)) {
 							ok = true;
 							break;
 						}
 					}
 					if (!ok) {
-						tactics.put(current.getString("attack"));
+						tactics.put(key);
 					}
 				}
 			}
@@ -79,9 +83,9 @@ public class TacticsLogFile extends AbstractFile implements DoItLater {
 							.getJSONArray("tactics");
 
 					for (int i = 0; i < tactics.length(); i++) {
-						
+
 						boolean found = false;
-						
+
 						for (int j = 0; j < oldTactics.length(); j++) {
 							if (tactics.getString(i).equals(
 									oldTactics.getString(j))) {
@@ -130,6 +134,30 @@ public class TacticsLogFile extends AbstractFile implements DoItLater {
 		} catch (JSONException e) {
 		}
 		return null;
+	}
+
+	private String id2name(int key) {
+		switch (key) {
+		case 0:
+			return "head";
+
+		case 1:
+			return "body";
+
+		case 2:
+			return "legleft";
+
+		case 3:
+			return "legright";
+
+		case 4:
+			return "armleft";
+
+		case 5:
+			return "armright";
+
+		}
+		return "";
 	}
 
 }
