@@ -96,7 +96,10 @@ public class AktionField extends Field {
 
 		if (text.equalsIgnoreCase("Für ein anstehendes Referat musst du besonders konzentriert sein, steigere deinen Wahrnehmungswert um 1 Punkt!")) {
 
-			if (!getConfig().isNull("Wahrnehmung")) {
+			if (getKlatsche().useCardAsk(PlanBundesklatsche.CARD_PROTEIN)) {
+				Output.printClockLn("Karte Protein gesetzt", Output.INFO);
+				return cancelButton();
+			} else if (!getConfig().isNull("Wahrnehmung")) {
 
 				boolean bank = false;
 				try {
@@ -135,7 +138,10 @@ public class AktionField extends Field {
 
 		if (text.equalsIgnoreCase("Du warst im Fitnesscenter und hast stundenlang deine Armmuskulatur trainiert, steigere deinen Skill Mukkies um 1 Punkt!")) {
 
-			if (!getConfig().isNull("Mukkies")) {
+			if (getKlatsche().useCardAsk(PlanBundesklatsche.CARD_PROTEIN)) {
+				Output.printClockLn("Karte Protein gesetzt", Output.INFO);
+				return cancelButton();
+			} else if (!getConfig().isNull("Mukkies")) {
 
 				boolean bank = false;
 				try {
@@ -172,7 +178,10 @@ public class AktionField extends Field {
 
 		if (text.equalsIgnoreCase("Der alljährliche Schützenwettbewerb im Kastanienweitwurf steht an, steigere deinen Skill Schleuderkraft um 1 Punkt!")) {
 
-			if (!getConfig().isNull("Schleuderkraft")) {
+			if (getKlatsche().useCardAsk(PlanBundesklatsche.CARD_PROTEIN)) {
+				Output.printClockLn("Karte Protein gesetzt", Output.INFO);
+				return cancelButton();
+			} else if (!getConfig().isNull("Schleuderkraft")) {
 
 				boolean bank = false;
 				try {
@@ -190,7 +199,10 @@ public class AktionField extends Field {
 
 		if (text.equalsIgnoreCase("Heute steht alles im Zeichen deines persönlichen Glücks, steigere deinen Skill Glück um 1 Punkt!")) {
 
-			if (!getConfig().isNull("Glueck")) {
+			if (getKlatsche().useCardAsk(PlanBundesklatsche.CARD_PROTEIN)) {
+				Output.printClockLn("Karte Protein gesetzt", Output.INFO);
+				return cancelButton();
+			} else if (!getConfig().isNull("Glueck")) {
 
 				boolean bank = false;
 				try {
