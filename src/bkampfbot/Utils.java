@@ -151,7 +151,7 @@ public class Utils {
 
 		try {
 			if (Config.getDebug())
-				Output.println("getString: " + url, 2);
+				Output.println("getString: " + Config.getHost() + url, 2);
 
 			HttpGet httpget = new HttpGet(Config.getHost() + url);
 			if (location != "") {

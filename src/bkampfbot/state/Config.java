@@ -57,6 +57,7 @@ public class Config {
 	protected String host;
 
 	/* opticaly */
+	protected String speedHost;
 	protected String configFile = "config.json";
 	protected int outputLevel = 1;
 	protected PlanManager plan0 = null;
@@ -132,6 +133,11 @@ public class Config {
 			} else if (key.equalsIgnoreCase("host")) {
 
 				Config.setHost(jsonConfig.getString(key));
+				
+				// Speed world
+			} else if (key.equalsIgnoreCase("speed")) {
+
+				Config.setSpeedHost(jsonConfig.getString(key));
 
 				// Angriff nochmal
 			} else if (key.equalsIgnoreCase("angriff nochmal")) {
@@ -233,6 +239,24 @@ public class Config {
 
 			}
 		}
+	}
+
+	/**
+	 * @return the host
+	 */
+	public static String getSpeedHost() {
+		return getInstance().speedHost;
+	}
+
+	/**
+	 * @param host
+	 *            the host to set
+	 */
+	public static void setSpeedHost(String host) {
+		if (host.length() > 0 && !host.substring(host.length() - 1).equals("/")) {
+			host += "/";
+		}
+		getInstance().speedHost = host;
 	}
 
 	public static Config getInstance() {

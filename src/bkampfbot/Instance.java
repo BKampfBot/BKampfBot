@@ -587,6 +587,7 @@ public final class Instance {
 		}
 		// login
 		this.login();
+		this.switchToSpeedHost();
 
 		switch (this.modus) {
 
@@ -693,6 +694,34 @@ public final class Instance {
 		}
 	}
 
+	private void switchToSpeedHost() {
+		if (Config.getSpeedHost() != null) {
+			try {
+				String page = Utils.getString("speed/index");
+				
+				int pos = page.indexOf("speedlink");
+				if (pos < 0) throw new NotFound();
+				page = page.substring(pos);
+				
+				pos = page.indexOf("\"");
+				if (pos < 0) throw new NotFound();
+				page = page.substring(pos + 1);
+				
+				pos = page.indexOf("\"");
+				if (pos < 0) throw new NotFound();
+				page = page.substring(0, pos);
+				
+				page = page.substring(Config.getSpeedHost().length());
+				
+				Config.setHost(Config.getSpeedHost());
+				
+				Utils.getString(page);
+				
+			} catch (NotFound e) {
+			}
+		}
+	}
+
 	/**
 	 * Durchläuft beide Pläne genau ein mal
 	 * 
@@ -768,5 +797,9 @@ public final class Instance {
 
 			getCharacter();
 		}
+	}
+	
+	public class NotFound extends Exception {
+		private static final long serialVersionUID = -7987563389035661007L;
 	}
 }
