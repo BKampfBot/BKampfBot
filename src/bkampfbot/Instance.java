@@ -694,7 +694,7 @@ public final class Instance {
 		}
 	}
 
-	private void switchToSpeedHost() {
+	private void switchToSpeedHost() throws FatalError {
 		if (Config.getSpeedHost() != null) {
 			try {
 				String page = Utils.getString("speed/index");
@@ -716,6 +716,8 @@ public final class Instance {
 				Config.setHost(Config.getSpeedHost());
 				
 				Utils.getString(page);
+				
+				getCharacter();
 				
 			} catch (NotFound e) {
 			}
