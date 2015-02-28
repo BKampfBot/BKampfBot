@@ -123,12 +123,18 @@ public class Utils {
 	}
 
 	public static final JSONObject getJSON(String url) throws JSONException {
-		return new JSONObject(new JSONTokener(getString(url)));
+		String page = repaireJSONString(getString(url));
+		return new JSONObject(new JSONTokener(page));
+	}
+	
+	private static final String repaireJSONString(String page) {
+		return page.replaceAll("^[^{]*\\{", "{");
 	}
 
 	public static final JSONObject getJSON(String url, List<NameValuePair> nvpl)
 			throws JSONException {
-		return new JSONObject(new JSONTokener(getString(url, nvpl)));
+		String page = repaireJSONString(getString(url, nvpl));
+		return new JSONObject(new JSONTokener(page));
 	}
 
 	/**
